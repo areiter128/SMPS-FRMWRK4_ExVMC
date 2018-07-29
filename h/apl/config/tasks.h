@@ -1,0 +1,164 @@
+/*LICENSE ********************************************************************
+ * Microchip Technology Inc. and its subsidiaries.  You may use this software 
+ * and any derivatives exclusively with Microchip products. 
+ * 
+ * THIS SOFTWARE IS SUPPLIED BY MICROCHIP "AS IS".  NO WARRANTIES, WHETHER 
+ * EXPRESS, IMPLIED OR STATUTORY, APPLY TO THIS SOFTWARE, INCLUDING ANY IMPLIED 
+ * WARRANTIES OF NON-INFRINGEMENT, MERCHANTABILITY, AND FITNESS FOR A 
+ * PARTICULAR PURPOSE, OR ITS INTERACTION WITH MICROCHIP PRODUCTS, COMBINATION 
+ * WITH ANY OTHER PRODUCTS, OR USE IN ANY APPLICATION. 
+ *
+ * IN NO EVENT WILL MICROCHIP BE LIABLE FOR ANY INDIRECT, SPECIAL, PUNITIVE, 
+ * INCIDENTAL OR CONSEQUENTIAL LOSS, DAMAGE, COST OR EXPENSE OF ANY KIND 
+ * WHATSOEVER RELATED TO THE SOFTWARE, HOWEVER CAUSED, EVEN IF MICROCHIP HAS 
+ * BEEN ADVISED OF THE POSSIBILITY OR THE DAMAGES ARE FORESEEABLE.  TO THE 
+ * FULLEST EXTENT ALLOWED BY LAW, MICROCHIP'S TOTAL LIABILITY ON ALL CLAIMS 
+ * IN ANY WAY RELATED TO THIS SOFTWARE WILL NOT EXCEED THE AMOUNT OF FEES, IF 
+ * ANY, THAT YOU HAVE PAID DIRECTLY TO MICROCHIP FOR THIS SOFTWARE.
+ *
+ * MICROCHIP PROVIDES THIS SOFTWARE CONDITIONALLY UPON YOUR ACCEPTANCE OF THESE 
+ * TERMS. 
+ * ***************************************************************************/
+/*@@tasks.h
+ *****************************************************************************
+ * File:   tasks.h
+ *
+ * Summary:
+ * Globally defines the task list and operating modes
+ *
+ * Description:	
+ * -
+ *
+ * References:
+ * -
+ *
+ * See also:
+ * task_manager.c
+ * task_manager.h
+ * 
+ * Revision history: 
+ * 07/27/16     Initial version
+ * Author: M91406
+ * Comments:
+ *****************************************************************************/
+
+// This is a guard condition so that contents of this file are not included
+// more than once.  
+#ifndef _APPLICATION_LAYER_TASK_FLOW_LISTS_H_
+#define	_APPLICATION_LAYER_TASK_FLOW_LISTS_H_
+
+#include <xc.h> // include processor files - each processor file is guarded.  
+#include <stdint.h>
+
+/* ***********************************************************************************************
+ * INCLUDE OF HEADERS ALSO CONTAINING GLOBALLY AVAILABLE FUNCTION CALLS
+ * ***********************************************************************************************/
+#include "apl.h"
+
+#include "task_FaultHandler.h"
+
+#include "task_Idle.h"
+#include "task_OnPIM_LED.h"
+#include "task_LED_Green.h"
+#include "task_LED_Red.h"
+#include "task_Switch.h"
+
+/* *****************************************************************************************************
+ * Prototypes of external function used in task lists
+ * *****************************************************************************************************
+ * Functions which should be used in task flow lists can be prototyped here. The functions can
+ * come from any source and are usually located in external C-files.
+ * 
+ * Limitations:
+ *   - function has to be of the type int xxx (void)
+ *   - The function must return an integer value
+ *   - The function cannot take specific parameters
+ *   - Specific parameters have to be derived from global or private data structures
+ *
+ * *****************************************************************************************************/
+
+// All User Tasks are defined here
+/*
+extern uint16_t init_gpio(void);         // Initialize GPIOs
+extern uint16_t init_oscillator(void);   // Initialize main oscillator
+extern uint16_t init_system_timer(void);        // Initialize timer
+extern uint16_t launch_system_timer(void);      // Start timer
+ */
+/* Prototypes of additional initialization task functions */
+
+/*@@Task Table
+ * *****************************************************************************************************
+ * Task Table lists all tasks which will be called by the task manager
+ * *****************************************************************************************************
+ * This is the list which defines ALL available tasks as enumerated items of an array.
+ * These enumerations will be combined freely in so called Task Flow Lists which will then be called
+ * by the manager's function calls from the main loop
+ * *****************************************************************************************************/
+
+extern uint16_t(*Task_Table[])(void);
+
+/*@@task_id_no_e
+ * *****************************************************************************************************
+ * The task_id_no_e enum is for easy addressing task-items from Task_Table using readable 
+ * defines instead of indices. 
+ * *****************************************************************************************************/
+typedef enum {
+    TASK_IDLE = 0, // Default task not performing any action but occupying a task time frame
+    TASK_INIT_FAULT_OBJECTS = 1, // Task initializing default and user defined fault objects
+    TASK_EXEC_FAULT_CHECK_ALL = 2, // Task execute check of all default and user defined fault objects at once
+    TASK_EXEC_FAULT_CHECK_SEQUENTIAL = 3, // Task execute check of default and user defined fault objects sequentially
+    TASK_INIT_GPIO = 4, // Task initializing the chip GPIOs
+
+    TASK_INIT_ON_BOARD_LED = 5, // Task initializing the on-board debug LED
+    TASK_INIT_SWITCH = 6, // Task initializing the expander board switch button
+    TASK_INIT_LED_RED = 7, // Task initializing the red expander board debug LED
+    TASK_INIT_LED_GREEN = 8, // Task initializing the green expander board debug LED
+    TASK_ON_BOARD_LED = 9, // Task controlling the on-board debug LED
+    TASK_READ_SWITCH = 10, // Task reading expander board switch button status
+    TASK_LED_RED = 11, // Task initializing the red expander board debug LED
+    TASK_LED_RED_ON = 12, // task forcing the red expander board LED into ON state
+    TASK_LED_RED_OFF = 13, // task forcing the red expander board LED into OFF state
+    TASK_LED_RED_TOGGLE = 14, // task forcing the red expander board LED to toggle state
+    TASK_LED_GREEN = 15, // Task initializing the green expander board debug LED
+    TASK_LED_GREEN_ON = 16, // task forcing the green expander board LED into ON state
+    TASK_LED_GREEN_OFF = 17, // task forcing the green expander board LED into OFF state
+    TASK_LED_GREEN_TOGGLE = 18, // task forcing the green expander board LED to toggle state
+    TASK_INIT_HSADC = 19, // Task initializing the high speed ADC module
+    TASK_LAUNCH_HSADC = 20, // Task launching the pre-configured high speed ADC module
+    TASK_INIT_HSPWM = 21, // Task initializing the high speed PWM module
+    TASK_LAUNCH_HSPWM = 22, // Task launching the pre-configured high speed PWM module
+    TASK_SOFT_START_HSPWM = 23, // Task soft-starting the pre-configured high speed PWM module (TEST CODE ONLY))
+
+    TASK_INIT_CNPNZ_VMC = 24 // task initializing the voltage mode controller object
+
+} task_id_no_e;
+
+/*@@Task Flow Lists
+ *  *****************************************************************************************************
+ * Task Flow Lists 
+ * *****************************************************************************************************
+ * These lists are used to establish any order of the registered tasks to be executed.
+ * As the task manager is running on a fixed tick rate, more critical tasks might be called
+ * multiple times while less critical ones might only be called once.
+ * *****************************************************************************************************/
+
+extern uint16_t task_list_boot[];
+extern uint16_t task_list_boot_size;
+
+extern uint16_t task_list_device_startup[];
+extern uint16_t task_list_device_startup_size;
+
+extern uint16_t task_list_system_startup[];
+extern uint16_t task_list_system_startup_size;
+
+extern uint16_t task_list_normal[];
+extern uint16_t task_list_normal_size;
+
+extern uint16_t task_list_fault[];
+extern uint16_t task_list_fault_size;
+
+extern uint16_t task_list_standby[];
+extern uint16_t task_list_standby_size;
+
+#endif	/* _APPLICATION_LAYER_TASK_FLOW_LISTS_H_ */
+

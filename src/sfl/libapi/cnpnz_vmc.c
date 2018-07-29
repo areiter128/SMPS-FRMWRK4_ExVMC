@@ -1,0 +1,111 @@
+#include "cnpnz_vmc.h"
+
+/* ***************************************************************************************
+ * Digital Control Loop Designer Version 0.9.0.15.
+ * ***************************************************************************************
+ * 3p3z compensation filter coefficients derived for following operating conditions:
+ * ***************************************************************************************
+ *
+ * 	Controller Type:	3P3Z - Basic Voltage Mode Compensator
+ * 	Sampling Frequency:	250000 Hz 
+ * 	Fixed Point Format:	15
+ * 	Scaling Mode:		1 - Single Bit-Shift Scaling
+ * 	Input Gain:			1
+ * 
+ * ***************************************************************************************
+ * Data Arrays:
+ * The cNPNZ_t data structure contains a pointer to derived coefficients in X-space and
+ * other pointers to controller and error history in Y-space.
+ * This source declares the static parameters of the z-domain compensation filter.
+ * These declarations re made publicly accessible through defines in cnpnz_vmc.h
+ * ***************************************************************************************/
+
+	cnpnz_vmc_CONTROL_LOOP_COEFFICIENTS_t __attribute__((space(xmemory), near)) cnpnz_vmc_coefficients; // A/B-Coefficients 
+	uint16_t cnpnz_vmc_ACoefficients_size = (sizeof(cnpnz_vmc_coefficients.ACoefficients)/sizeof(cnpnz_vmc_coefficients.ACoefficients[0])); // A-coefficient array size
+	uint16_t cnpnz_vmc_BCoefficients_size = (sizeof(cnpnz_vmc_coefficients.BCoefficients)/sizeof(cnpnz_vmc_coefficients.BCoefficients[0])); // B-coefficient array size
+
+	cnpnz_vmc_CONTROL_LOOP_HISTORIES_t __attribute__((space(ymemory), far)) cnpnz_vmc_histories; // Control/Error Histories 
+	uint16_t cnpnz_vmc_ControlHistory_size = (sizeof(cnpnz_vmc_histories.ControlHistory)/sizeof(cnpnz_vmc_histories.ControlHistory[0])); // Control history array size
+	uint16_t cnpnz_vmc_ErrorHistory_size = (sizeof(cnpnz_vmc_histories.ErrorHistory)/sizeof(cnpnz_vmc_histories.ErrorHistory[0])); // Error history array size
+
+/* ***************************************************************************************
+ * 	Pole&Zero Placement:
+ * ***************************************************************************************
+ *
+ * 	fP0:	500 Hz 
+ * 	fP1:	20000 Hz 
+ * 	fZ1:	3000 Hz 
+ * 	fP2:	90000 Hz 
+ * 	fZ2:	6000 Hz 
+ *
+ * ***************************************************************************************
+ * 	Filter Coefficients and Parameters:
+ * ***************************************************************************************/
+
+	fractional cnpnz_vmc_ACoefficients [3] = 
+	{
+		0x625C,	// Coefficient A1 will be multiplied with controller output u(n-1)
+		0xDFFF,	// Coefficient A2 will be multiplied with controller output u(n-2)
+		0xFDA6	// Coefficient A3 will be multiplied with controller output u(n-3)
+	};
+
+	fractional cnpnz_vmc_BCoefficients [4] = 
+	{
+		0x10D5,	// Coefficient B0 will be multiplied with error input e(n)
+		0xF2C1,	// Coefficient B1 will be multiplied with error input e(n-1)
+		0xEF58,	// Coefficient B2 will be multiplied with error input e(n-2)
+		0x0D6B	// Coefficient B3 will be multiplied with error input e(n-3)
+	};
+
+
+	int16_t cnpnz_vmc_pre_scaler = 3;
+	int16_t cnpnz_vmc_post_shift_A = -1;
+	int16_t cnpnz_vmc_post_shift_B = 0;
+	fractional cnpnz_vmc_post_scaler = 0x0000;
+
+	cNPNZ16b_t cnpnz_vmc; // user-controller data object
+
+/* ***************************************************************************************/
+
+uint16_t cnpnz_vmc_Init(void)
+{
+	uint16_t i = 0;
+
+	// Initialize controller data structure at runtime with pre-defined default values
+	cnpnz_vmc.status.flags = CONTROLLER_STATUS_CLEAR;  // clear all status flag bits (will turn off execution))
+
+	cnpnz_vmc.ptrACoefficients = &cnpnz_vmc_coefficients.ACoefficients[0]; // initialize pointer to A-coefficients array
+	cnpnz_vmc.ptrBCoefficients = &cnpnz_vmc_coefficients.BCoefficients[0]; // initialize pointer to B-coefficients array
+	cnpnz_vmc.ptrControlHistory = &cnpnz_vmc_histories.ControlHistory[0]; // initialize pointer to control history array
+	cnpnz_vmc.ptrErrorHistory = &cnpnz_vmc_histories.ErrorHistory[0]; // initialize pointer to error history array
+	cnpnz_vmc.normPostShiftA = cnpnz_vmc_post_shift_A; // initialize A-coefficients/single bit-shift scaler
+	cnpnz_vmc.normPostShiftB = cnpnz_vmc_post_shift_B; // initialize B-coefficients/dual/post scale factor bit-shift scaler
+	cnpnz_vmc.normPostScaler = cnpnz_vmc_post_scaler; // initialize control output value normalization scaling factor
+	cnpnz_vmc.normPreShift = cnpnz_vmc_pre_scaler; // initialize A-coefficients/single bit-shift scaler
+
+	cnpnz_vmc.ACoefficientsArraySize = cnpnz_vmc_ACoefficients_size; // initialize A-coefficients array size
+	cnpnz_vmc.BCoefficientsArraySize = cnpnz_vmc_BCoefficients_size; // initialize A-coefficients array size
+	cnpnz_vmc.ControlHistoryArraySize = cnpnz_vmc_ControlHistory_size; // initialize control history array size
+	cnpnz_vmc.ErrorHistoryArraySize = cnpnz_vmc_ErrorHistory_size; // initialize error history array size
+
+
+	// Load default set of A-coefficients from user RAM into X-Space controller A-array
+	for(i=0; i<cnpnz_vmc.ACoefficientsArraySize; i++)
+	{
+		cnpnz_vmc_coefficients.ACoefficients[i] = cnpnz_vmc_ACoefficients[i];
+	}
+
+	// Load default set of B-coefficients from user RAM into X-Space controller B-array
+	for(i=0; i<cnpnz_vmc.BCoefficientsArraySize; i++)
+	{
+		cnpnz_vmc_coefficients.BCoefficients[i] = cnpnz_vmc_BCoefficients[i];
+	}
+
+	// Clear error and control histories of the 3P3Z controller
+	cnpnz_vmc_Reset(&cnpnz_vmc);
+
+	return(1);
+}
+
+// end of file
+

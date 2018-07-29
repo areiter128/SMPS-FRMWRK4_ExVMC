@@ -1,0 +1,206 @@
+/*LICENSE ********************************************************************
+ * Microchip Technology Inc. and its subsidiaries.  You may use this software 
+ * and any derivatives exclusively with Microchip products. 
+ * 
+ * THIS SOFTWARE IS SUPPLIED BY MICROCHIP "AS IS".  NO WARRANTIES, WHETHER 
+ * EXPRESS, IMPLIED OR STATUTORY, APPLY TO THIS SOFTWARE, INCLUDING ANY IMPLIED 
+ * WARRANTIES OF NON-INFRINGEMENT, MERCHANTABILITY, AND FITNESS FOR A 
+ * PARTICULAR PURPOSE, OR ITS INTERACTION WITH MICROCHIP PRODUCTS, COMBINATION 
+ * WITH ANY OTHER PRODUCTS, OR USE IN ANY APPLICATION. 
+ *
+ * IN NO EVENT WILL MICROCHIP BE LIABLE FOR ANY INDIRECT, SPECIAL, PUNITIVE, 
+ * INCIDENTAL OR CONSEQUENTIAL LOSS, DAMAGE, COST OR EXPENSE OF ANY KIND 
+ * WHATSOEVER RELATED TO THE SOFTWARE, HOWEVER CAUSED, EVEN IF MICROCHIP HAS 
+ * BEEN ADVISED OF THE POSSIBILITY OR THE DAMAGES ARE FORESEEABLE.  TO THE 
+ * FULLEST EXTENT ALLOWED BY LAW, MICROCHIP'S TOTAL LIABILITY ON ALL CLAIMS 
+ * IN ANY WAY RELATED TO THIS SOFTWARE WILL NOT EXCEED THE AMOUNT OF FEES, IF 
+ * ANY, THAT YOU HAVE PAID DIRECTLY TO MICROCHIP FOR THIS SOFTWARE.
+ *
+ * MICROCHIP PROVIDES THIS SOFTWARE CONDITIONALLY UPON YOUR ACCEPTANCE OF THESE 
+ * TERMS. 
+ * ***************************************************************************/
+/* @@main.c
+ * ****************************************************************************
+ * File:   main.c
+ * Author: M91406
+ *
+ * Description:
+ * This code example has been created to introduce the functionality of the
+ * basic SMPS firmware framework v4. This project uses the basic function call
+ * based scheduler to group, align and monitor user tasks. 
+ * 
+ * The procedure shown in this examples initializes the internal oscillator and 
+ * the task scheduler and then immediately launches the scheduler. During the 
+ * start-up phase of the controller, configuration of peripherals are also 
+ * executed within the active scheduler monitoring & control scheme to be able
+ * to respond to errors during the configuration process. This specific aspect
+ * is only available if peripheral libraries are used. 
+ * If MCC is used to set up the peripherals, the function call SYSTEM_Initialize()
+ * will call the MCC generated configuration instead and the operating mode 
+ * OP_MODE_BOOT used in this example project needs to be bypassed.
+ * 
+ * 
+ * History:
+ * Created on July 03, 2017, 09:32 PM
+ ******************************************************************************/
+
+#include "globals.h"        // globals.h also include the 4-layer headers for 
+                            //   - Application Layer (APL)
+                            //   - Hardware Abstraction Layer (HAL)
+                            //   - Microcontroller Abstraction Layer (MCAL)
+                            //   - Special Function Layer (SFL)
+#include "task_manager.h"
+#include "tasks.h"
+
+int main(void) {
+
+    uint16_t fres=0, err_code=0;
+    
+#if __DEBUG
+    uint16_t cnt=0;
+#endif
+    
+    // Right after system reset, first check for root-cause of previous device reset
+    fres = CheckCPUResetRootCause();
+    
+    // Initialize essential chip features and peripheral modules to boot up system
+    fres = SYSTEM_Initialize();
+
+    // Initialize software layers (scheduler and essential user tasks)
+    fres &= OS_Initialize();
+
+    // after the basic steps, the rest of the configuration runs as part of the scheduler,
+    // where execution can be monitored and faults can be properly handled.
+    while (run_main_loop) 
+    {
+
+        // Wait for timer to expire before calling the next task
+        while (
+           !(*task_mgr.reg_task_timer_irq_flag & task_mgr.task_timer_irq_flag_mask)
+            && (task_mgr.cpu_load.ticks != task_mgr.task_period)
+            )
+        {
+            // Increment CPU tick counter
+            task_mgr.cpu_load.ticks++;
+        }
+
+#if (USE_TASK_EXECUTION_CLOCKOUT_PIN==1)
+#if defined (CLKOUT_WR)
+  CLKOUT_WR = PINSTATE_HIGH;                  // Drive debug pin high
+#else
+  #error === Task-timing clock output pin is not defined. Task execution clock output is not available ===
+#endif
+#endif
+        
+        // CPU Meter Fault Trigger for CPU Load Lockout Check
+        if(task_mgr.cpu_load.ticks >= task_mgr.task_period){
+            // When this error condition has been detected, something went wrong with
+            // the timer interrupt bit (oscillator, timer or interrupt controller is corrupted)
+            // => Immediate reconfiguration and firmware initialization is required
+
+            task_mgr.op_mode.mode = OP_MODE_BOOT;                               // Boot mode will force re-config
+            task_mgr.task_list_tick_index = (task_mgr.task_list_ubound + 1);    // setting index to maximum will trip op_mode switch
+
+        }
+        else    // Task scheduling is running as expected => Continue with next task
+        {   
+            task_mgr.cpu_load.ticks *= task_mgr.cpu_load.loop_nomblk;    // Calculate the accumulated CPU cycles
+            task_mgr.cpu_load.load  = (uint16_t)((task_mgr.cpu_load.ticks * task_mgr.cpu_load.load_factor)>>16);
+            task_mgr.cpu_load.load_max_buffer |= task_mgr.cpu_load.load;
+            task_mgr.cpu_load.ticks = 0; // Reset CPU tick counter
+
+        }
+        *task_mgr.reg_task_timer_irq_flag ^= task_mgr.task_timer_irq_flag_mask; // Reset timer ISR flag bit
+
+        
+#if (USE_TASK_EXECUTION_CLOCKOUT_PIN==1)
+#if defined (CLKOUT_WR)
+  CLKOUT_WR = PINSTATE_LOW;                  // Drive debug pin low
+  Nop();
+  CLKOUT_WR = PINSTATE_HIGH;                 // Drive debug pin high
+#endif
+#endif
+        
+        // Call most recent task with execution time measurement
+        err_code = ((task_mgr.op_mode.mode << 8) | (task_mgr.exec_task_id)); // build error code
+        
+        task_mgr.task_time_buffer = *task_mgr.reg_task_timer_counter; // Capture timer counter to calculate remaining "free" time
+        fres = task_manager_tick();     // Step through pre-defined task lists
+        task_mgr.task_time = *task_mgr.reg_task_timer_counter - task_mgr.task_time_buffer;  // measure most recent task time
+        task_mgr.task_time_max_buffer |= task_mgr.task_time;
+        
+#if (USE_TASK_EXECUTION_CLOCKOUT_PIN==1)
+#if defined (CLKOUT_WR)
+  CLKOUT_WR = PINSTATE_LOW;                  // Drive debug pin low
+  Nop();
+  CLKOUT_WR = PINSTATE_HIGH;                 // Drive debug pin high
+#endif
+#endif
+        
+        // Task execution analysis and fault flag settings
+        
+        // if last executed task returned a value !=1 (no success), indicate task execution failure condition
+        if (fres != 1)  
+        {
+            task_mgr.error_code = err_code;
+            fault_object_list[FLTOBJ_TASK_EXECUTION_FAILURE]->error_code = err_code;
+            fault_object_list[FLTOBJ_TASK_EXECUTION_FAILURE]->status.flags.fltstat = 1;
+        }
+        // if last executed task returned a value =1 (success), reset task execution failure condition
+        else
+        {
+            task_mgr.error_code = 0;
+            fault_object_list[FLTOBJ_TASK_EXECUTION_FAILURE]->error_code = 0;
+            fault_object_list[FLTOBJ_TASK_EXECUTION_FAILURE]->status.flags.fltstat = 0;
+        }
+  
+        // if last task execution took longer than specified, indicate task time quota violation condition
+        if(task_mgr.task_time >= task_mgr.task_period)
+        {
+            task_mgr.error_code = err_code;
+            fault_object_list[FLTOBJ_TASK_EXECUTION_FAILURE]->error_code = err_code;
+            fault_object_list[FLTOBJ_TASK_TIME_QUOTA_VIOLATION]->status.flags.fltstat = 1;
+        }
+        // if last task execution took longer than specified, reset task time quota violation condition
+        else
+        {
+            task_mgr.error_code = 0;
+            fault_object_list[FLTOBJ_TASK_EXECUTION_FAILURE]->error_code = 0;
+            fault_object_list[FLTOBJ_TASK_TIME_QUOTA_VIOLATION]->status.flags.fltstat = 0;
+        }
+
+  
+#if (USE_TASK_EXECUTION_CLOCKOUT_PIN==1)
+#if defined (CLKOUT_WR)
+  CLKOUT_WR = PINSTATE_LOW;                  // Drive debug pin low
+#endif
+#endif
+        
+        
+#if __DEBUG
+#if (USE_TASK_MANAGER_TIMING_DEBUG_ARRAYS == 1)
+// In debugging mode CPU load and task time is measured and logged in two arrays
+// to examine the recent code execution profile
+if(cnt == CPU_LOAD_DEBUG_BUFFER_LENGTH)
+{
+    Nop();  // place breakpoint here to hold firmware when arrays are filled
+    Nop();
+    Nop();
+    cnt = 0;
+}
+else
+{
+    task_time_buffer[cnt] = task_mgr.task_time;   // Log task most recent time
+    cpu_time_buffer[cnt] = task_mgr.cpu_load.load;    // Log most recent CPU Load
+    cnt++;                                      // Increment array index
+}
+#endif
+#endif          
+        
+    }   // End of main loop
+
+    traplog.count++;  // increment the persistent soft-reset counter to stop restarting after certain number of restart attempts
+    CPU_RESET;  // If the fault handler skips execution of the main loop, this line will reset the CPU  
+    return(0);   // if this code line is ever reached, something really bad had happened...
+    
+}
