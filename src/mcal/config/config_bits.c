@@ -158,17 +158,17 @@
 
 // FOSC
 #pragma config POSCMD = NONE            // Primary Oscillator Mode Select bits (Primary Oscillator disabled)
-#pragma config OSCIOFNC = ON           // OSC2 Pin Function bit (OSC2 is clock output)
-#pragma config IOL1WAY = OFF             // Peripheral pin select configuration bit (Allow only one reconfiguration)
+#pragma config OSCIOFNC = ON            // OSC2 Pin Function bit (OSC2 is clock output)
+#pragma config IOL1WAY = OFF            // Peripheral pin select configuration bit (Allow only one reconfiguration)
 #pragma config FCKSM = CSECMD           // Clock Switching Mode bits (Clock switching is enabled,Fail-safe Clock Monitor is disabled)
-//#pragma config PLLKEN = OFF             // PLL Lock Enable Bit (Clock switch will not wait for the PLL lock signal)
+//#pragma config PLLKEN = OFF           // PLL Lock Enable Bit (Clock switch will not wait for the PLL lock signal)
 
 // FWDT
-#pragma config WDTPOST = PS1            // Watchdog Timer Postscaler bits (1:1)
-#pragma config WDTPRE = PR32            // Watchdog Timer Prescaler bit (1:32)
-#pragma config WDTEN = OFF              // Watchdog Timer Enable bits (WDT and SWDTEN disabled)
-#pragma config WINDIS = OFF             // Watchdog Timer Window Enable bit (Watchdog Timer in Non-Window mode)
-#pragma config WDTWIN = WIN75           // Watchdog Timer Window Select bits (WDT Windo is 75% of WDT period)
+#pragma config WDTPOST = PS1            // Watchdog Timer Postscaler bits->1:1
+#pragma config WDTPRE = PR128           // Watchdog Timer Prescaler bit->1:128
+#pragma config WDTEN = SWDTEN           // Watchdog Timer Enable bits->WDT Enabled/Disabled (controlled using SWDTEN bit)
+#pragma config WINDIS = OFF             // Watchdog Timer Window Enable bit->Watchdog Timer in Non-Window mode
+#pragma config WDTWIN = WIN50           // Watchdog Timer Window Select bits->WDT Window is 50% of WDT period
 
 // FICD
 #pragma config ICS = PGD1               // ICD Communication Channel Select bits (Communicate on PGEC3 and PGED3)

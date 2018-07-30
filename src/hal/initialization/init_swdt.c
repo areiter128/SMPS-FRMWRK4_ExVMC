@@ -35,9 +35,8 @@
 
 uint16_t init_SoftwareWatchDogTimer(void) {
 
-    #ifdef WDTCONL
-    WDTCONLbits.ON = 0;     // Turn off WDT
-    #endif
+    // Enable the software watchdog timer
+    swdt_enable(SWDT_ENABLED);
     
     return(1);
     

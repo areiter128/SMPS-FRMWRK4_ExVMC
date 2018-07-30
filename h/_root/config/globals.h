@@ -99,7 +99,7 @@
      volatile uint16_t bit15:1;	// Bit #15:  generic bit placeholder bit #15
  }__attribute__((packed)) SFR16b_FRAME_t;
  
- typedef union 
+typedef union 
 {
 	volatile uint16_t reg_block;    // buffer for 16-bit word read/write operations
 	volatile SFR16b_FRAME_t flags;  // data structure for single bit addressing operations

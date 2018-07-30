@@ -176,7 +176,9 @@ int main(void) {
 #endif
 #endif
         
-        
+        // Reset Watchdog Timer
+        swdt_reset();
+  
 #if __DEBUG
 #if (USE_TASK_MANAGER_TIMING_DEBUG_ARRAYS == 1)
 // In debugging mode CPU load and task time is measured and logged in two arrays

@@ -93,7 +93,7 @@ extern "C" {
  * MACRO DEFINITIONS
  * ***********************************************************************************************/
     
-#define WDT_RESET		asm volatile ("CRLWDT\n")
+#define WDT_RESET		asm volatile ("CLRWDT\n")
 #define PWRSAV_IDLE		asm volatile ("PWRSAV #1\n")
 #define PWRSAV_SLEEP	asm volatile ("PWRSAV #0\n")
 #define CPU_RESET		asm volatile ("RESET\n")

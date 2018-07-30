@@ -103,12 +103,17 @@ extern uint16_t(*Task_Table[])(void);
  * defines instead of indices. 
  * *****************************************************************************************************/
 typedef enum {
+    
+    // OS-level initialization
     TASK_IDLE = 0, // Default task not performing any action but occupying a task time frame
     TASK_INIT_FAULT_OBJECTS = 1, // Task initializing default and user defined fault objects
     TASK_EXEC_FAULT_CHECK_ALL = 2, // Task execute check of all default and user defined fault objects at once
     TASK_EXEC_FAULT_CHECK_SEQUENTIAL = 3, // Task execute check of default and user defined fault objects sequentially
+        
+    // Chip level initialization
     TASK_INIT_GPIO = 4, // Task initializing the chip GPIOs
 
+    // board level initialization
     TASK_INIT_ON_BOARD_LED = 5, // Task initializing the on-board debug LED
     TASK_INIT_SWITCH = 6, // Task initializing the expander board switch button
     TASK_INIT_LED_RED = 7, // Task initializing the red expander board debug LED
@@ -123,6 +128,8 @@ typedef enum {
     TASK_LED_GREEN_ON = 16, // task forcing the green expander board LED into ON state
     TASK_LED_GREEN_OFF = 17, // task forcing the green expander board LED into OFF state
     TASK_LED_GREEN_TOGGLE = 18, // task forcing the green expander board LED to toggle state
+
+    // System function / Special function initialization
     TASK_INIT_HSADC = 19, // Task initializing the high speed ADC module
     TASK_LAUNCH_HSADC = 20, // Task launching the pre-configured high speed ADC module
     TASK_INIT_HSPWM = 21, // Task initializing the high speed PWM module

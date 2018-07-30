@@ -80,10 +80,10 @@ typedef struct {
 typedef union {
     volatile CONVERTER_STATUS_BIT_FIELD_t flag;
     volatile uint16_t flags;
-} __attribute__((packed))CONVERTER_STATUS_t;
+} CONVERTER_STATUS_t;
 
 /* converter data structure */
-
+/*
 typedef struct {
     
     volatile uint16_t* input_voltage; // Recent Input Voltage
@@ -99,25 +99,26 @@ typedef struct {
     volatile uint16_t  current_reference; // Phase current reference
     
 }CONVERTER_SETTINGS_t;
-
-
+*/
+/*
 typedef struct {
 
     // Default 2P2Z/3P3Z/4P4Z/5P5Z compensator data structure
     volatile cNPNZ16b_t* compensator;    // Add a generic nPnZ compensator structure with clamping
     
-} __attribute__((packed)) VOLTAGE_LOOP_SETTINGS_t;
-
+//} __attribute__((packed)) VOLTAGE_LOOP_SETTINGS_t;
+} CONTROL_LOOP_SETTINGS_t;
+*/
 typedef struct {    
     
     // Generic status information
     volatile CONVERTER_STATUS_t status; // Converter Stage Status Code
 
     // Hardware-specific converter settings and properties
-    volatile CONVERTER_SETTINGS_t converter; // Generic converter settings
+//    volatile CONVERTER_SETTINGS_t converter; // Generic converter settings
     
     // Controller and Converter Objects
-    volatile VOLTAGE_LOOP_SETTINGS_t c_vmc;        // Declare a NPNZ_t Data Structure for the outer voltage loop
+    volatile cNPNZ16b_t c_vmc;        // Declare a NPNZ_t Data Structure for the outer voltage loop
 
 }__attribute__((packed))CONVERTER_t;
 //} CONVERTER_t;

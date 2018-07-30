@@ -63,6 +63,7 @@
           <itemPath>../h/mcal/config/devcfg_hsadc.h</itemPath>
           <itemPath>../h/mcal/config/devcfg_hspwm.h</itemPath>
           <itemPath>../h/mcal/config/devcfg_oscillator.h</itemPath>
+          <itemPath>../h/mcal/config/devcfg_irq.h</itemPath>
         </logicalFolder>
         <logicalFolder name="generic" displayName="generic" projectFiles="true">
           <itemPath>../h/mcal/generic/p33GS_hsacmp.h</itemPath>
@@ -85,6 +86,8 @@
         </logicalFolder>
         <logicalFolder name="generic" displayName="generic" projectFiles="true">
           <itemPath>../h/sfl/generic/npnz16b.h</itemPath>
+        </logicalFolder>
+        <logicalFolder name="f1" displayName="isr" projectFiles="true">
         </logicalFolder>
         <logicalFolder name="libapi" displayName="libapi" projectFiles="true">
           <itemPath>../h/sfl/libapi/cnpnz_vmc.h</itemPath>
@@ -164,6 +167,14 @@
         </logicalFolder>
         <logicalFolder name="generic" displayName="generic" projectFiles="true">
         </logicalFolder>
+        <logicalFolder name="f1" displayName="isr" projectFiles="true">
+          <itemPath>../src/sfl/isr/isr_adc.c</itemPath>
+          <itemPath>../src/sfl/isr/isr_adcmp.c</itemPath>
+          <itemPath>../src/sfl/isr/isr_adcflt.c</itemPath>
+          <itemPath>../src/sfl/isr/isr_gpio.c</itemPath>
+          <itemPath>../src/sfl/isr/isr_pwm.c</itemPath>
+          <itemPath>../src/sfl/isr/isr_timer.c</itemPath>
+        </logicalFolder>
         <logicalFolder name="libapi" displayName="libapi" projectFiles="true">
           <itemPath>../src/sfl/libapi/cnpnz_vmc.c</itemPath>
         </logicalFolder>
@@ -175,6 +186,7 @@
                    displayName="Important Files"
                    projectFiles="false">
       <itemPath>Makefile</itemPath>
+      <itemPath>MyConfig.mc3</itemPath>
     </logicalFolder>
   </logicalFolder>
   <sourceFolderFilter></sourceFolderFilter>
@@ -196,6 +208,7 @@
     <Elem>../h/sfl/asmlib</Elem>
     <Elem>../h/sfl/generic</Elem>
     <Elem>../h/sfl/libapi</Elem>
+    <Elem>../h/sfl/isr</Elem>
     <Elem>../src</Elem>
   </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
@@ -349,7 +362,7 @@
       </C30-LD>
       <C30Global>
         <property key="common-include-directories"
-                  value="..\h;..\h\_root;..\h\_root\generic;..\h\apl;..\h\apl\config;..\h\apl\tasks;..\h\hal;..\h\hal\config;..\h\hal\initialization;..\h\mcal;..\h\mcal\config;..\h\mcal\generic;..\h\sfl;..\h\sfl\asmlib;..\h\sfl\generic;..\h\sfl\libapi;..\src"/>
+                  value="..\h;..\h\_root;..\h\_root\generic;..\h\apl;..\h\apl\config;..\h\apl\tasks;..\h\hal;..\h\hal\config;..\h\hal\initialization;..\h\mcal;..\h\mcal\config;..\h\mcal\generic;..\h\sfl;..\h\sfl\asmlib;..\h\sfl\generic;..\h\sfl\libapi;..\h\sfl\isr;..\src"/>
         <property key="dual-boot-partition" value="0"/>
         <property key="fast-math" value="false"/>
         <property key="generic-16-bit" value="false"/>
@@ -477,18 +490,13 @@
         <property key="periphComp6.gte" value="gt"/>
         <property key="reset.scl" value="false"/>
         <property key="reset.type" value="MCLR"/>
-        <property key="tracecontrol.collectioninterval" value="1"/>
-        <property key="tracecontrol.collectionunits" value="1"/>
-        <property key="tracecontrol.disablemacros" value="false"/>
         <property key="tracecontrol.include.timestamp" value="summarydataenabled"/>
-        <property key="tracecontrol.medium" value="0"/>
         <property key="tracecontrol.select" value="0"/>
         <property key="tracecontrol.stallontracebufferfull" value="false"/>
-        <property key="tracecontrol.timerpriority" value="3"/>
-        <property key="tracecontrol.timerselect" value="0"/>
+        <property key="tracecontrol.timestamp" value="0"/>
         <property key="tracecontrol.tracebufmax" value="546000"/>
         <property key="tracecontrol.tracefile" value="defmplabxtrace.log"/>
-        <property key="tracecontrol.tracefilemax" value="10000000"/>
+        <property key="tracecontrol.traceresetonrun" value="false"/>
         <property key="uart0io.output" value="window"/>
         <property key="uart0io.outputfile" value=""/>
         <property key="uart0io.uartioenabled" value="false"/>

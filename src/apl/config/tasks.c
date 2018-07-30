@@ -66,12 +66,16 @@
 
 uint16_t (*Task_Table[])(void) = {
     
+    // OS-level initialization
     task_Idle,              // simple task doing nothing 
     init_FaultObjects, // call fault object initialization
     exec_FaultCheckAll,       // execute check of all default and user defined fault objects at once
     exec_FaultCheckSequential, // execute check of default and user defined fault objects sequentially
+    
+    // Chip level initialization
     init_gpio,              // task initializing all used GPIOs in accordance to their application specific function
 
+    // board level initialization
     init_TaskOnBoardLED,    // task initializing the on-board LED control pin and debug LED data structure
     init_TaskSwitchButton,  // task initializing the expander board switch button
     init_TaskLEDRed,        // task initializing the red expander board LED
@@ -87,9 +91,9 @@ uint16_t (*Task_Table[])(void) = {
     task_LEDGreen_ForceOff,   // task forcing the green expander board LED into OFF state
     task_LEDGreen_ForceToggle, // task forcing the green expander board LED to toggle state
     
+    // System function / Special function initialization
     init_hsadc,             // task initializing the high-speed ADC module
     exec_launch_hsadc,      // task launching the pre-configured high-speed ADC module
-
     init_hspwm,             // task initializing the high-speed PWM module
     exec_launch_hspwm,      // task launching the pre-configured high-speed PWM module
     exec_soft_start_hspwm,  // task soft-starting the pre-configured high-speed PWM module (TEST CODE ONLY)
