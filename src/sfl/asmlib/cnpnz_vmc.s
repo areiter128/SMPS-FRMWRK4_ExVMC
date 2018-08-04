@@ -65,7 +65,7 @@ _cnpnz_vmc_Update:    ; provide global scope to routine
 	push w8
 	push w10
 	push w12    ; save working register used for status flag tracking
-	
+    
 ;------------------------------------------------------------------------------
 ; Check status word for Enable/Disable flag and bypass computation, if disabled
 	mov [w0 + #offStatus], w12
@@ -192,8 +192,8 @@ _cnpnz_vmc_Update:    ; provide global scope to routine
 	pop w8
 	pop w10
 	pop w12    ; restore working register used for status flag tracking
-	
-;------------------------------------------------------------------------------
+
+    ;------------------------------------------------------------------------------
 ; End of routine
 	return
 ;------------------------------------------------------------------------------

@@ -36,36 +36,36 @@
 
 	typedef struct
 	{
-		fractional ACoefficients[3]; // A-Coefficients
-		fractional BCoefficients[4]; // B-Coefficients
-	} __attribute__((packed))cnpnz_vmc_CONTROL_LOOP_COEFFICIENTS_t;
+		volatile fractional ACoefficients[3]; // A-Coefficients
+		volatile fractional BCoefficients[4]; // B-Coefficients
+	} __attribute__((packed))CNPNZ_VMC_CONTROL_LOOP_COEFFICIENTS_t;
 
 	typedef struct
 	{
-		fractional ControlHistory[3];  // Control History
-		fractional ErrorHistory[4];    // Error History
-	} __attribute__((packed))cnpnz_vmc_CONTROL_LOOP_HISTORIES_t;
+		volatile fractional ControlHistory[3];  // Control History
+		volatile fractional ErrorHistory[4];    // Error History
+	} __attribute__((packed))CNPNZ_VMC_CONTROL_LOOP_HISTORIES_t;
 
 
-	extern cNPNZ16b_t cnpnz_vmc; // user-controller data object
+	extern volatile cNPNZ16b_t cnpnz_vmc; // user-controller data object
 
 /* ***************************************************************************************/
 
 // Function call prototypes for initialization routines and control loops
 
-extern uint16_t cnpnz_vmc_Init(void); // Loads default coefficients into 3P3Z controller and resets histories to zero
+extern inline uint16_t cnpnz_vmc_Init(void); // Loads default coefficients into 3P3Z controller and resets histories to zero
 
-extern void cnpnz_vmc_Reset( // Resets the 3P3Z controller histories
+extern inline void cnpnz_vmc_Reset( // Resets the 3P3Z controller histories
 	volatile cNPNZ16b_t* controller // Pointer to nPnZ data structure
 	);
 
-extern void cnpnz_vmc_Precharge( // Pre-charges histories of the 3P3Z with defined steady-state data
+extern inline void cnpnz_vmc_Precharge( // Pre-charges histories of the 3P3Z with defined steady-state data
 	volatile cNPNZ16b_t* controller, // Pointer to nPnZ data structure
 	volatile uint16_t ctrl_input, // user-defined, constant error history value
 	volatile uint16_t ctrl_output // user-defined, constant control output history value
 	);
 
-extern void cnpnz_vmc_Update( // Calls the 3P3Z controller
+extern inline void cnpnz_vmc_Update( // Calls the 3P3Z controller
 	volatile cNPNZ16b_t* controller // Pointer to nPnZ data structure
 	);
 

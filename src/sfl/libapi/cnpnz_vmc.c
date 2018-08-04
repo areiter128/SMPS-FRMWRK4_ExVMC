@@ -22,13 +22,13 @@
  * These declarations are made publicly accessible through defines in cnpnz_vmc.h
  * ***************************************************************************************/
 
-	cnpnz_vmc_CONTROL_LOOP_COEFFICIENTS_t __attribute__((space(xmemory), near)) cnpnz_vmc_coefficients; // A/B-Coefficients 
-	uint16_t cnpnz_vmc_ACoefficients_size = (sizeof(cnpnz_vmc_coefficients.ACoefficients)/sizeof(cnpnz_vmc_coefficients.ACoefficients[0])); // A-coefficient array size
-	uint16_t cnpnz_vmc_BCoefficients_size = (sizeof(cnpnz_vmc_coefficients.BCoefficients)/sizeof(cnpnz_vmc_coefficients.BCoefficients[0])); // B-coefficient array size
+	volatile CNPNZ_VMC_CONTROL_LOOP_COEFFICIENTS_t __attribute__((space(xmemory), near)) cnpnz_vmc_coefficients; // A/B-Coefficients 
+	volatile uint16_t cnpnz_vmc_ACoefficients_size = (sizeof(cnpnz_vmc_coefficients.ACoefficients)/sizeof(cnpnz_vmc_coefficients.ACoefficients[0])); // A-coefficient array size
+	volatile uint16_t cnpnz_vmc_BCoefficients_size = (sizeof(cnpnz_vmc_coefficients.BCoefficients)/sizeof(cnpnz_vmc_coefficients.BCoefficients[0])); // B-coefficient array size
 
-	cnpnz_vmc_CONTROL_LOOP_HISTORIES_t __attribute__((space(ymemory), far)) cnpnz_vmc_histories; // Control/Error Histories 
-	uint16_t cnpnz_vmc_ControlHistory_size = (sizeof(cnpnz_vmc_histories.ControlHistory)/sizeof(cnpnz_vmc_histories.ControlHistory[0])); // Control history array size
-	uint16_t cnpnz_vmc_ErrorHistory_size = (sizeof(cnpnz_vmc_histories.ErrorHistory)/sizeof(cnpnz_vmc_histories.ErrorHistory[0])); // Error history array size
+	volatile CNPNZ_VMC_CONTROL_LOOP_HISTORIES_t __attribute__((space(ymemory), far)) cnpnz_vmc_histories; // Control/Error Histories 
+	volatile uint16_t cnpnz_vmc_ControlHistory_size = (sizeof(cnpnz_vmc_histories.ControlHistory)/sizeof(cnpnz_vmc_histories.ControlHistory[0])); // Control history array size
+	volatile uint16_t cnpnz_vmc_ErrorHistory_size = (sizeof(cnpnz_vmc_histories.ErrorHistory)/sizeof(cnpnz_vmc_histories.ErrorHistory[0])); // Error history array size
 
 /* ***************************************************************************************
  * 	Pole&Zero Placement:
@@ -44,14 +44,14 @@
  * 	Filter Coefficients and Parameters:
  * ***************************************************************************************/
 
-	fractional cnpnz_vmc_ACoefficients [3] = 
+	volatile fractional cnpnz_vmc_ACoefficients [3] = 
 	{
 		0x4839,	// Coefficient A1 will be multiplied with controller output u(n-1)
 		0xFC13,	// Coefficient A2 will be multiplied with controller output u(n-2)
 		0xFBB6	// Coefficient A3 will be multiplied with controller output u(n-3)
 	};
 
-	fractional cnpnz_vmc_BCoefficients [4] = 
+	volatile fractional cnpnz_vmc_BCoefficients [4] = 
 	{
 		0x12D3,	// Coefficient B0 will be multiplied with error input e(n)
 		0xF0BE,	// Coefficient B1 will be multiplied with error input e(n-1)
@@ -60,18 +60,18 @@
 	};
 
 
-	int16_t cnpnz_vmc_pre_scaler = 3;
-	int16_t cnpnz_vmc_post_shift_A = -1;
-	int16_t cnpnz_vmc_post_shift_B = 0;
-	fractional cnpnz_vmc_post_scaler = 0x0000;
+	volatile int16_t cnpnz_vmc_pre_scaler = 3;
+	volatile int16_t cnpnz_vmc_post_shift_A = -1;
+	volatile int16_t cnpnz_vmc_post_shift_B = 0;
+	volatile fractional cnpnz_vmc_post_scaler = 0x0000;
 
-	cNPNZ16b_t cnpnz_vmc; // user-controller data object
+	volatile cNPNZ16b_t cnpnz_vmc; // user-controller data object
 
 /* ***************************************************************************************/
 
 uint16_t cnpnz_vmc_Init(void)
 {
-	uint16_t i = 0;
+	volatile uint16_t i = 0;
 
 	// Initialize controller data structure at runtime with pre-defined default values
 	cnpnz_vmc.status.flags = CONTROLLER_STATUS_CLEAR;  // clear all status flag bits (will turn off execution))
