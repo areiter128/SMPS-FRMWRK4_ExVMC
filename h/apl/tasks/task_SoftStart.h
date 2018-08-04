@@ -83,10 +83,10 @@ typedef struct
     volatile uint16_t power_good_delay;
 }SOFT_START_OBJECT_t;
 
-extern SOFT_START_OBJECT_t soft_start;
+extern volatile SOFT_START_OBJECT_t soft_start;
 
-extern uint16_t init_soft_start(void);
-extern uint16_t exec_soft_start(void);
+extern volatile uint16_t init_soft_start(void);
+extern volatile uint16_t exec_soft_start(void);
 
 #endif	/* _SFL_SOFT_START_DRIVER_H_ */
 

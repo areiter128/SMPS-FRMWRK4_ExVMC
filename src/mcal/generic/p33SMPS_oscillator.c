@@ -77,7 +77,7 @@
 int16_t init_FOSC(OSC_CONFIG_t OscCfg, OSC_FRCDIVN_e FrcDiv, int8_t FrcTune)
 {
 
-uint16_t i=0, err=0, res=0;
+    volatile uint16_t i=0, err=0, res=0;
 
 // Configure Oscillator to operate the device at desired speed
 //
@@ -196,7 +196,7 @@ uint16_t i=0, err=0, res=0;
 uint16_t init_ACLK( AUXOSC_CONFIG_t aux_clock_config )
 {
 
-unsigned int i=0, lRes=1;
+    volatile unsigned int i=0, lRes=1;
 
 
 // The dsPIC33F-GS Family provides an Auxiliary Clock module to boost the basic

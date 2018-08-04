@@ -12,7 +12,7 @@
  * Global converter default settings, threshold and scaling
  * ***************************************************************************************/
 
-uint16_t ctrl_v_reference  = 0;
+volatile uint16_t ctrl_v_reference  = 0;
 
 /* ***************************************************************************************/
 
@@ -38,7 +38,7 @@ uint16_t ctrl_v_reference  = 0;
  * 
  * 
  *****************************************************************************/
-uint16_t init_VMC_Controller(void)
+volatile uint16_t init_VMC_Controller(void)
 {
 
     volatile uint16_t fres = 0;

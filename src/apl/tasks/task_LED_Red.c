@@ -44,27 +44,27 @@
 #include "task_Switch.h"
 #include "task_LED_Red.h"
 
-FUNCTION_LED_CONFIG_t taskLEDRED_config;
+volatile FUNCTION_LED_CONFIG_t taskLEDRED_config;
 
-uint16_t task_LEDRed_ForceOn(void)
+volatile uint16_t task_LEDRed_ForceOn(void)
 {
     LED_RD_WR = LED_ON;
     return(1);
 }
 
-uint16_t task_LEDRed_ForceOff(void)
+volatile uint16_t task_LEDRed_ForceOff(void)
 {
     LED_RD_WR = LED_OFF;
     return(1);
 }
 
-uint16_t task_LEDRed_ForceToggle(void)
+volatile uint16_t task_LEDRed_ForceToggle(void)
 {
     LED_RD_WR ^= 1;
     return(1);
 }
 
-uint16_t task_LEDRed(void)
+volatile uint16_t task_LEDRed(void)
 {
     if(taskSWITCH_config.status == SWITCH_CLOSED) LED_RD_WR = LED_ON;
     else {LED_RD_WR = LED_OFF;}
@@ -72,7 +72,7 @@ uint16_t task_LEDRed(void)
     return(1);
 }
 
-uint16_t init_TaskLEDRed(void)
+volatile uint16_t init_TaskLEDRed(void)
 {
     LED_RD_WR = LED_OFF;
     LED_RD_TRIS = 0;

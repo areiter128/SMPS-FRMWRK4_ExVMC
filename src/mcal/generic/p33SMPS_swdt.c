@@ -63,7 +63,7 @@ uint16_t swdt_enable(SWDT_CONFIGURATION_t swdt_enable_state) {
 
 }
 
-inline uint16_t swdt_reset(void)
+uint16_t swdt_reset(void)
 {
 
     #if defined (_P33SMPS_WACA_) || defined (_P33SMPS_WACS_)

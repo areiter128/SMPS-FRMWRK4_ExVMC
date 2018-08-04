@@ -78,7 +78,7 @@ typedef struct
     volatile uint16_t status;               // used to globally publish the switch button status
 }TASK_ON_BOARD_LED_CONFIG_t;
 
-extern TASK_ON_BOARD_LED_CONFIG_t taskOnBoardLED_config;
+extern volatile TASK_ON_BOARD_LED_CONFIG_t taskOnBoardLED_config;
 
 #define LED_DELAY_COUNTER_DEFAULT   500
 #define LED_DELAY_COUNTER_FAULT     100
@@ -86,8 +86,9 @@ extern TASK_ON_BOARD_LED_CONFIG_t taskOnBoardLED_config;
 /* ***********************************************************************************************
  * PROTOTYPES
  * ***********************************************************************************************/
-extern uint16_t init_TaskOnBoardLED(void);
-extern uint16_t task_OnBoardLED(void);
+extern volatile uint16_t init_TaskOnBoardLED(void);
+extern volatile uint16_t task_OnBoardLED(void);
+extern volatile uint16_t dispose_TaskOnBoardLED(void);
 
 #endif	/* APL_TASK_ON_BOARD_LED_H */
 

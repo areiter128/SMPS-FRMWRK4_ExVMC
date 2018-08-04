@@ -43,9 +43,9 @@
 #include "task_Switch.h"
 #include "hal.h"
 
-TASK_SWITCH_BUTTON_CONFIG_t taskSWITCH_config;
+volatile TASK_SWITCH_BUTTON_CONFIG_t taskSWITCH_config;
 
-uint16_t task_SwitchButton(void) 
+volatile uint16_t task_SwitchButton(void) 
 {
 
     if(taskSWITCH_config.enable)
@@ -60,7 +60,7 @@ uint16_t task_SwitchButton(void)
     return(1);
 }
 
-uint16_t init_TaskSwitchButton(void)
+volatile uint16_t init_TaskSwitchButton(void)
 {
     // Setting up the port pin
     SWITCH_WR = 1;

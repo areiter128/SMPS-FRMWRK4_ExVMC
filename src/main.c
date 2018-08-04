@@ -57,7 +57,7 @@ int main(void) {
     volatile uint16_t fres = 0;
     
 #if __DEBUG
-    uint16_t cnt=0;
+    volatile uint16_t cnt=0;
 #endif
     
     // Right after system reset, first check for root-cause of previous device reset

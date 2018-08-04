@@ -36,8 +36,8 @@
 /* ***********************************************************************************************
  * PROTOTYPES
  * ***********************************************************************************************/
-extern uint16_t init_hspwm(void);
-extern uint16_t exec_launch_hspwm(void);
+extern volatile uint16_t init_hspwm(void);
+extern volatile uint16_t exec_launch_hspwm(void);
 
 #endif	/* _HARDWARE_ABSTRACTION_LAYER_INITIALIZE_HIGH_SPEED_PWM_H_ */
 

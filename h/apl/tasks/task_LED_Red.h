@@ -51,16 +51,16 @@
  * DECLARATIONS
  * ***********************************************************************************************/
 
-extern FUNCTION_LED_CONFIG_t taskLEDRED_config;
+extern volatile FUNCTION_LED_CONFIG_t taskLEDRED_config;
 
 /* ***********************************************************************************************
  * PROTOTYPES
  * ***********************************************************************************************/
-extern uint16_t init_TaskLEDRed(void);
-extern uint16_t task_LEDRed(void);
-extern uint16_t task_LEDRed_ForceOn(void);
-extern uint16_t task_LEDRed_ForceOff(void);
-extern uint16_t task_LEDRed_ForceToggle(void);
+extern volatile uint16_t init_TaskLEDRed(void);
+extern volatile uint16_t task_LEDRed(void);
+extern volatile uint16_t task_LEDRed_ForceOn(void);
+extern volatile uint16_t task_LEDRed_ForceOff(void);
+extern volatile uint16_t task_LEDRed_ForceToggle(void);
 
 #endif	/* APL_TASK_BOARD_LED_RED_H */
 

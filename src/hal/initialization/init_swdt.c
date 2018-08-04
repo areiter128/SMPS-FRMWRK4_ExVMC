@@ -33,7 +33,7 @@
 
 #include "init_swdt.h"
 
-uint16_t init_SoftwareWatchDogTimer(void) {
+volatile uint16_t init_SoftwareWatchDogTimer(void) {
 
     // Enable the software watchdog timer
     swdt_enable(SWDT_ENABLED);

@@ -38,7 +38,7 @@
 ISR: 		PWM Special Event Match Interrupt
 Description: 
 ***************************************************************************/
-void __attribute__((__interrupt__,no_auto_psv)) _PWMSpEventMatchInterrupt(void)
+void __attribute__((__interrupt__,no_auto_psv, context)) _PWMSpEventMatchInterrupt(void)
 {	
 
 #if(TRIGGER_OPTION == TRG_OPTION_PWM)
@@ -46,7 +46,6 @@ void __attribute__((__interrupt__,no_auto_psv)) _PWMSpEventMatchInterrupt(void)
     cnpnz_vmc_Update(&cnpnz_vmc);   // Call voltage control loop controller
 #endif
     
-    _PSEMIF = 0;
 	IFS3bits.PSEMIF = 0; // clear interrupt flag
 
 	return;

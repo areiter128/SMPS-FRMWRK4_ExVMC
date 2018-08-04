@@ -56,21 +56,21 @@
 uint16_t gsirq_init_irq(uint16_t regINTCON1, uint16_t regINTCON2)
 {
 
-    volatile uint16_t reg_buf=0, i_res=0;
+    volatile uint16_t reg_buf=0, fres=0;
 
 	reg_buf = (regINTCON1 & REG_INTCON1_WRITE_BIT_MSK);	// Status-bits will be masked out, flag bits will be reset
 	INTCON1 = reg_buf;                                  // Read register contents
-	if((INTCON1 & REG_INTCON1_WRITE_BIT_MSK) == reg_buf) i_res = 1; // Compare 
+	if((INTCON1 & REG_INTCON1_WRITE_BIT_MSK) == reg_buf) fres = 1; // Compare 
 
 	reg_buf = (regINTCON2 & REG_INTCON2_WRITE_BIT_MSK);	// Status-bits will be masked out
 	INTCON2 = reg_buf;	
-	if((INTCON2 & REG_INTCON2_VALID_BIT_MSK) == reg_buf) i_res &= 1;
+	if((INTCON2 & REG_INTCON2_VALID_BIT_MSK) == reg_buf) fres &= 1;
 
 	reg_buf = (0x0000 & REG_INTCON3_WRITE_BIT_MSK);	// Status-bits will be masked out
 	INTCON3 = reg_buf;	
-	if((INTCON3 & REG_INTCON3_VALID_BIT_MSK) == reg_buf) i_res &= 1;
+	if((INTCON3 & REG_INTCON3_VALID_BIT_MSK) == reg_buf) fres &= 1;
 
-	return(i_res);
+	return(fres);
 	
 }
 

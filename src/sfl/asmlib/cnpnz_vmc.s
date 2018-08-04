@@ -2,9 +2,9 @@
 ; **********************************************************************************
 ;  SDK Version: Digital Control Loop Designer v0.9.0.25
 ;  Author:      M91406
-;  Date/Time:   08/03/18 03:50:04 PM
+;  Date/Time:   08/05/18 01:16:42 AM
 ; **********************************************************************************
-;  3P3Z Control Library File (Single Bitshift-Scaling Mode)
+;  3P3Z Control Library File (Dual Bitshift-Scaliing Mode)
 ; **********************************************************************************
 	
 ;------------------------------------------------------------------------------
@@ -38,8 +38,8 @@
 	.equ offErrHistArraySize,       22    ; size of the error history array
 	.equ offPreShift,               24    ; value of input value normalization bit-shift scaler
 	.equ offPostShiftA,             26    ; value of A-term normalization bit-shift scaler
-	.equ reserved_1,                28    ; (reserved)
-	.equ reserved_2,                30    ; (reserved)
+	.equ offPostShiftB,             28    ; value of B-term normalization bit-shift scaler
+	.equ reserved_1,                30    ; (reserved)
 	.equ offMinOutput,              32    ; minimum clamping value of control output
 	.equ offMaxOutput,              34    ; maximum clamping value of control output
 	.equ offADCTriggerRegister,     36    ; pointer to ADC trigger register memory address
@@ -59,13 +59,8 @@ _cnpnz_vmc_Update:    ; provide global scope to routine
 	
 ;------------------------------------------------------------------------------
 ; Save working registers
-	push.s    ; save shadowed working registers (w0...w3)
-	push w4    ; save working registers used for MAC operations (w4, w6, w8, w10)
-	push w6
-	push w8
-	push w10
 	push w12    ; save working register used for status flag tracking
-    
+	
 ;------------------------------------------------------------------------------
 ; Check status word for Enable/Disable flag and bypass computation, if disabled
 	mov [w0 + #offStatus], w12
@@ -74,7 +69,6 @@ _cnpnz_vmc_Update:    ; provide global scope to routine
 	
 ;------------------------------------------------------------------------------
 ; Save working registers
-	push SR    ; save CPU status register
 	
 ;------------------------------------------------------------------------------
 ; Setup pointers to A-Term data arrays
@@ -92,17 +86,9 @@ _cnpnz_vmc_Update:    ; provide global scope to routine
 	mac w4*w6, a    ; multiply & accumulate last control output with coefficient of the delay line (no more prefetch)
 	
 ;------------------------------------------------------------------------------
-; Setup pointer to first element of error history array
-	mov [w0 + #offErrorHistory], w10    ; load pointer address into wreg
-	
-;------------------------------------------------------------------------------
-; Update error history (move error one tick along the delay line)
-	mov [w10 + #4], w6    ; move entry (n-3) into buffer
-	mov w6, [w10 + #6]    ; move buffered value one tick down the delay line
-	mov [w10 + #2], w6    ; move entry (n-2) into buffer
-	mov w6, [w10 + #4]    ; move buffered value one tick down the delay line
-	mov [w10 + #0], w6    ; move entry (n-1) into buffer
-	mov w6, [w10 + #2]    ; move buffered value one tick down the delay line
+; Backward normalization of recent result
+	mov [w0 + #offPostShiftA], w6
+	sftac a, w6
 	
 ;------------------------------------------------------------------------------
 ; Read data from input source and calculate error input to transfer function
@@ -116,20 +102,34 @@ _cnpnz_vmc_Update:    ; provide global scope to routine
 ;------------------------------------------------------------------------------
 ; Setup pointers to B-Term data arrays
 	mov [w0 + #offBCoefficients], w8    ; load pointer to first index of B coefficients array
+	
+;------------------------------------------------------------------------------
+; Setup pointer to first element of error history array
+	mov [w0 + #offErrorHistory], w10    ; load pointer address into wreg
+	
+;------------------------------------------------------------------------------
+; Update error history (move error one tick along the delay line)
+	mov [w10 + #4], w6    ; move entry (n-3) into buffer
+	mov w6, [w10 + #6]    ; move buffered value one tick down the delay line
+	mov [w10 + #2], w6    ; move entry (n-2) into buffer
+	mov w6, [w10 + #4]    ; move buffered value one tick down the delay line
+	mov [w10 + #0], w6    ; move entry (n-1) into buffer
+	mov w6, [w10 + #2]    ; move buffered value one tick down the delay line
 	mov w1, [w10]    ; add most recent error input to history array
 	
 ;------------------------------------------------------------------------------
-; Compute compensation filter term
-	movsac a, [w8]+=2, w4, [w10]+=2, w6    ; leave contents accumulator A untouched and prefetch first operands
-	mac w4*w6, a, [w8]+=2, w4, [w10]+=2, w6    ; multiply & accumulate error input (n-0) from the delay line with coefficient B0 and prefetch next operands
-	mac w4*w6, a, [w8]+=2, w4, [w10]+=2, w6    ; multiply & accumulate error input (n-1) from the delay line with coefficient B1 and prefetch next operands
-	mac w4*w6, a, [w8]+=2, w4, [w10]+=2, w6    ; multiply & accumulate error input (n-2) from the delay line with coefficient B2 and prefetch next operands
-	mac w4*w6, a    ; multiply & accumulate last control output with coefficient of the delay line (no more prefetch)
+; Compute B-Term of the compensation filter
+	clr b, [w8]+=2, w4, [w10]+=2, w6    ; clear accumulator B and prefetch first operands
+	mac w4*w6, b, [w8]+=2, w4, [w10]+=2, w6    ; multiply & accumulate error input (n-0) from the delay line with coefficient B0 and prefetch next operands
+	mac w4*w6, b, [w8]+=2, w4, [w10]+=2, w6    ; multiply & accumulate error input (n-1) from the delay line with coefficient B1 and prefetch next operands
+	mac w4*w6, b, [w8]+=2, w4, [w10]+=2, w6    ; multiply & accumulate error input (n-2) from the delay line with coefficient B2 and prefetch next operands
+	mac w4*w6, b    ; multiply & accumulate last error input with coefficient of the delay line (no more prefetch)
 	
 ;------------------------------------------------------------------------------
 ; Backward normalization of recent result
-	mov [w0 + #offPostShiftA], w6
-	sftac a, w6
+	mov [w0 + #offPostShiftB], w6
+	sftac b, w6
+	add a    ; add accumulator b to accumulator a
 	sac.r a, w4    ; store most recent accumulator result in working register
 	
 ;------------------------------------------------------------------------------
@@ -178,7 +178,6 @@ _cnpnz_vmc_Update:    ; provide global scope to routine
 	
 ;------------------------------------------------------------------------------
 ; Restore working registers
-	pop SR    ; restore CPU status registers
 	
 ;------------------------------------------------------------------------------
 ; Enable/Disable bypass branch target
@@ -186,14 +185,9 @@ _cnpnz_vmc_Update:    ; provide global scope to routine
 	
 ;------------------------------------------------------------------------------
 ; Restore working registers
-	pop.s    ; restore shadowed working registers (w0...w3)
-	pop w4    ; restore working registers used for MAC operations w4, w6, w8, w10)
-	pop w6
-	pop w8
-	pop w10
 	pop w12    ; restore working register used for status flag tracking
-
-    ;------------------------------------------------------------------------------
+	
+;------------------------------------------------------------------------------
 ; End of routine
 	return
 ;------------------------------------------------------------------------------
@@ -260,4 +254,14 @@ _cnpnz_vmc_Precharge:
 	mov w2, [w0]    ; Load user value into last address of control history array
 	pop w2
 	pop w0
+	
+;------------------------------------------------------------------------------
+; End of routine
+	return
+;------------------------------------------------------------------------------
+	
+;------------------------------------------------------------------------------
+; End of file
+	.end
+;------------------------------------------------------------------------------
 	

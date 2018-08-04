@@ -45,31 +45,31 @@
 #include "task_LED_Green.h"
 
 
-FUNCTION_LED_CONFIG_t taskLEDGREEN_config;
+volatile FUNCTION_LED_CONFIG_t taskLEDGREEN_config;
 
 
-uint16_t task_LEDGreen_ForceOn(void)
+volatile uint16_t task_LEDGreen_ForceOn(void)
 {
     LED_GN_WR = LED_ON;
     taskLEDGREEN_config.pin_status = LED_GN_RD;     // Reading active pin status
     return(1);
 }
 
-uint16_t task_LEDGreen_ForceOff(void)
+volatile uint16_t task_LEDGreen_ForceOff(void)
 {
     LED_GN_WR = LED_OFF;
     taskLEDGREEN_config.pin_status = LED_GN_RD;     // Reading active pin status
     return(1);
 }
 
-uint16_t task_LEDGreen_ForceToggle(void)
+volatile uint16_t task_LEDGreen_ForceToggle(void)
 {
     LED_GN_WR ^= 1;
     taskLEDGREEN_config.pin_status = LED_GN_RD;     // Reading active pin status
     return(1);
 }
 
-uint16_t task_LEDGreen(void)
+volatile uint16_t task_LEDGreen(void)
 {
     if(taskSWITCH_config.status == SWITCH_OPEN) { LED_GN_WR = LED_ON; }
     else { LED_GN_WR = LED_OFF; }
@@ -87,7 +87,7 @@ uint16_t task_LEDGreen(void)
     return(taskLEDGREEN_config.status);
 }
 
-uint16_t init_TaskLEDGreen(void)
+volatile uint16_t init_TaskLEDGreen(void)
 {
     LED_GN_WR = LED_OFF;
     LED_GN_TRIS = 0;

@@ -51,11 +51,11 @@
 
 /* Private Variable Declarations */
 
-TASK_ON_BOARD_LED_CONFIG_t taskOnBoardLED_config;
+volatile TASK_ON_BOARD_LED_CONFIG_t taskOnBoardLED_config;
 
 /* Public Functions globalized by declarations in task_DebugLED.h */
 
-uint16_t task_OnBoardLED(void) {
+volatile uint16_t task_OnBoardLED(void) {
 
     volatile uint16_t fres = 0;
     
@@ -90,7 +90,7 @@ uint16_t task_OnBoardLED(void) {
 }
 
 
-uint16_t init_TaskOnBoardLED(void) {
+volatile uint16_t init_TaskOnBoardLED(void) {
     
     DBGLED1_TRIS = LED_OUTPUT;
     DBGLED1_WR = LED_ON;
@@ -103,7 +103,7 @@ uint16_t init_TaskOnBoardLED(void) {
     
 }
 
-uint16_t dispose_TaskOnBoardLED(void) {
+volatile uint16_t dispose_TaskOnBoardLED(void) {
     
     taskOnBoardLED_config.delay_counter = 0;
     taskOnBoardLED_config.delay_counter_max = 0;

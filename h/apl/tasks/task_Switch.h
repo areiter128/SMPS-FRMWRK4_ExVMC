@@ -56,7 +56,7 @@ typedef struct
     volatile uint16_t status;               // used globally publish the switch button status
 }TASK_SWITCH_BUTTON_CONFIG_t;
 
-extern TASK_SWITCH_BUTTON_CONFIG_t taskSWITCH_config;
+extern volatile TASK_SWITCH_BUTTON_CONFIG_t taskSWITCH_config;
 
 #define SWITCH_DELAY_COUNTER_DEFAULT   500
 #define SWITCH_DELAY_COUNTER_FAULT     2500
@@ -64,8 +64,8 @@ extern TASK_SWITCH_BUTTON_CONFIG_t taskSWITCH_config;
 /* ***********************************************************************************************
  * PROTOTYPES
  * ***********************************************************************************************/
-extern uint16_t init_TaskSwitchButton(void);
-extern uint16_t task_SwitchButton(void);
+extern volatile uint16_t init_TaskSwitchButton(void);
+extern volatile uint16_t task_SwitchButton(void);
 
 
 #endif	/* APL_TASK_SWITCH_BUTTON_H */

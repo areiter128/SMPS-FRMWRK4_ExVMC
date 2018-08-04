@@ -14,7 +14,7 @@
 volatile uint16_t first_run = 1;
 volatile uint16_t ctrl_ref_buffer = 0;
 volatile uint16_t ctrl_ref_step_size = 0;
-SOFT_START_OBJECT_t soft_start;
+volatile SOFT_START_OBJECT_t soft_start;
 
 /*@@init_soft_start
  *****************************************************************************
@@ -34,7 +34,7 @@ SOFT_START_OBJECT_t soft_start;
  * init_HSPWM
  * 
  *****************************************************************************/
-uint16_t init_soft_start(void)
+volatile uint16_t init_soft_start(void)
 {
     
     /* ToDo: this is a placeholder soft-start function not suited for real application
@@ -71,7 +71,7 @@ uint16_t init_soft_start(void)
  * init_HSPWM
  * 
  *****************************************************************************/
-uint16_t exec_soft_start(void)
+volatile uint16_t exec_soft_start(void)
 {
     volatile uint16_t vin = 0, vout = 0, ctrl_output = 0, timeout = 0;
     volatile float dummy = 0.0;
@@ -158,13 +158,17 @@ uint16_t exec_soft_start(void)
             }
 
             // wait until control loop activity has been detected
+            CVRT_SEV_IRQ_IF = 0;
+//            if (!INTCON2bits.GIE)
+//            { INTCON2bits.GIE = 1; }
             while((!CVRT_SEV_IRQ_IF) && (timeout++ < 50000));
             
             // ToDo: Trip fault if control loop interrupt is not starting
             if (timeout >= 50000)
             { soft_start.status.flag.irq_flt = 1; }
+            // Control loop has been started properly
             else
-            { soft_start.status.flag.irq_flt = 0; } // Control loop has been started properly
+            { soft_start.status.flag.irq_flt = 0; }
             
             // increment the control reference until it reaches nominal level
             if((ctrl_v_reference + ctrl_ref_step_size) < ctrl_ref_buffer)

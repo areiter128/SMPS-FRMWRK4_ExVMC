@@ -53,14 +53,14 @@
 uint16_t gsdsp_init_dsp(uint16_t regCORCON)
 {
 
-volatile uint16_t reg_buf=0, i_res=0;
+volatile uint16_t reg_buf=0, fres=0;
 
 	reg_buf = (regCORCON & REG_CORCON_WRITE_MSK);	// Status-bits will be masked out
 	CORCON = reg_buf;	
 
-	if((CORCON & REG_CORCON_WRITE_MSK) == reg_buf) i_res = 1;
+	if((CORCON & REG_CORCON_WRITE_MSK) == reg_buf) fres = 1;
 
-	return(i_res);
+	return(fres);
 	
 }
 

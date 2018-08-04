@@ -52,9 +52,9 @@
  * init_ADC
  * 
  *****************************************************************************/
-uint16_t init_hspwm(void)
+volatile uint16_t init_hspwm(void)
 {
-    uint16_t i = 0, m = 0, phs = 0, trgcon = 0, fltcon = 0;
+    volatile uint16_t i = 0, m = 0, phs = 0, trgcon = 0, fltcon = 0;
     
     // Turn on power to PWM peripheral blocks
     gspwm_module_power_up();
@@ -198,13 +198,13 @@ uint16_t init_hspwm(void)
  * init_hspwm
  * 
  *****************************************************************************/
-uint16_t exec_launch_hspwm(void)
+volatile uint16_t exec_launch_hspwm(void)
 {
-    uint16_t i_res = 0;
+    volatile uint16_t fres = 0;
     
 
     // Interrupt Configuration = TESTCODE =
-    i_res = gspwm_set_sevtcmp_value(PWM_PRIMARY, CVRT_SEV_DEFAULT_TRIGGER);
+    fres = gspwm_set_sevtcmp_value(PWM_PRIMARY, CVRT_SEV_DEFAULT_TRIGGER);
     CVRT_SEV_IRQ_IF = 0;                                // Reset Interrupt Flag
     CVRT_SEV_IRQ_IP = CVRT_SEV_ISR_PRIORITY;            // Set Interrupt Priority
     CVRT_SEV_IRQ_IE = CVRT_SEV_ISR_ENABLE;              // Enable/Disable Interrupt
@@ -214,12 +214,12 @@ uint16_t exec_launch_hspwm(void)
 //    CVRT_PH1_PWM_IRQ_IE = CVRT_PH1_PWM_ISR_ENABLE;      // Enable/Disable ISR
 
     // Enable PWM peripheral
-    i_res &= gspwm_module_enable();
+    fres &= gspwm_module_enable();
 
     // Launch PWM1
-    i_res &= gspwm_channel_output_enable(CVRT_PH1_PWM_IDX, PWMx_HIGH_LOW);
-    i_res &= gspwm_set_duty_cycle(CVRT_PH1_PWM_IDX, PWMx_HIGH, 0);
-    i_res &= gspwm_ovr_output_release(CVRT_PH1_PWM_IDX, PWMx_HIGH_LOW);
+    fres &= gspwm_channel_output_enable(CVRT_PH1_PWM_IDX, PWMx_HIGH_LOW);
+    fres &= gspwm_set_duty_cycle(CVRT_PH1_PWM_IDX, PWMx_HIGH, 0);
+    fres &= gspwm_ovr_output_release(CVRT_PH1_PWM_IDX, PWMx_HIGH_LOW);
     
     // Launch PWM2
     #if ( PWM_MPH_PHASE_COUNT >= 2 )
@@ -228,9 +228,9 @@ uint16_t exec_launch_hspwm(void)
     CVRT_PH2_PWM_IRQ_IP = CVRT_PH2_PWM_ISR_PRIORITY;    // Set INterrupt Priority
     CVRT_PH2_PWM_IRQ_IE = CVRT_PH2_PWM_ISR_ENABLE;      // Enable/Disable ISR
 
-    i_res &= gspwm_channel_output_enable(CVRT_PH2_PWM_IDX, PWMx_HIGH_LOW);
-    i_res &= gspwm_set_duty_cycle(CVRT_PH2_PWM_IDX, PWMx_HIGH, 0);
-    i_res &= gspwm_ovr_output_release(CVRT_PH2_PWM_IDX, PWMx_HIGH_LOW);
+    fres &= gspwm_channel_output_enable(CVRT_PH2_PWM_IDX, PWMx_HIGH_LOW);
+    fres &= gspwm_set_duty_cycle(CVRT_PH2_PWM_IDX, PWMx_HIGH, 0);
+    fres &= gspwm_ovr_output_release(CVRT_PH2_PWM_IDX, PWMx_HIGH_LOW);
 
     #endif
     
@@ -241,9 +241,9 @@ uint16_t exec_launch_hspwm(void)
     CVRT_PH3_PWM_IRQ_IP = CVRT_PH3_PWM_ISR_PRIORITY;    // Set INterrupt Priority
     CVRT_PH3_PWM_IRQ_IE = CVRT_PH3_PWM_ISR_ENABLE;      // Enable/Disable ISR
 
-    i_res &= gspwm_channel_output_enable(CVRT_PH3_PWM_IDX, PWMx_HIGH_LOW);
-    i_res &= gspwm_set_duty_cycle(CVRT_PH3_PWM_IDX, PWMx_HIGH, 0);
-    i_res &= gspwm_ovr_output_release(CVRT_PH3_PWM_IDX, PWMx_HIGH_LOW);
+    fres &= gspwm_channel_output_enable(CVRT_PH3_PWM_IDX, PWMx_HIGH_LOW);
+    fres &= gspwm_set_duty_cycle(CVRT_PH3_PWM_IDX, PWMx_HIGH, 0);
+    fres &= gspwm_ovr_output_release(CVRT_PH3_PWM_IDX, PWMx_HIGH_LOW);
 
     #endif
     
@@ -254,14 +254,14 @@ uint16_t exec_launch_hspwm(void)
     CVRT_PH4_PWM_IRQ_IP = CVRT_PH4_PWM_ISR_PRIORITY;    // Set INterrupt Priority
     CVRT_PH4_PWM_IRQ_IE = CVRT_PH4_PWM_ISR_ENABLE;      // Enable/Disable ISR
 
-    i_res &= gspwm_channel_output_enable(CVRT_PH4_PWM_IDX, PWMx_HIGH_LOW);
-    i_res &= gspwm_set_duty_cycle(CVRT_PH4_PWM_IDX, PWMx_HIGH, 0);
-    i_res &= gspwm_ovr_output_release(CVRT_PH4_PWM_IDX, PWMx_HIGH_LOW);
+    fres &= gspwm_channel_output_enable(CVRT_PH4_PWM_IDX, PWMx_HIGH_LOW);
+    fres &= gspwm_set_duty_cycle(CVRT_PH4_PWM_IDX, PWMx_HIGH, 0);
+    fres &= gspwm_ovr_output_release(CVRT_PH4_PWM_IDX, PWMx_HIGH_LOW);
 
     #endif
     
     
-    return(i_res);
+    return(fres);
     
 }
 

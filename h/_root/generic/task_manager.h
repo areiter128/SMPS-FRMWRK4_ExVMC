@@ -117,13 +117,13 @@ typedef struct {
 } task_manager_settings_t;
 
 // Public Task Manager data structure declaration
-extern task_manager_settings_t task_mgr; // Declare a data structure holding the settings of the task manager
+extern volatile task_manager_settings_t task_mgr; // Declare a data structure holding the settings of the task manager
 
 
 // Public Task Manager Function Prototypes
-extern uint16_t init_TaskManager(void);
-extern uint16_t task_manager_tick(void);
-extern uint16_t task_CheckOperationModeStatus(void);
+extern inline uint16_t init_TaskManager(void);
+extern inline uint16_t task_manager_tick(void);
+extern inline uint16_t task_CheckOperationModeStatus(void);
 
 
 #endif	/* _ROOT_TASK_MANAGER_H_ */

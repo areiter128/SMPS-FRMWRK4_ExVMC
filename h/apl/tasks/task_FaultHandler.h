@@ -65,7 +65,7 @@ typedef enum
 }FAULT_OBJECT_ERROR_CODE_e;
 
 /* PROTOTYPES */
-extern uint16_t init_FaultObjects();
+extern volatile uint16_t init_FaultObjects();
 
 #endif	/* _HARDWARE_ABSTRACTION_LAYER_FAULT_HANDLER_H_ */
 

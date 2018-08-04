@@ -56,7 +56,7 @@
  * 07/28/2017	File created
  * ***********************************************************************************************/
 
-uint16_t task_Idle(void) {
+volatile uint16_t task_Idle(void) {
 // Idle tasks might be required to free up additional CPU load for higher
 // priority processes. THerefore it's recommended to leave at least 
 // one Idle cycle in each task list

@@ -47,9 +47,9 @@
  * 
  **************************************************************************/
 
-uint16_t init_hsadc(void)
+volatile uint16_t init_hsadc(void)
 {
-    uint16_t i_res = 0;
+    volatile uint16_t fres = 0;
 
 	// Set Analog inputs
 
@@ -58,45 +58,45 @@ uint16_t init_hsadc(void)
     ADC_PH1_IL_ANSEL = 1;      // 1: Enable Analog Input, 0: Disable Analog Input
     
     // Turn on ADC module power
-    i_res = gsadc_module_power_up();
+    fres = gsadc_module_power_up();
     
     // Run basic initialization of ADC module features
-	i_res &= gsadc_init_adc(
+	fres &= gsadc_init_adc(
         ADC_ADCON1L_CFG, ADC_ADCON1H_CFG, ADC_ADCON2L_CFG, ADC_ADCON2H_CFG,
         ADC_ADCON3L_CFG, ADC_ADCON3H_CFG, ADC_ADCON4L_CFG, ADC_ADCON4H_CFG, 
         ADC_ADCON5L_CFG, ADC_ADCON5H_CFG);
 
     // Initialize individual ADC cores
-    i_res &= gsadc_init_adc_core(ADC_VOUT_ADCORE, ADC_VOUT_ADCORExL_CFG, ADC_VOUT_ADCORExH_CFG);
-    i_res &= gsadc_init_adc_core(ADC_VIN_ADCORE, ADC_VIN_ADCORExL_CFG, ADC_VIN_ADCORExH_CFG);
-    i_res &= gsadc_init_adc_core(ADC_PH1_IL_ADCORE, ADC_PH1_IL_ADCORExL_CFG, ADC_PH1_IL_ADCORExH_CFG);
+    fres &= gsadc_init_adc_core(ADC_VOUT_ADCORE, ADC_VOUT_ADCORExL_CFG, ADC_VOUT_ADCORExH_CFG);
+    fres &= gsadc_init_adc_core(ADC_VIN_ADCORE, ADC_VIN_ADCORExL_CFG, ADC_VIN_ADCORExH_CFG);
+    fres &= gsadc_init_adc_core(ADC_PH1_IL_ADCORE, ADC_PH1_IL_ADCORExL_CFG, ADC_PH1_IL_ADCORExH_CFG);
     
     // Enable ADC Module
-    i_res &= gsadc_module_enable();
+    fres &= gsadc_module_enable();
     
     // Power on ADC cores and run calibration
-    i_res &= gsadc_power_on_adc_core(ADC_VOUT_ADCORE);
-    i_res &= gsadc_calibrate_adc_core(ADC_VOUT_ADCORE, ADC_ADCAL_CALIB_MODE);
+    fres &= gsadc_power_on_adc_core(ADC_VOUT_ADCORE);
+    fres &= gsadc_calibrate_adc_core(ADC_VOUT_ADCORE, ADC_ADCAL_CALIB_MODE);
 
-    i_res &= gsadc_power_on_adc_core(ADC_VIN_ADCORE);
-    i_res &= gsadc_calibrate_adc_core(ADC_VIN_ADCORE, ADC_ADCAL_CALIB_MODE);
+    fres &= gsadc_power_on_adc_core(ADC_VIN_ADCORE);
+    fres &= gsadc_calibrate_adc_core(ADC_VIN_ADCORE, ADC_ADCAL_CALIB_MODE);
 
-    i_res &= gsadc_power_on_adc_core(ADC_PH1_IL_ADCORE);
-    i_res &= gsadc_calibrate_adc_core(ADC_PH1_IL_ADCORE, ADC_ADCAL_CALIB_MODE);
+    fres &= gsadc_power_on_adc_core(ADC_PH1_IL_ADCORE);
+    fres &= gsadc_calibrate_adc_core(ADC_PH1_IL_ADCORE, ADC_ADCAL_CALIB_MODE);
 
     // Set ADC Interrupt Trigger
-    i_res &= gsadc_set_adc_input_trigger_source(ADC_VOUT_ANALOG_INPUT, ADC_VOUT_TRIG_SOURCE);
-    i_res &= gsadc_set_adc_input_trigger_source(ADC_VIN_ANALOG_INPUT, ADC_VIN_TRIG_SOURCE);
-    i_res &= gsadc_set_adc_input_trigger_source(ADC_PH1_IL_ANALOG_INPUT, ADC_PH1_IL_TRIG_SOURCE);
+    fres &= gsadc_set_adc_input_trigger_source(ADC_VOUT_ANALOG_INPUT, ADC_VOUT_TRIG_SOURCE);
+    fres &= gsadc_set_adc_input_trigger_source(ADC_VIN_ANALOG_INPUT, ADC_VIN_TRIG_SOURCE);
+    fres &= gsadc_set_adc_input_trigger_source(ADC_PH1_IL_ANALOG_INPUT, ADC_PH1_IL_TRIG_SOURCE);
 
     // Set up digital comparators for input and output voltage
-    i_res &= gsadc_init_adc_comp( ADC_ADCMP_VIN, ADC_VIN_ANALOG_INPUT, ADC_ADCMP_VIN_CFG, VIN_UVLO_TRIP, VIN_OVLO_TRIP );
-    i_res &= gsadc_init_adc_comp( ADC_ADCMP_VOUT, ADC_VOUT_ANALOG_INPUT, ADC_ADCMP_VOUT_CFG, 0, VOUT_OVP_TRIP );
+    fres &= gsadc_init_adc_comp( ADC_ADCMP_VIN, ADC_VIN_ANALOG_INPUT, ADC_ADCMP_VIN_CFG, VIN_UVLO_TRIP, VIN_OVLO_TRIP );
+    fres &= gsadc_init_adc_comp( ADC_ADCMP_VOUT, ADC_VOUT_ANALOG_INPUT, ADC_ADCMP_VOUT_CFG, 0, VOUT_OVP_TRIP );
     
     // Set up Interrupts
-    i_res &= gsadc_set_adc_core_interrupt(ADC_VOUT_ANALOG_INPUT, ADC_VOUT_ADIN_IE, ADC_VOUT_ADCORE_EIE);
-    i_res &= gsadc_set_adc_core_interrupt(ADC_VIN_ANALOG_INPUT, ADC_VIN_ADIN_IE, ADC_VIN_ADCORE_EIE);
-    i_res &= gsadc_set_adc_core_interrupt(ADC_PH1_IL_ANALOG_INPUT, ADC_PH1_IL_ADIN_IE, ADC_PH1_IL_ADCORE_EIE);
+    fres &= gsadc_set_adc_core_interrupt(ADC_VOUT_ANALOG_INPUT, ADC_VOUT_ADIN_IE, ADC_VOUT_ADCORE_EIE);
+    fres &= gsadc_set_adc_core_interrupt(ADC_VIN_ANALOG_INPUT, ADC_VIN_ADIN_IE, ADC_VIN_ADCORE_EIE);
+    fres &= gsadc_set_adc_core_interrupt(ADC_PH1_IL_ANALOG_INPUT, ADC_PH1_IL_ADIN_IE, ADC_PH1_IL_ADCORE_EIE);
 
     STRIG1 = 7000;  // TODO: Move this setting into system configuration
     
@@ -108,7 +108,7 @@ uint16_t init_hsadc(void)
     ADC_VOUT_ADCMP_IF = 0;
     ADC_VOUT_ADCMP_IE = 0;
 
-	return(i_res);
+	return(fres);
 	
 }
 
@@ -128,12 +128,12 @@ uint16_t init_hsadc(void)
  * 
  **************************************************************************/
 
-uint16_t exec_launch_hsadc(void)
+volatile uint16_t exec_launch_hsadc(void)
 {
-    uint16_t i_res=1;
-    uint16_t dummy_buffer=0;
+    volatile uint16_t fres=1;
+    volatile uint16_t dummy_buffer=0;
 
-    i_res &= gspwm_set_adc_trigger(CVRT_PH1_PWM_IDX, PWMx_HIGH, 500);
+    fres &= gspwm_set_adc_trigger(CVRT_PH1_PWM_IDX, PWMx_HIGH, 500);
 
     ADC_VOUT_ADC_IF = 0;                            // Reset Interrupt Flag Bit
     dummy_buffer = ADC_VOUT_ADCBUF;                 // Dummy Read
@@ -150,6 +150,6 @@ uint16_t exec_launch_hsadc(void)
     ADC_PH1_IL_ADC_IP = ADC_PH1_IL_ISR_PRIORITY;    // Set Interrupt Priority
     ADC_PH1_IL_ADC_IE = ADC_PH1_IL_ADIN_IE;         // Enable/Disable Interrupt
     
-    return(i_res);
+    return(fres);
 }
     

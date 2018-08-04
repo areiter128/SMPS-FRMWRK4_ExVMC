@@ -187,7 +187,7 @@ typedef struct
 }TRAP_LOGGER_t;
 
  //extern TRAP_LOGGER_t __attribute__((__persistent__))traplog; // data structure used as buffer for trap monitoring
-extern TRAP_LOGGER_t traplog; // data structure used as buffer for trap monitoring
+extern volatile TRAP_LOGGER_t traplog; // data structure used as buffer for trap monitoring
 
 // =================================================================================================
 //

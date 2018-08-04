@@ -37,7 +37,7 @@
 /* ***********************************************************************************************
  * PROTOTYPES
  * ***********************************************************************************************/
-extern uint16_t init_SoftwareWatchDogTimer(void);
+extern volatile uint16_t init_SoftwareWatchDogTimer(void);
 
 #endif	/* _HARDWARE_ABSTRACTION_LAYER_SOFTWARE_WATCH_DOG_INITIALIZATION_H_ */
 

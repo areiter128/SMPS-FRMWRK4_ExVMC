@@ -96,7 +96,7 @@ extern uint16_t launch_system_timer(void);      // Start timer
  * by the manager's function calls from the main loop
  * *****************************************************************************************************/
 
-extern uint16_t(*Task_Table[])(void);
+extern volatile uint16_t(*Task_Table[])(void);
 
 /*@@task_id_no_e
  * *****************************************************************************************************
@@ -153,23 +153,23 @@ typedef enum {
  * multiple times while less critical ones might only be called once.
  * *****************************************************************************************************/
 
-extern uint16_t task_list_boot[];
-extern uint16_t task_list_boot_size;
+extern volatile uint16_t task_list_boot[];
+extern volatile uint16_t task_list_boot_size;
 
-extern uint16_t task_list_device_startup[];
-extern uint16_t task_list_device_startup_size;
+extern volatile uint16_t task_list_device_startup[];
+extern volatile uint16_t task_list_device_startup_size;
 
-extern uint16_t task_list_system_startup[];
-extern uint16_t task_list_system_startup_size;
+extern volatile uint16_t task_list_system_startup[];
+extern volatile uint16_t task_list_system_startup_size;
 
-extern uint16_t task_list_normal[];
-extern uint16_t task_list_normal_size;
+extern volatile uint16_t task_list_normal[];
+extern volatile uint16_t task_list_normal_size;
 
-extern uint16_t task_list_fault[];
-extern uint16_t task_list_fault_size;
+extern volatile uint16_t task_list_fault[];
+extern volatile uint16_t task_list_fault_size;
 
-extern uint16_t task_list_standby[];
-extern uint16_t task_list_standby_size;
+extern volatile uint16_t task_list_standby[];
+extern volatile uint16_t task_list_standby_size;
 
 #endif	/* _APPLICATION_LAYER_TASK_FLOW_LISTS_H_ */
 

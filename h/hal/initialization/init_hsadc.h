@@ -38,8 +38,8 @@
 /* ***********************************************************************************************
  * PROTOTYPES
  * ***********************************************************************************************/
-extern uint16_t init_hsadc(void);
-extern uint16_t exec_launch_hsadc(void);
+extern volatile uint16_t init_hsadc(void);
+extern volatile uint16_t exec_launch_hsadc(void);
 
 #endif	/* _HARDWARE_ABSTRACTION_LAYER_INITIALIZE_ANALOG_TO_DIGITAL_CONVERTER_H_ */
 

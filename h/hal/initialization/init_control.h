@@ -50,12 +50,12 @@
 /* ***********************************************************************************************
  * GLOBAL VARIABLE DECLARATIONS
  * ***********************************************************************************************/
-extern uint16_t ctrl_v_reference;
+extern volatile uint16_t ctrl_v_reference;
 
 /* ***********************************************************************************************
  * FUNCTION PROTOTYPES
  * ***********************************************************************************************/
-extern uint16_t init_VMC_Controller(void);      // Initialize the voltage loop controller
+extern volatile uint16_t init_VMC_Controller(void);      // Initialize the voltage loop controller
 
 #endif	/* _HARDWARE_ABSTRACTION_LAYER_CONTROL_CONFIGURATION_H_ */
 

@@ -56,16 +56,16 @@
 
 
 // Task Manager
-task_manager_settings_t task_mgr; // Declare a data structure holding the settings of the task manager
-system_operation_mode_t pre_op_mode; // Private flag variable pre-op-mode used by task_CheckOperationModeStatus to identify changes in op_mode
+volatile task_manager_settings_t task_mgr; // Declare a data structure holding the settings of the task manager
+volatile system_operation_mode_t pre_op_mode; // Private flag variable pre-op-mode used by task_CheckOperationModeStatus to identify changes in op_mode
 
 //------------------------------------------------------------------------------
 // execute task manager scheduler
 //------------------------------------------------------------------------------
 
-inline uint16_t task_manager_tick(void) {
+uint16_t task_manager_tick(void) {
 
-    uint16_t i_res = 0, err_code = 0;
+    uint16_t fres = 0, err_code = 0;
 
     // The task manager scheduler runs through the currently selected task flow list in n steps.
     // After the last item of each list the operation mode switch-over check is performed and the 
@@ -82,9 +82,9 @@ inline uint16_t task_manager_tick(void) {
     task_mgr.task_time_buffer = *task_mgr.reg_task_timer_counter; // Capture timer counter to calculate remaining "free" time
 
     // Execute next task on the list
-    i_res = Task_Table[task_mgr.exec_task_id](); // Execute currently selected task
+    fres = Task_Table[task_mgr.exec_task_id](); // Execute currently selected task
 
-    task_mgr.exec_task_retval = i_res; // copy/publish most recent function result 
+    task_mgr.exec_task_retval = fres; // copy/publish most recent function result 
 
     // Capture time to determine elapsed task executing time
     task_mgr.task_time = *task_mgr.reg_task_timer_counter - task_mgr.task_time_buffer; // measure most recent task time
@@ -93,7 +93,7 @@ inline uint16_t task_manager_tick(void) {
 
     // Task execution analysis and fault flag settings
 
-    if (i_res == 1)
+    if (fres == 1)
         // if last executed task returned a value =1 (success), reset task execution failure condition
     {
         task_mgr.error_code = 0;
@@ -102,7 +102,7 @@ inline uint16_t task_manager_tick(void) {
     } else
         // if last executed task returned a value !=1 (no success), indicate task execution failure condition
     {
-        task_mgr.exec_task_retval = i_res; // copy/publish most recent function result 
+        task_mgr.exec_task_retval = fres; // copy/publish most recent function result 
         task_mgr.error_code = err_code; // copy/publish most recent function result 
         fault_object_list[FLTOBJ_TASK_EXECUTION_FAILURE]->error_code = err_code;
         fault_object_list[FLTOBJ_TASK_EXECUTION_FAILURE]->status.flags.fltstat = 1;
@@ -123,7 +123,7 @@ inline uint16_t task_manager_tick(void) {
     }
 
     // Check for system-wide fault conditions
-    i_res &= exec_FaultCheckAll();
+    fres &= exec_FaultCheckAll();
     
     // Increment task table pointer
     task_mgr.task_list_tick_index++;
@@ -136,13 +136,13 @@ inline uint16_t task_manager_tick(void) {
         // is executed by default
 
         err_code = 0xFF00; // 0xFF indicates roll-over process
-        i_res &= task_CheckOperationModeStatus();
+        fres &= task_CheckOperationModeStatus();
         task_mgr.task_list_tick_index = 0; // If end of list has bee reached, jump back to first item
 
     }
 
 
-    return (i_res);
+    return (fres);
 }
 
 
@@ -150,7 +150,7 @@ inline uint16_t task_manager_tick(void) {
 // Check operation mode status and switch op mode if needed
 //------------------------------------------------------------------------------
 
-inline uint16_t task_CheckOperationModeStatus(void) {
+uint16_t task_CheckOperationModeStatus(void) {
 
     // Short Fix if MCC Configuration is used
     if ((pre_op_mode.mode == OP_MODE_BOOT) && (task_mgr.op_mode.mode == OP_MODE_BOOT)) { // Boot-up task list is only run once

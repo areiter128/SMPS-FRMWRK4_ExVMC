@@ -5,9 +5,9 @@
  * ***************************************************************************************
  *
  * 	Controller Type:	3P3Z - Basic Voltage Mode Compensator
- * 	Sampling Frequency:	250000 Hz 
+ * 	Sampling Frequency:	350000 Hz 
  * 	Fixed Point Format:	15
- * 	Scaling Mode:		1 - Single Bit-Shift Scaling
+ * 	Scaling Mode:		3 - Dual Bit-Shift Scaling
  * 	Input Gain:			1
  * 
  * ***************************************************************************************/

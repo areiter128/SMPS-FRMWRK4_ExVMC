@@ -26,7 +26,7 @@
 
 #include "init_gpio.h"
 
-uint16_t init_gpio(void) {
+volatile uint16_t init_gpio(void) {
     
     // Executing header files macros
     DBGLED1_INIT;

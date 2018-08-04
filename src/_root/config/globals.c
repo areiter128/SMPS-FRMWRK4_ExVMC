@@ -44,12 +44,12 @@
 /* ***********************************************************************************************
  * DECLARATIONS
  * ***********************************************************************************************/
-APPLICATION_STATUS_t application; // global APPLICATION object holding status and error code information
-uint16_t run_main_loop = 1;     // Flag used to reset the main loop, forcing a warm reset when set != 1
+volatile APPLICATION_STATUS_t application; // global APPLICATION object holding status and error code information
+volatile uint16_t run_main_loop = 1;     // Flag used to reset the main loop, forcing a warm reset when set != 1
 
 #if __DEBUG
-uint16_t task_time_buffer[CPU_LOAD_DEBUG_BUFFER_LENGTH];
-uint16_t cpu_time_buffer[CPU_LOAD_DEBUG_BUFFER_LENGTH];
+volatile uint16_t task_time_buffer[CPU_LOAD_DEBUG_BUFFER_LENGTH];
+volatile uint16_t cpu_time_buffer[CPU_LOAD_DEBUG_BUFFER_LENGTH];
 #endif
 
 /* ***********************************************************************************************

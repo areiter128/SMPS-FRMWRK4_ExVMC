@@ -59,7 +59,7 @@
 
 //uint16_t __attribute__((__persistent__))trap_counter;
 //uint16_t __attribute__((__persistent__))trap_identifier;
-TRAP_LOGGER_t traplog;          // data structure used as buffer for trap monitoring
+volatile TRAP_LOGGER_t traplog;          // data structure used as buffer for trap monitoring
 
 // =================================================================================================
 //

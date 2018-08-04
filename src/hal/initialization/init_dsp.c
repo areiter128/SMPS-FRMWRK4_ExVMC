@@ -48,7 +48,7 @@
  * 
  **************************************************************************/
 
-uint16_t init_dsp(void)
+volatile uint16_t init_dsp(void)
 {
 
     volatile uint16_t fres = 0;

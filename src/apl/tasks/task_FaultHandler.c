@@ -115,7 +115,7 @@ uint16_t fltobj_list_size = (sizeof(fault_object_list)/sizeof(fault_object_list[
  * status information, fault classes and user fault actions.
  * ***********************************************************************************************/
 
-uint16_t init_FaultObjects(void)
+volatile uint16_t init_FaultObjects(void)
 {
     volatile uint16_t fres = 0;
 

@@ -150,10 +150,10 @@ typedef union
 
 typedef struct
 {
-    APPLICATION_FAULT_STATUS_FLAGS_t fault_status;
+    volatile APPLICATION_FAULT_STATUS_FLAGS_t fault_status;
 }APPLICATION_STATUS_t;
 
-extern APPLICATION_STATUS_t application;
+extern volatile APPLICATION_STATUS_t application;
 
 /*@@run_main_loop
  * ***********************************************************************************************
@@ -171,7 +171,7 @@ extern APPLICATION_STATUS_t application;
  * See also:
  * CPU_RESET
  * ***********************************************************************************************/
-extern uint16_t run_main_loop;
+extern volatile uint16_t run_main_loop;
 
 /*@@USE_TASK_EXECUTION_CLOCKOUT_PIN
  * ***********************************************************************************************
@@ -233,8 +233,8 @@ extern uint16_t run_main_loop;
 // in debugging mode two generic arrays are available for CPU load measurements
 #if __DEBUG
 #define CPU_LOAD_DEBUG_BUFFER_LENGTH     128
-extern uint16_t task_time_buffer[];
-extern uint16_t cpu_time_buffer[];
+extern volatile uint16_t task_time_buffer[];
+extern volatile uint16_t cpu_time_buffer[];
 #endif
 
  /* ***********************************************************************************************

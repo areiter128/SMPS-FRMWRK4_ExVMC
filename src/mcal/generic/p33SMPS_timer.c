@@ -75,11 +75,11 @@
  * ***********************************************************************************************/
 
 
-int gstmr_init_timer16b(uint16_t index, TxCON_CONTROL_REGISTER_t regTCON, uint32_t period, TIMER_ISR_PRIORITY_e isr_priority)
+uint16_t gstmr_init_timer16b(uint16_t index, TxCON_CONTROL_REGISTER_t regTCON, uint32_t period, TIMER_ISR_PRIORITY_e isr_priority)
 {
 
-uint32_t per_buf=0;
-uint16_t reg_buf=0, tmr_reg_msk=0;
+    volatile uint32_t per_buf=0;
+    volatile uint16_t reg_buf=0, tmr_reg_msk=0;
 
 
 	if (index > GSTMR_TIMER_COUNT) return(0); // Skip if index is out of range
@@ -199,10 +199,10 @@ uint16_t reg_buf=0, tmr_reg_msk=0;
 
 }
 
-int gstmr_get_tmr_config(uint16_t index, TxCON_CONTROL_REGISTER_t *regTCON, uint32_t period, TIMER_ISR_PRIORITY_e *isr_priority)
+uint16_t gstmr_get_tmr_config(uint16_t index, TxCON_CONTROL_REGISTER_t *regTCON, uint32_t period, TIMER_ISR_PRIORITY_e *isr_priority)
 {
     
-    uint32_t reg_buf=0;
+    volatile uint32_t reg_buf=0;
 
 	if (index > GSTMR_TIMER_COUNT) return(0); // Skip if index is out of range
 
@@ -276,7 +276,7 @@ int gstmr_get_tmr_config(uint16_t index, TxCON_CONTROL_REGISTER_t *regTCON, uint
  * ***********************************************************************************************/
 
 
-int gstmr_enable(uint16_t index, TIMER_ISR_ENABLE_STATE_e isr_enable)
+uint16_t gstmr_enable(uint16_t index, TIMER_ISR_ENABLE_STATE_e isr_enable)
 {
 	
 	if (index > GSTMR_TIMER_COUNT) return(0); // Skip if index is out of range
@@ -350,7 +350,7 @@ int gstmr_enable(uint16_t index, TIMER_ISR_ENABLE_STATE_e isr_enable)
  * ***********************************************************************************************/
 
 
-int gstmr_disable(uint16_t index)
+uint16_t gstmr_disable(uint16_t index)
 {
 	
 	if (index > GSTMR_TIMER_COUNT) return(0); // Skip if index is out of range
@@ -409,7 +409,7 @@ int gstmr_disable(uint16_t index)
  * ***********************************************************************************************/
 
 
-int gstmr_reset(uint16_t index)
+uint16_t gstmr_reset(uint16_t index)
 {
 	
 	if (index > GSTMR_TIMER_COUNT) return(0); // Skip if index is out of range

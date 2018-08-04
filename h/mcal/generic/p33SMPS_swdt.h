@@ -107,8 +107,8 @@ typedef union
 
 #endif
 
-extern uint16_t swdt_enable(SWDT_CONFIGURATION_t swdt_enable_state);
-extern uint16_t swdt_reset(void);
+extern inline uint16_t swdt_enable(SWDT_CONFIGURATION_t swdt_enable_state);
+extern inline uint16_t swdt_reset(void);
     
 #endif	/* MCAL_P33_SMPS_SWDT_H */
 

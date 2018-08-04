@@ -12,7 +12,7 @@
 #include "mcal.h"
 #include "devcfg_irq.h"
 
-uint16_t init_irq(void)
+volatile uint16_t init_irq(void)
 {
 
     volatile uint16_t fres = 0;
