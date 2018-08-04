@@ -1,8 +1,8 @@
 ;LICENSE / DISCLAIMER
 ; **********************************************************************************
-;  SDK Version: Digital Control Loop Designer v0.9.0.15
+;  SDK Version: Digital Control Loop Designer v0.9.0.25
 ;  Author:      M91406
-;  Date/Time:   07/25/2018 08:39:17 PM
+;  Date/Time:   08/03/18 03:50:04 PM
 ; **********************************************************************************
 ;  3P3Z Control Library File (Single Bitshift-Scaling Mode)
 ; **********************************************************************************
@@ -64,23 +64,17 @@ _cnpnz_vmc_Update:    ; provide global scope to routine
 	push w6
 	push w8
 	push w10
-	push w13    ; save working register used for status flag tracking
-	push ACCAL    ; save accumulator A registers
-	push ACCAH
-	push ACCAU
-	push CORCON    ; save CPU configuration register
-	push SR    ; save CPU status register
+	push w12    ; save working register used for status flag tracking
 	
 ;------------------------------------------------------------------------------
 ; Check status word for Enable/Disable flag and bypass computation, if disabled
-	mov [w0 + #offStatus], w13
-	btss w13, #NPMZ16_STATUS_ENABLE
+	mov [w0 + #offStatus], w12
+	btss w12, #NPMZ16_STATUS_ENABLE
 	bra CNPNZ_VMC_BYPASS_LOOP
 	
 ;------------------------------------------------------------------------------
-; Configure DSP for fractional operation with normal saturation (Q1.31 format)
-	mov #0x00E4, w4
-	mov w4, _CORCON
+; Save working registers
+	push SR    ; save CPU status register
 	
 ;------------------------------------------------------------------------------
 ; Setup pointers to A-Term data arrays
@@ -144,13 +138,13 @@ _cnpnz_vmc_Update:    ; provide global scope to routine
 	cpslt w6, w4
 	bra CNPNZ_VMC_CLAMP_MAX_EXIT
 	mov w6, w4
-	bset w13, #NPMZ16_STATUS_USAT
+	bset w12, #NPMZ16_STATUS_USAT
 	CNPNZ_VMC_CLAMP_MAX_EXIT:
 	mov [w0 + #offMinOutput], w6
 	cpsgt w6, w4
 	bra CNPNZ_VMC_CLAMP_MIN_EXIT
 	mov w6, w4
-	bset w13, #NPMZ16_STATUS_LSAT
+	bset w12, #NPMZ16_STATUS_LSAT
 	CNPNZ_VMC_CLAMP_MIN_EXIT:
 	
 ;------------------------------------------------------------------------------
@@ -180,7 +174,11 @@ _cnpnz_vmc_Update:    ; provide global scope to routine
 	
 ;------------------------------------------------------------------------------
 ; Update status flag bitfield
-	mov w13, [w0 + #offStatus]
+	mov w12, [w0 + #offStatus]
+	
+;------------------------------------------------------------------------------
+; Restore working registers
+	pop SR    ; restore CPU status registers
 	
 ;------------------------------------------------------------------------------
 ; Enable/Disable bypass branch target
@@ -193,12 +191,7 @@ _cnpnz_vmc_Update:    ; provide global scope to routine
 	pop w6
 	pop w8
 	pop w10
-	pop w13    ; restore working register used for status flag tracking
-	pop ACCAL    ; restore accumulator A registers
-	pop ACCAH
-	pop ACCAU
-	pop CORCON    ; restore CPU configuration registers
-	pop SR    ; restore CPU status registers
+	pop w12    ; restore working register used for status flag tracking
 	
 ;------------------------------------------------------------------------------
 ; End of routine
@@ -267,14 +260,4 @@ _cnpnz_vmc_Precharge:
 	mov w2, [w0]    ; Load user value into last address of control history array
 	pop w2
 	pop w0
-	
-;------------------------------------------------------------------------------
-; End of routine
-	return
-;------------------------------------------------------------------------------
-	
-;------------------------------------------------------------------------------
-; End of file
-	.end
-;------------------------------------------------------------------------------
 	

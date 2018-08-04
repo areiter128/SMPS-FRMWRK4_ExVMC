@@ -42,8 +42,8 @@
  * Comments:
  *****************************************************************************/
 
-#ifndef ROOT_TASK_MANAGER_H
-#define	ROOT_TASK_MANAGER_H
+#ifndef _ROOT_TASK_MANAGER_H_
+#define	_ROOT_TASK_MANAGER_H_
     
 #include <stdint.h>
 #include "fdrv_FaultHandler.h"
@@ -93,6 +93,7 @@ typedef struct {
     
     /* Active task list properties */
     volatile uint16_t exec_task_id; // Main task ID from task id definition list
+    volatile uint16_t exec_task_retval; // last return code of most recently executed task
     volatile uint16_t *task_list; // Pointer to the task flow list (lookup table of task flow combinations)
     volatile uint16_t task_list_ubound; // Number of tasks in the current list (1-n))
     volatile uint16_t task_list_tick_index; // Recent task tick counter
@@ -125,9 +126,4 @@ extern uint16_t task_manager_tick(void);
 extern uint16_t task_CheckOperationModeStatus(void);
 
 
-
-#ifdef	__cplusplus
-}
-#endif
-
-#endif	/* ROOT_TASK_MANAGER_H */
+#endif	/* _ROOT_TASK_MANAGER_H_ */

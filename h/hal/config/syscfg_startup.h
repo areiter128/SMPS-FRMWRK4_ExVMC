@@ -26,36 +26,24 @@
  * Revision history: 
  */
 
-/*@@init_control.h
- * *****************************************************************************
- * Summary:
- * Special Function Layer (SFL) item defining controller specific parameters
- *
- * Description:
- * ToDo: Add file description
- *
- * *****************************************************************************
- */
-
 // This is a guard condition so that contents of this file are not included
 // more than once.  
-#ifndef _HARDWARE_ABSTRACTION_LAYER_CONTROL_CONFIGURATION_H_
-#define	_HARDWARE_ABSTRACTION_LAYER_CONTROL_CONFIGURATION_H_
+#ifndef _HARDWARE_ABSTRACTION_LAYER_SYSTEM_STARTUP_H_
+#define	_HARDWARE_ABSTRACTION_LAYER_SYSTEM_STARTUP_H_
 
 #include <xc.h> // include processor files - each processor file is guarded.  
 #include <stdint.h>
+#include <math.h>
+#include "task_manager_config.h"
+#include "tasks.h"
 
-#include "syscfg_cvrt.h"
+#define POWER_ON_DELAY   100.0e-3  // Power On Delay in [sec]
+#define RAMP_UP_PERIOD   50.0e-3  // Voltage Ramp-Up Period in [sec]
+#define POWER_GOOD_DELAY 100.0e-3  // Power Good Delay in [sec]
 
-/* ***********************************************************************************************
- * GLOBAL VARIABLE DECLARATIONS
- * ***********************************************************************************************/
-extern uint16_t ctrl_v_reference;
+#define POWER_ON_DELAY_TICKS    (uint16_t)(((float)POWER_ON_DELAY / (float)TASK_MGR_TIME_STEP)/ ((float)(task_list_system_startup_size)))
+#define RAMP_UP_PERIOD_TICKS    (uint16_t)(((float)RAMP_UP_PERIOD / (float)TASK_MGR_TIME_STEP) / ((float)(task_list_system_startup_size)))
+#define POWER_GOOD_DELAY_TICKS  (uint16_t)(((float)POWER_GOOD_DELAY / (float)TASK_MGR_TIME_STEP) / ((float)(task_list_system_startup_size)))
 
-/* ***********************************************************************************************
- * FUNCTION PROTOTYPES
- * ***********************************************************************************************/
-extern uint16_t init_VMC_Controller(void);      // Initialize the voltage loop controller
-
-#endif	/* _HARDWARE_ABSTRACTION_LAYER_CONTROL_CONFIGURATION_H_ */
+#endif	/* _HARDWARE_ABSTRACTION_LAYER_SYSTEM_STARTUP_H_ */
 

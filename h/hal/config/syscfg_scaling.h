@@ -25,8 +25,8 @@
  * 07/29/2016   initial release
  * **************************************************************************************/
 
-#ifndef SYSTEM_SCALING_H
-#define	SYSTEM_SCALING_H
+#ifndef _HARDWARE_ABSTRACTION_LAYER_SYSTEM_SCALING_H_
+#define	_HARDWARE_ABSTRACTION_LAYER_SYSTEM_SCALING_H_
 
 #include <xc.h> // include processor files - each processor file is guarded.  
 #include <stdint.h>
@@ -46,6 +46,7 @@
 #define VIN_DIVIDER_R1          15400       // Resitance of upper voltage divider resistor in Ohm
 #define VIN_DIVIDER_R2          2200        // Resitance of lower voltage divider resistor in Ohm
 #define VIN_DIVIDER_RATIO   (float)(((float)VIN_DIVIDER_R2) / ((float)(VIN_DIVIDER_R1 + VIN_DIVIDER_R2)))
+#define VIN_DIVIDER_RATIO_INV  (float)( 1.0 / VIN_DIVIDER_RATIO)
 
 #define VIN_SENSE_OFFSET       0.000        // Input voltage sense offset
 #define VIN_FB_OFFSET      (uint16_t)(VIN_SENSE_OFFSET * ADC_SCALER)    // Input voltage sense offset ADC ticks
@@ -53,13 +54,14 @@
 #define VOUT_DIVIDER_R1         4700        // Resitance of upper voltage divider resistor in Ohm
 #define VOUT_DIVIDER_R2         4700        // Resitance of lower voltage divider resistor in Ohm
 #define VOUT_DIVIDER_RATIO  (float)(((float)VOUT_DIVIDER_R2) / ((float)(VOUT_DIVIDER_R1 + VOUT_DIVIDER_R2)))
+#define VOUT_DIVIDER_RATIO_INV  (float)( 1.0 / VOUT_DIVIDER_RATIO)
 
 #define VOUT_SENSE_OFFSET       0.000       // Output voltage sense offset
 #define VOUT_FB_OFFSET      (int16_t)(VOUT_SENSE_OFFSET * ADC_SCALER)   // Output voltage sense offset ADC ticks
 
 
 #define VIN2VOUT_NORMALIZATION  0x7fff  //(int16_t)(ceiling(log(VOUT_DIVIDER_RATIO/VIN_DIVIDER_RATIO)))
-#define VIN2VOUT_NORM_BSFT        0
+#define VIN2VOUT_NORM_BSFT      2
 
 #if (CS_TYPE == CS_TYPE_CT)
 // Defines for Current Sense Transformer feedback
@@ -149,5 +151,5 @@
 #define MPH_PHASE_SHIFT_CH7 (6 * (uint16_t)((float)SWITCHING_PERIOD / (float)PWM_MPH_PHASE_COUNT))
 #define MPH_PHASE_SHIFT_CH8 (7 * (uint16_t)((float)SWITCHING_PERIOD / (float)PWM_MPH_PHASE_COUNT))
 
-#endif	/* SYSTEM_SCALING_H */
+#endif	/* _HARDWARE_ABSTRACTION_LAYER_SYSTEM_SCALING_H_ */
 

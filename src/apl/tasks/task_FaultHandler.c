@@ -57,6 +57,8 @@ FAULT_OBJECT_t fltobj_TaskExecutionFailure;
 FAULT_OBJECT_t fltobj_TaskTimeQuotaViolation;
 
 // Declaration of user defined fault objects
+FAULT_OBJECT_t fltobj_SoftStartFailure;
+
 FAULT_OBJECT_t fltobj_UnderVoltageLockOut;
 FAULT_OBJECT_t fltobj_OverVoltageLockOut;
 FAULT_OBJECT_t fltobj_OverVoltageProtection;
@@ -72,9 +74,11 @@ FAULT_OBJECT_t fltobj_OverTemperatureProtection;
  * throughout the firmware needs to be initialized by a separate initialization routine.
  * ***********************************************************************************************/
 
-uint16_t init_CPULoadOverrunFaultObject();
-uint16_t init_TaskExecutionFaultObject();
-uint16_t init_TaskTimeQuotaViolationFaultObject();
+uint16_t init_CPULoadOverrunFaultObject(void);
+uint16_t init_TaskExecutionFaultObject(void);
+uint16_t init_TaskTimeQuotaViolationFaultObject(void);
+
+uint16_t init_SoftStartFailureFaultObject(void);
 
 /*@@fault_object_list[]
  * ***********************************************************************************************
@@ -92,6 +96,8 @@ FAULT_OBJECT_t *fault_object_list[] = {
     &fltobj_TaskTimeQuotaViolation, // a time execution took longer than specified
     
     // user defined fault objects
+    &fltobj_SoftStartFailure, 
+    
     &fltobj_UnderVoltageLockOut,
     &fltobj_OverVoltageLockOut,
     &fltobj_OverVoltageProtection,
@@ -99,7 +105,7 @@ FAULT_OBJECT_t *fault_object_list[] = {
     &fltobj_OverTemperatureWarning,
     &fltobj_OverTemperatureProtection
 };
-uint16_t fltobj_list_size = (sizeof(fault_object_list)/sizeof(fault_object_list[0])) - 1;
+uint16_t fltobj_list_size = (sizeof(fault_object_list)/sizeof(fault_object_list[0]));
 
 /*@@init_FaultObjects
  * ***********************************************************************************************
@@ -109,13 +115,14 @@ uint16_t fltobj_list_size = (sizeof(fault_object_list)/sizeof(fault_object_list[
  * status information, fault classes and user fault actions.
  * ***********************************************************************************************/
 
-uint16_t init_FaultObjects()
+uint16_t init_FaultObjects(void)
 {
-    uint16_t fres=0;
+    volatile uint16_t fres = 0;
 
     fres = init_CPULoadOverrunFaultObject();
     fres &= init_TaskExecutionFaultObject();
     fres &= init_TaskTimeQuotaViolationFaultObject();
+    fres &= init_SoftStartFailureFaultObject();
     
     return(fres);
     
@@ -129,18 +136,20 @@ uint16_t init_FaultObjects()
  * time left.
  * ***********************************************************************************************/
 
-uint16_t init_CPULoadOverrunFaultObject()
+uint16_t init_CPULoadOverrunFaultObject(void)
 {
     // Configuring the CPU Load Overrun fault object
     
     // specify the target value/register to be monitored
     fltobj_CPULoadOverrun.object = &task_mgr.cpu_load.load_max_buffer; // monitoring the CPU meter result
+    fltobj_CPULoadOverrun.object_bit_mask = FAULT_OBJECT_BIT_MASK_DEFAULT;
     fltobj_CPULoadOverrun.error_code = (uint16_t)ERR_CPU_LOAD_OVERRUN;
+    fltobj_CPULoadOverrun.id = (uint16_t)ERR_CPU_LOAD_OVERRUN;
     
     /* TODO: identify and set generic CPU load warning/fault thresholds */
     // configuring the trip and reset levels as well as trip and reset event filter setting
-    fltobj_CPULoadOverrun.criteria.fault_ratio = FAULT_LEVEL_RATIO_LESS_THAN;
     fltobj_CPULoadOverrun.criteria.counter = 0;      // Set/reset fault counter
+    fltobj_CPULoadOverrun.criteria.fault_ratio = FAULT_LEVEL_RATIO_LESS_THAN;
     fltobj_CPULoadOverrun.criteria.trip_level = 50;   // Set/reset trip level value
     fltobj_CPULoadOverrun.criteria.trip_cnt_threshold = 1; // Set/reset number of successive trips before triggering fault event
     fltobj_CPULoadOverrun.criteria.reset_level = 100;  // Set/reset fault release level value
@@ -149,8 +158,8 @@ uint16_t init_CPULoadOverrunFaultObject()
     // specifying fault class, fault level and enable/disable status
     fltobj_CPULoadOverrun.classes.flags.notify = 1;   // Set =1 if this fault object triggers a fault condition notification
     fltobj_CPULoadOverrun.classes.flags.warning = 1;  // Set =1 if this fault object triggers a warning fault condition response
-    fltobj_CPULoadOverrun.classes.flags.critical = 1; // Set =1 if this fault object triggers a critical fault condition response
-    fltobj_CPULoadOverrun.classes.flags.catastrophic = 1; // Set =1 if this fault object triggers a catastrophic fault condition response
+    fltobj_CPULoadOverrun.classes.flags.critical = 0; // Set =1 if this fault object triggers a critical fault condition response
+    fltobj_CPULoadOverrun.classes.flags.catastrophic = 0; // Set =1 if this fault object triggers a catastrophic fault condition response
     fltobj_CPULoadOverrun.classes.flags.user_class = 0; // Set =1 if this fault object triggers a user-defined fault condition response
         
     fltobj_CPULoadOverrun.status.flags.fltlvlhw = 0; // Set =1 if this fault condition is board-level fault condition
@@ -173,18 +182,22 @@ uint16_t init_CPULoadOverrunFaultObject()
  * user defined task called by the main scheduler returns a failure flag
  * ***********************************************************************************************/
 
-uint16_t init_TaskExecutionFaultObject()
+uint16_t init_TaskExecutionFaultObject(void)
 {
     // Configuring the Task Execution Failure fault object
     
     // specify the target value/register to be monitored
+    fltobj_TaskExecutionFailure.object = &task_mgr.error_code;
+    fltobj_TaskExecutionFailure.object_bit_mask = FAULT_OBJECT_BIT_MASK_DEFAULT;
     fltobj_TaskExecutionFailure.error_code = (uint16_t)ERR_TASK_EXECUTION_FAILURE;
+    fltobj_TaskExecutionFailure.id = (uint16_t)ERR_TASK_EXECUTION_FAILURE;
     
     // configuring the trip and reset levels as well as trip and reset event filter setting
     fltobj_TaskExecutionFailure.criteria.counter = 0;      // Set/reset fault counter
+    fltobj_TaskExecutionFailure.criteria.fault_ratio = FAULT_LEVEL_RATIO_GREATER_THAN;
     fltobj_TaskExecutionFailure.criteria.trip_level = 1;   // Set/reset trip level value
     fltobj_TaskExecutionFailure.criteria.trip_cnt_threshold = 1; // Set/reset number of successive trips before triggering fault event
-    fltobj_TaskExecutionFailure.criteria.reset_level = 1;  // Set/reset fault release level value
+    fltobj_TaskExecutionFailure.criteria.reset_level = 0;  // Set/reset fault release level value
     fltobj_TaskExecutionFailure.criteria.reset_cnt_threshold = 1; // Set/reset number of successive resets before triggering fault release
 
     // specifying fault class, fault level and enable/disable status
@@ -215,15 +228,18 @@ uint16_t init_TaskExecutionFaultObject()
  * maximum time quota defined within the task manager data structure.
  * ***********************************************************************************************/
 
-uint16_t init_TaskTimeQuotaViolationFaultObject()
+uint16_t init_TaskTimeQuotaViolationFaultObject(void)
 {
     // Configuring the Task Time Quota Violation fault object
     fltobj_TaskTimeQuotaViolation.object = &task_mgr.task_time_max_buffer;
+    fltobj_TaskTimeQuotaViolation.object_bit_mask = FAULT_OBJECT_BIT_MASK_DEFAULT;
     fltobj_TaskTimeQuotaViolation.error_code = (uint16_t)FLTOBJ_TASK_TIME_QUOTA_VIOLATION;
+    fltobj_TaskTimeQuotaViolation.id = (uint16_t)FLTOBJ_TASK_TIME_QUOTA_VIOLATION;
+
 
     // configuring the trip and reset levels as well as trip and reset event filter setting
-    fltobj_TaskTimeQuotaViolation.criteria.fault_ratio = FAULT_LEVEL_RATIO_GREATER_THAN;
     fltobj_TaskTimeQuotaViolation.criteria.counter = 0;      // Set/reset fault counter
+    fltobj_TaskTimeQuotaViolation.criteria.fault_ratio = FAULT_LEVEL_RATIO_GREATER_THAN;
     fltobj_TaskTimeQuotaViolation.criteria.trip_level = (task_mgr.task_period - (task_mgr.task_period >> 3));   // Set/reset trip level value
     fltobj_TaskTimeQuotaViolation.criteria.trip_cnt_threshold = 1; // Set/reset number of successive trips before triggering fault event
     fltobj_TaskTimeQuotaViolation.criteria.reset_level = (task_mgr.task_period - (task_mgr.task_period >> 2));  // Set/reset fault release level value
@@ -248,4 +264,46 @@ uint16_t init_TaskTimeQuotaViolationFaultObject()
     return(fltobj_TaskTimeQuotaViolation.status.flags.fltchken);
 }
 
+
+/*@@init_SoftStartFailureFaultObject
+ * ***********************************************************************************************
+ * Description:
+ * The fltobj_SoftStartFailure is initialized here. This fault detects conditions occurring 
+ * during a soft-start process of the power converter.
+ * ***********************************************************************************************/
+
+uint16_t init_SoftStartFailureFaultObject(void)
+{
+    // Configuring the Task Time Quota Violation fault object
+    fltobj_SoftStartFailure.object = &soft_start.status.flags;
+    fltobj_SoftStartFailure.object_bit_mask = SOFT_START_FAULT_COMMON_FLAG;
+    fltobj_SoftStartFailure.error_code = (uint16_t)FLTOBJ_SOFT_START;
+    fltobj_SoftStartFailure.id = (uint16_t)FLTOBJ_SOFT_START;
+
+    // configuring the trip and reset levels as well as trip and reset event filter setting
+    fltobj_SoftStartFailure.criteria.counter = 0;      // Set/reset fault counter
+    fltobj_SoftStartFailure.criteria.fault_ratio = FAULT_LEVEL_RATIO_GREATER_THAN;
+    fltobj_SoftStartFailure.criteria.trip_level = 1;   // Set/reset trip level value
+    fltobj_SoftStartFailure.criteria.trip_cnt_threshold = 100; // Set/reset number of successive trips before triggering fault event
+    fltobj_SoftStartFailure.criteria.reset_level = 0;  // Set/reset fault release level value
+    fltobj_SoftStartFailure.criteria.reset_cnt_threshold = 100; // Set/reset number of successive resets before triggering fault release
+        
+    // specifying fault class, fault level and enable/disable status
+    fltobj_SoftStartFailure.classes.flags.notify = 1;   // Set =1 if this fault object triggers a fault condition notification
+    fltobj_SoftStartFailure.classes.flags.warning = 1;  // Set =1 if this fault object triggers a warning fault condition response
+    fltobj_SoftStartFailure.classes.flags.critical = 1; // Set =1 if this fault object triggers a critical fault condition response
+    fltobj_SoftStartFailure.classes.flags.catastrophic = 0; // Set =1 if this fault object triggers a catastrophic fault condition response
+    fltobj_SoftStartFailure.classes.flags.user_class = 0; // Set =1 if this fault object triggers a user-defined fault condition response
+        
+    fltobj_SoftStartFailure.status.flags.fltlvlhw = 1; // Set =1 if this fault condition is board-level fault condition
+    fltobj_SoftStartFailure.status.flags.fltlvlsw = 0; // Set =1 if this fault condition is software-level fault condition
+    fltobj_SoftStartFailure.status.flags.fltlvlsi = 0; // Set =1 if this fault condition is silicon-level fault condition
+    fltobj_SoftStartFailure.status.flags.fltlvlsys = 1; // Set =1 if this fault condition is system-level fault condition
+
+    fltobj_SoftStartFailure.status.flags.fltstat = 0; // Set/ret fault condition as present/active
+    fltobj_SoftStartFailure.status.flags.fltactive = 0; // Set/reset fault condition as present/active
+    fltobj_SoftStartFailure.status.flags.fltchken = 1; // Enable/disable fault check
+    
+    return(fltobj_SoftStartFailure.status.flags.fltchken);
+}
 

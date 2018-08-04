@@ -50,7 +50,32 @@ extern "C" {
  * ***********************************************************************************************/
 /* generic drivers */
 #include "p33SMPS_devices.h"
+
+#ifdef __00124_R02_EP806__
+// dsPIC33EP128GS806 Digital Power Plug-In Module, Version 0.2
+  #include "00124_R02_EP806_pinmap.h"
+#endif
+#ifdef __00124_R10_EP806__
+// dsPIC33EP128GS806 Digital Power Plug-In Module, Version 1.0
+  #include "00124_R10_EP806_pinmap.h"
+#endif
+#ifdef __00124_R11_EP806__
+// dsPIC33EP128GS806 Digital Power Plug-In Module, Version 1.1
+  #include "00124_R11_EP806_pinmap.h"
+#endif
+/*
+#ifdef __00133_R30_MP506__
+// dsPIC33CH128MP506 Digital Power Plug-In Module, Version 3.0
+  #include "00133_R30_MP506_pinmap.h"
+#endif
+#ifdef __00146_R10_MP506__
+// dsPIC33EP128GS806 Digital Power Plug-In Module, Version 0.2
+  #include "00124_R02_EP806_pinmap.h"
+#endif
+*/
+
     
+#include "p33GS_irq.h"
 #include "p33SMPS_dsp.h"
 #include "p33SMPS_gpio.h"
 #include "p33SMPS_oscillator.h"
@@ -68,21 +93,6 @@ extern "C" {
 #include "devcfg_hspwm.h"
 #include "devcfg_hsadc.h"
 
-    
-#ifdef __00124_R02_EP806__
-// dsPIC33EP128GS806 Digital Power Plug-In Module, Version 0.2
-  #include "00124_R02_EP806_pinmap.h"
-#endif
-/*
-#ifdef __00133_R30_MP506__
-// dsPIC33CH128MP506 Digital Power Plug-In Module, Version 3.0
-  #include "00133_R30_MP506_pinmap.h"
-#endif
-#ifdef __00146_R10_MP506__
-// dsPIC33EP128GS806 Digital Power Plug-In Module, Version 0.2
-  #include "00124_R02_EP806_pinmap.h"
-#endif
-*/
     
 /* ***********************************************************************************************
  * GENERIC DEFINES

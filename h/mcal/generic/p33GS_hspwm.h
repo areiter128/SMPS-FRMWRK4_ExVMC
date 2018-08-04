@@ -40,48 +40,48 @@
  * ***********************************************************************************************/
 
 // Prototypes
-extern int gspwm_reset_pwm_io(void);
+extern inline uint16_t gspwm_reset_pwm_io(void);
 
-extern int gspwm_init_mtb(uint16_t index, uint16_t regXTCON, uint16_t regXTCON2, uint16_t period);
-extern int gspwm_init_channel(uint16_t index, uint16_t regPWMCON, uint16_t regIOCON, uint16_t regFCLCON, uint16_t regLEBCON);
-extern int gspwm_init_channel_timing_complementary(uint16_t index, uint16_t phase, uint16_t duty_cycle, uint16_t dead_time, uint16_t alternate_dead_time);
-extern int gspwm_init_channel_timing_redundant(uint16_t index, uint16_t phase, uint16_t duty_cycle);
-extern int gspwm_init_channel_timing_push_pull(uint16_t index, uint16_t phase, uint16_t duty_cycle, uint16_t dead_time, uint16_t alternate_dead_time);
-extern int gspwm_init_channel_timing_true_independent(uint16_t index, uint16_t sub_index, uint16_t phase, uint16_t duty_cycle);
-extern int gspwm_init_channel_adc_trigger(uint16_t index, uint16_t regTRGCON, uint16_t primary_adc_trigger, uint16_t secondary_adc_trigger);
-extern int gspwm_set_adc_trigger_config(uint16_t index, uint16_t adc_tigger_config);
-extern int gspwm_init_dead_time(uint16_t index, uint16_t dead_time_mode, uint16_t rising_edge_period, uint16_t falling_edge_period);
+extern inline uint16_t gspwm_init_mtb(uint16_t index, uint16_t regXTCON, uint16_t regXTCON2, uint16_t period);
+extern inline uint16_t gspwm_init_channel(uint16_t index, uint16_t regPWMCON, uint16_t regIOCON, uint16_t regFCLCON, uint16_t regLEBCON);
+extern inline uint16_t gspwm_init_channel_timing_complementary(uint16_t index, uint16_t phase, uint16_t duty_cycle, uint16_t dead_time, uint16_t alternate_dead_time);
+extern inline uint16_t gspwm_init_channel_timing_redundant(uint16_t index, uint16_t phase, uint16_t duty_cycle);
+extern inline uint16_t gspwm_init_channel_timing_push_pull(uint16_t index, uint16_t phase, uint16_t duty_cycle, uint16_t dead_time, uint16_t alternate_dead_time);
+extern inline uint16_t gspwm_init_channel_timing_true_independent(uint16_t index, uint16_t sub_index, uint16_t phase, uint16_t duty_cycle);
+extern inline uint16_t gspwm_init_channel_adc_trigger(uint16_t index, uint16_t regTRGCON, uint16_t primary_adc_trigger, uint16_t secondary_adc_trigger);
+extern inline uint16_t gspwm_set_adc_trigger_config(uint16_t index, uint16_t adc_tigger_config);
+extern inline uint16_t gspwm_init_dead_time(uint16_t index, uint16_t dead_time_mode, uint16_t rising_edge_period, uint16_t falling_edge_period);
 
-extern uint16_t gspwm_get_dead_times(uint16_t index, uint16_t *rising_edge_period, uint16_t *falling_edge_period);
-extern int gspwm_set_mtb_period(uint16_t index, uint16_t period);
-extern uint16_t gspwm_get_mtb_period(uint16_t index);
-extern int gspwm_set_phase(uint16_t index, uint16_t sub_index, uint16_t period);
-extern uint16_t gspwm_get_phase(uint16_t index, uint16_t sub_index);
-extern int gspwm_set_duty_cycle(uint16_t index, uint16_t sub_index, uint16_t duty_cycle);
-extern uint16_t gspwm_get_duty_cycle(uint16_t index, uint16_t sub_index);
-extern int gspwm_set_leb_period(uint16_t index, uint16_t period);
-extern uint16_t gspwm_get_leb_period(uint16_t index);
-extern int gspwm_set_sevtcmp_value(uint16_t index, uint16_t period);
-extern uint16_t gspwm_get_sevtcmp_value(uint16_t index);
-extern int gspwm_set_adc_trigger(uint16_t index, uint16_t sub_index, uint16_t adc_trigger);
-extern uint16_t gspwm_get_adc_trigger(uint16_t index, uint16_t sub_index);
+extern inline uint16_t gspwm_get_dead_times(uint16_t index, uint16_t *rising_edge_period, uint16_t *falling_edge_period);
+extern inline uint16_t gspwm_set_mtb_period(uint16_t index, uint16_t period);
+extern inline uint16_t gspwm_get_mtb_period(uint16_t index);
+extern inline uint16_t gspwm_set_phase(uint16_t index, uint16_t sub_index, uint16_t period);
+extern inline uint16_t gspwm_get_phase(uint16_t index, uint16_t sub_index);
+extern inline uint16_t gspwm_set_duty_cycle(uint16_t index, uint16_t sub_index, uint16_t duty_cycle);
+extern inline uint16_t gspwm_get_duty_cycle(uint16_t index, uint16_t sub_index);
+extern inline uint16_t gspwm_set_leb_period(uint16_t index, uint16_t period);
+extern inline uint16_t gspwm_get_leb_period(uint16_t index);
+extern inline uint16_t gspwm_set_sevtcmp_value(uint16_t index, uint16_t period);
+extern inline uint16_t gspwm_get_sevtcmp_value(uint16_t index);
+extern inline uint16_t gspwm_set_adc_trigger(uint16_t index, uint16_t sub_index, uint16_t adc_trigger);
+extern inline uint16_t gspwm_get_adc_trigger(uint16_t index, uint16_t sub_index);
 
-extern int gspwm_channel_power_up(uint16_t index);
-extern int gspwm_channel_power_down(uint16_t index);
+extern inline uint16_t gspwm_channel_power_up(uint16_t index);
+extern inline uint16_t gspwm_channel_power_down(uint16_t index);
 
-extern int gspwm_module_power_up(void);
-extern int gspwm_module_power_down(void);
-extern int gspwm_module_enable(void);
-extern int gspwm_module_disable(void);
+extern inline uint16_t gspwm_module_power_up(void);
+extern inline uint16_t gspwm_module_power_down(void);
+extern inline uint16_t gspwm_module_enable(void);
+extern inline uint16_t gspwm_module_disable(void);
 
-extern int gspwm_ovr_output_hold(uint16_t index, uint16_t sub_index);
-extern int gspwm_ovr_output_release(uint16_t index, uint16_t sub_index);
-extern int gspwm_channel_output_disable(uint16_t index, uint16_t sub_index);
-extern int gspwm_channel_output_enable(uint16_t index, uint16_t sub_index);
+extern inline uint16_t gspwm_ovr_output_hold(uint16_t index, uint16_t sub_index);
+extern inline uint16_t gspwm_ovr_output_release(uint16_t index, uint16_t sub_index);
+extern inline uint16_t gspwm_channel_output_disable(uint16_t index, uint16_t sub_index);
+extern inline uint16_t gspwm_channel_output_enable(uint16_t index, uint16_t sub_index);
 
 #if defined (_P33SMPS_TLAL_) || defined (_P33SMPS_TLAH_) || defined (_P33SMPS_TLAY_)
 
-  extern int gspwm_write_wp_fclcon(uint16_t index, uint16_t regFCLCON);
+  extern inline uint16_t gspwm_write_wp_fclcon(uint16_t index, uint16_t regFCLCON);
 
 #endif
 
@@ -360,46 +360,39 @@ extern int gspwm_channel_output_enable(uint16_t index, uint16_t sub_index);
 #elif defined (_P33SMPS_TLAL_)
 // TLAL family of devices
 
-#define REG_PWMKEY_VALID_BIT_MSK           0b0000000000000000      // PWM Lock/Unlock Sequence register
-  
-#define REG_PTCON_VALID_BIT_MSK            0b0100000000000000      // Primary PWM time base configuration register
-#define REG_STCON_VALID_BIT_MSK            0b1110000000000000      // Secondary PWM time base configuration register
-#define REG_PTCON2_VALID_BIT_MSK           0b1111111111111000      // Primary PWM clock divider register
-#define REG_STCON2_VALID_BIT_MSK           0b1111111111111000      // Secondary PWM clock divider register
+#define REG_PWMKEY_VALID_BIT_MSK        0b1111111111111111      // PWM Lock/Unlock Sequence register
 
-#define REG_PWMCONx_VALID_BIT_MSK          0b0000000000110000      // PWM generator channel configuration register
-#define REG_IOCONx_VALID_BIT_MSK           0b0000000000000000      // PWM generator channel GPIO configuration register
-#define REG_FCLCONx_VALID_BIT_MSK			0b0000000000000000      // Fault/Current Limit register
-#define REG_LEBCONx_VALID_BIT_MSK			0b0000001111000000      // Leading Edge Blanking register
-#define REG_LEBDLYx_LEB_BIT_MSK         0b0000111111111000      // Leading Edge Blanking Period register
-#define REG_LEBDLYx_VALID_BIT_MSK          0b1111000000000111      // Leading Edge Blanking Period register
+#define REG_PTCON_VALID_BIT_MSK         0b1011111111111111      // Primary PWM time base configuration register
+#define REG_STCON_VALID_BIT_MSK         0b0001111111111111      // Secondary PWM time base configuration register
+#define REG_PTCON2_VALID_BIT_MSK        0b0000000000000111      // Primary PWM clock divider register
+#define REG_STCON2_VALID_BIT_MSK        0b0000000000000111      // Secondary PWM clock divider register
 
-#define REG_SEVTCMP_VALID_BIT_MSK          0b0000000000000111      // Primary Special Event compare register
-#define REG_SEVTCMP_BIT_MASK            0b1111111111111000      // This mask has to be AND-ed to the 16-bit compare value, effectively reducing the resolution to 1/8th of the PWM resolution
-#define REG_SSEVTCMP_UNUSED_MSK         0b0000000000000111      // Secondary Special Event compare register
-#define REG_SSEVTCMP_VALID_BIT_MSK           0b1111111111111000      // This mask has to be AND-ed to the 16-bit compare value, effectively reducing the resolution to 1/8th of the PWM resolution
+#define REG_PWMCONx_VALID_BIT_MSK       0b1111111111001111      // PWM generator channel configuration register
+#define REG_IOCONx_VALID_BIT_MSK        0b1111111111111111      // PWM generator channel GPIO configuration register
+#define REG_FCLCONx_VALID_BIT_MSK   	0b1111111111111111      // Fault/Current Limit register
+#define REG_LEBCONx_VALID_BIT_MSK		0b1111110000111111      // Leading Edge Blanking register
+#define REG_LEBDLYx_VALID_BIT_MSK       0b0000111111111000      // Leading Edge Blanking Period register
 
-#define REG_PTPER_VALID_BIT_MSK            0b0000000000000000      // PTPER register
-#define REG_STPER_VALID_BIT_MSK            0b0000000000000000      // STPER register
-#define REG_MDC_VALID_BIT_MSK              0b0000000000000000      // Master Duty Cycle register
-#define REG_CHOP_VALID_BIT_MSK             0b0111110000000111      // On-Time Chopping Frequency register
-#define REG_PHASEx_VALID_BIT_MSK           0b0000000000000000      // PHASEx register
-#define REG_SPHASEx_VALID_BIT_MSK          0b0000000000000000      // SPHASEx register
-#define REG_PDCx_VALID_BIT_MSK             0b0000000000000000      // PDCx registe
-#define REG_SDCx_VALID_BIT_MSK             0b0000000000000000      // PDCx registe
-#define REG_DTRx_VALID_BIT_MSK             0b1100000000000000      // DTRx register
-#define REG_ALTDTRx_VALID_BIT_MSK          0b1100000000000000      // ALTDTRx register
+#define REG_SEVTCMP_VALID_BIT_MSK       0b1111111111111000      // Primary Special Event compare register
+#define REG_SSEVTCMP_VALID_BIT_MSK      0b1111111111111000      // This mask has to be AND-ed to the 16-bit compare value, effectively reducing the resolution to 1/8th of the PWM resolution
 
-#define REG_TRGCON_VALID_BIT_MSK           0b0000111101000000      // Trigger Configuration register
-#define REG_TRIGx_VALID_BIT_MSK            0b0000000000000111      // Primary Trigger register
-#define REG_TRIGx_BIT_MASK              0b1111111111111000      // This mask has to be AND-ed to the 16-bit compare value, effectively reducing the resolution to 1/8th of the PWM resolution
-#define REG_TRIGx_COUNTER_SHIFT         3                       // Bit-shift required to consider unimplemented bits
-#define REG_STRIGx_VALID_BIT_MSK           0b0000000000000111      // Secondary Trigger register
-#define REG_STRIGx_BIT_MASK             0b1111111111111000      // This mask has to be AND-ed to the 16-bit compare value, effectively reducing the resolution to 1/8th of the PWM resolution
-#define REG_STRIGx_COUNTER_SHIFT        3                       // Bit-shift required to consider unimplemented bits
+#define REG_PTPER_VALID_BIT_MSK         0b1111111111111111      // PTPER register
+#define REG_STPER_VALID_BIT_MSK         0b1111111111111111      // STPER register
+#define REG_MDC_VALID_BIT_MSK           0b1111111111111111      // Master Duty Cycle register
+#define REG_CHOP_VALID_BIT_MSK          0b1000001111111000      // On-Time Chopping Frequency register
+#define REG_PHASEx_VALID_BIT_MSK        0b1111111111111111      // PHASEx register
+#define REG_SPHASEx_VALID_BIT_MSK       0b1111111111111111      // SPHASEx register
+#define REG_PDCx_VALID_BIT_MSK          0b1111111111111111      // PDCx registe
+#define REG_SDCx_VALID_BIT_MSK          0b1111111111111111      // PDCx registe
+#define REG_DTRx_VALID_BIT_MSK          0b0011111111111111      // DTRx register
+#define REG_ALTDTRx_VALID_BIT_MSK       0b0011111111111111      // ALTDTRx register
 
-#define REG_AUXCONx_VALID_BIT_MSK          0b0011000011000000      // PWMx generator auxiliary control register
-#define REG_PWMCAPx_VALID_BIT_MSK          0b0000000000000111      // PWMxH Capture register        
+#define REG_TRGCON_VALID_BIT_MSK        0b1111000010111111      // Trigger Configuration register
+#define REG_TRIGx_VALID_BIT_MSK         0b1111111111111000      // Primary Trigger register
+#define REG_STRIGx_VALID_BIT_MSK        0b1111111111111000      // Secondary Trigger register
+
+#define REG_AUXCONx_VALID_BIT_MSK       0b1100111100111111      // PWMx generator auxiliary control register
+#define REG_PWMCAPx_VALID_BIT_MSK       0b1111111111111000      // PWMxH Capture register        
 
 #elif defined (_P33SMPS_TLAH_)
 // TLAH family of devices
@@ -519,11 +512,11 @@ extern int gspwm_channel_output_enable(uint16_t index, uint16_t sub_index);
 #define DEAD_TIME_DISABLED				0b10	// Dead Time Generator is disabled
 
 // Interrupts
-#define SEV_INTERRUPT_ENABLE            1       // Bit setting for enabled interrupts of Special Event Interrupt
-#define SEV_INTERRUPT_DISABLE           0       // Bit setting for disabled interrupts of Special Event Interrupt
+#define SEV_INTERRUPT_ENABLED           1       // Bit setting for enabled interrupts of Special Event Interrupt
+#define SEV_INTERRUPT_DISABLED          0       // Bit setting for disabled interrupts of Special Event Interrupt
 
-#define PWMx_INTERRUPT_ENABLE           1       // Bit setting for enabled interrupts of a dedicated PWM channel
-#define PWMx_INTERRUPT_DISABLE          0       // Bit setting for disabled interrupts of a dedicated PWM channel
+#define PWMx_INTERRUPT_ENABLED          1       // Bit setting for enabled interrupts of a dedicated PWM channel
+#define PWMx_INTERRUPT_DISABLED         0       // Bit setting for disabled interrupts of a dedicated PWM channel
   
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //  PTCON - Register Flags

@@ -49,7 +49,7 @@
 
 uint16_t init_hsadc(void)
 {
-    uint16_t i_res=1;
+    uint16_t i_res = 0;
 
 	// Set Analog inputs
 

@@ -109,15 +109,35 @@ void GetTrapStatus()
 // =================================================================================================
 
 void DefaultTrapHandler(TRAP_ID_e trap_id) {
-    Nop();
-    Nop();
-    Nop();
-    Nop();
-    Nop();
+
+    volatile uint32_t i = 0;
+    
     traplog.inttreg.reg_block = INTTREG;
     traplog.trap_id = trap_id;
     traplog.count++;
     SaveTrapStatus();
+
+    /* ToDo: EXPERIMENTAL TEST CODE */
+    
+    _PTEN = 0;
+    
+    while(1)
+    {
+        Nop();
+        Nop();
+        Nop();
+
+        for( i=500000; i>0; i-- );
+        for( i=500000; i>0; i-- );
+        for( i=500000; i>0; i-- );
+        for( i=500000; i>0; i-- );
+
+        DBGLED1_WR ^= 1;
+        LED_GN_WR ^= 1;
+        LED_RD_WR ^= 1;
+    }
+    /* ToDo: EXPERIMENTAL TEST CODE END */
+    
     CPU_RESET;
     return;
 }
@@ -138,20 +158,30 @@ void DefaultTrapHandler(TRAP_ID_e trap_id) {
 
 void __attribute__((interrupt, no_auto_psv)) _ReservedTrap5(void) {
     
+#if __DEBUG
     Nop();
     Nop();
     Nop();
-    while(1);
+#endif
+
+    traplog.trap_flags.SGHT = 1; // Capture flag bit
+    INTCON4bits.SGHT = 0; // Clear the trap flag
+    DefaultTrapHandler(TRAP_RESERVED_TRAP_5_ERROR); // Call default trap handler
     
     return;
 }
 
 void __attribute__((interrupt, no_auto_psv)) _ReservedTrap7(void) {
     
+#if __DEBUG
     Nop();
     Nop();
     Nop();
-    while(1);
+#endif
+
+    traplog.trap_flags.SGHT = 1; // Capture flag bit
+    INTCON4bits.SGHT = 0; // Clear the trap flag
+    DefaultTrapHandler(TRAP_RESERVED_TRAP_7_ERROR); // Call default trap handler
     
     return;
 }
@@ -162,10 +192,11 @@ void __attribute__((interrupt, no_auto_psv)) _ReservedTrap7(void) {
 
 void __attribute__((interrupt, no_auto_psv)) _HardTrapError(void) {
 
+#if __DEBUG
     Nop();
     Nop();
     Nop();
-    while(1);
+#endif
     
     traplog.trap_flags.SGHT = 1; // Capture flag bit
     INTCON4bits.SGHT = 0; // Clear the trap flag
@@ -180,10 +211,11 @@ void __attribute__((interrupt, no_auto_psv)) _HardTrapError(void) {
 
 void __attribute__((interrupt, no_auto_psv)) _SoftTrapError(void) {
     
+#if __DEBUG
     Nop();
     Nop();
     Nop();
-    while(1);
+#endif
     
     traplog.trap_flags.NAE = INTCON3bits.NAE; // Capture flag bit
     INTCON3bits.NAE = 0; // Clear the trap flag
@@ -202,11 +234,12 @@ void __attribute__((interrupt, no_auto_psv)) _SoftTrapError(void) {
 
 void __attribute__((interrupt, no_auto_psv)) _OscillatorFail(void) {
 
+#if __DEBUG
     Nop();
     Nop();
     Nop();
-    while(1);
-
+#endif
+    
     traplog.trap_flags.OSCFAIL = INTCON1bits.OSCFAIL; // Capture flag bit    
     INTCON1bits.OSCFAIL = 0; // Clear the trap flag
     DefaultTrapHandler(TRAP_OSCILLATOR_FAIL);
@@ -221,11 +254,12 @@ void __attribute__((interrupt, no_auto_psv)) _OscillatorFail(void) {
 
 void __attribute__((interrupt, no_auto_psv)) _AddressError(void) {
 
-    Nop();
-    Nop();
-    Nop();
-    while(1);
-
+#if __DEBUG
+        Nop();
+        Nop();
+        Nop();
+#endif
+    
     traplog.trap_flags.ADDRERR = INTCON1bits.ADDRERR; // Capture flag bit    
     INTCON1bits.ADDRERR = 0; // Clear the trap flag
     DefaultTrapHandler(TRAP_ADDRESS_ERROR);
@@ -238,11 +272,12 @@ void __attribute__((interrupt, no_auto_psv)) _AddressError(void) {
 
 void __attribute__((interrupt, no_auto_psv)) _StackError(void) {
 
+#if __DEBUG
     Nop();
     Nop();
     Nop();
-    while(1);
-
+#endif
+    
     traplog.trap_flags.STKERR = INTCON1bits.STKERR; // Capture flag bit    
     INTCON1bits.STKERR = 0; // Clear the trap flag
     DefaultTrapHandler(TRAP_STACK_ERROR);
@@ -255,11 +290,12 @@ void __attribute__((interrupt, no_auto_psv)) _StackError(void) {
 
 void __attribute__((interrupt, no_auto_psv)) _MathError(void) {
 
+#if __DEBUG
     Nop();
     Nop();
     Nop();
-    while(1);
-
+#endif
+    
     traplog.trap_flags.MATHERR = INTCON1bits.MATHERR; // Capture flag bit    
     INTCON1bits.MATHERR = 0; // Clear the trap flag
     DefaultTrapHandler(TRAP_MATH_ERROR);
@@ -275,11 +311,12 @@ void __attribute__((interrupt, no_auto_psv)) _MathError(void) {
 
 void __attribute__((interrupt, no_auto_psv)) _DMACError(void) {
 
+#if __DEBUG
     Nop();
     Nop();
     Nop();
-    while(1);
-
+#endif
+    
     INTCON1bits.DMACERR = 0; //Clear the trap flag
     DefaultTrapHandler(TRAP_DMA_ERROR);
 

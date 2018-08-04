@@ -50,11 +50,14 @@
 #define MIPS50	1
 #define MIPS60	2
 #define MIPS70	4
+#define MIPS90	5
+#define MIPS100 6
 
 /* user settings */
 #define USE_EXTERNAL_OSC	0			// Usage of external oscillator (0= Internal FRC, 1= external Oscillator)
                                         // If FRS is selected, FRC will be tuned to 7.5 MHz
 #define MCU_SPEED			MIPS70		// Device speed selection (MIPS40, MIPS50, MIPS60, MIPS70)
+
 
 #if (USE_EXTERNAL_OSC == 1)
     EXT_OSC_FREQ        8000000         // Specify frequency of the external oscillator in [Hz]

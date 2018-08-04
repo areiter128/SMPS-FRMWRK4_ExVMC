@@ -40,8 +40,9 @@
 #include "syscfg_options.h"
 #include "syscfg_scaling.h"
 
-
 #include "init_gpio.h"
+#include "init_irq.h"
+#include "init_dsp.h"
 #include "init_timer.h"
 #include "init_fosc.h"
 #include "init_swdt.h"

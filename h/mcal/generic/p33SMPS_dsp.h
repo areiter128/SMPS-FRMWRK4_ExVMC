@@ -39,7 +39,7 @@
 
 // Prototypes
 
-extern int gsdsp_init_dsp(uint16_t regCORCON);
+extern inline uint16_t gsdsp_init_dsp(uint16_t regCORCON);
 
 // Global Flags and bit-masks
 

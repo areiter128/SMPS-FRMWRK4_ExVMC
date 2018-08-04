@@ -201,6 +201,8 @@ extern uint16_t run_main_loop;
 
 #if __DEBUG
 #define USE_TASK_MANAGER_TIMING_DEBUG_ARRAYS 1
+#else
+#define USE_TASK_MANAGER_TIMING_DEBUG_ARRAYS 0
 #endif
 
 /*@@USE_TASK_EXECUTION_CLOCKOUT_PIN

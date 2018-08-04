@@ -1,11 +1,11 @@
 /* ***************************************************************************************
- * Digital Control Loop Designer Version 0.9.0.15.
+ * Digital Control Loop Designer Version 0.9.0.25.
  * ***************************************************************************************
  * Generic library header for z-domain compensation filter assembly functions
  * ***************************************************************************************/
 
-#ifndef _SPECIAL_FUNCTION_LAYER_LIB_NPNZ_H_
-#define _SPECIAL_FUNCTION_LAYER_LIB_NPNZ_H_
+#ifndef __SPECIAL_FUNCTION_LAYER_LIB_NPNZ_H__
+#define __SPECIAL_FUNCTION_LAYER_LIB_NPNZ_H__
 
 #include <xc.h>
 #include <dsp.h>
@@ -95,4 +95,4 @@ typedef struct {
 
 
 /* ***************************************************************************************/
-#endif	// end of _SPECIAL_FUNCTION_LAYER_LIB_NPNZ_H_ header file section
+#endif	// end of __SPECIAL_FUNCTION_LAYER_LIB_NPNZ_H__ header file section

@@ -63,7 +63,7 @@ uint16_t SYSTEM_Initialize(void){
 
     /* this routine can be used to replace the operation mode OP_MODE_BOOT */
 
-    uint16_t fres=0;
+    volatile uint16_t fres = 0;
     
     // Initialize Master core clock for 90 MIPS (max speed on dsPIC33CHxxxMPxxx)
     fres = init_SoftwareWatchDogTimer();
@@ -112,7 +112,7 @@ uint16_t SYSTEM_Initialize(void){
 
 uint16_t OS_Initialize(void) {
 
-    uint16_t fres=0;
+    volatile uint16_t fres = 0;
 
     fres = init_TaskManager();
     fres &= init_FaultObjects();

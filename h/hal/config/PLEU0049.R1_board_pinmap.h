@@ -35,12 +35,8 @@
  * 07/28/2017	File created
  * ***************************************************************************/
 
-#ifndef HAL_BOARD_PINMAP_H
-#define	HAL_BOARD_PINMAP_H
-
-#ifdef	__cplusplus
-extern "C" {
-#endif
+#ifndef _HARDWARE_ABSTRACTION_LAYER_PLEU0029_R1_BOARD_PINMAP_H_
+#define	_HARDWARE_ABSTRACTION_LAYER_PLEU0029_R1_BOARD_PINMAP_H_
 
 #include <stdint.h>
 #include "mcal.h"
@@ -99,12 +95,10 @@ extern "C" {
 #define PWML_RD         TP47_RD
 #define PWML_INIT       {PWML_WR = 0; PWML_TRIS = 0;}
 
-
+#define VOUT_FB_PIN     TP14_ADC_IN
+#define VIN_FB_PIN      TP10_ADC_IN
+#define IL_FB_PIN       TP12_ADC_IN
     
-#ifdef	__cplusplus
-}
-#endif
-
 #endif	/* HAL_BOARD_PINMAP_H */
 
 // EOF

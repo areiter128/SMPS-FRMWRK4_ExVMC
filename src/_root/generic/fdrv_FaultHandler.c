@@ -36,6 +36,10 @@
 #include <stdint.h>
 #include "fdrv_FaultHandler.h"
 
+/* private function prototypes */
+inline uint16_t CheckFaultCondition(FAULT_OBJECT_t* fltobj);
+inline uint16_t ExecFaultHandler(FAULT_OBJECT_t* fltobj);
+
 /*@@fault_object_list_pointer
  * ***********************************************************************************************
  * Description:
@@ -44,7 +48,7 @@
  * declared in fault_object_list[] at a time. After the last item was checked, the 
  * fault_object_list_pointer is automatically reset and starts from fault_object_list[0].
  * ***********************************************************************************************/
-uint16_t fault_object_list_pointer = 0;
+volatile uint16_t fault_object_list_pointer = 0;
 
 /*@@CheckFaultCondition
  * ***********************************************************************************************
@@ -64,26 +68,31 @@ uint16_t fault_object_list_pointer = 0;
  * declared in fault_object_list[] at a time. After the last item was checked, the 
  * fault_object_list_pointer is automatically reset and starts from fault_object_list[0].
  * ***********************************************************************************************/
-uint16_t CheckFaultCondition(FAULT_OBJECT_t* fltobj)
+inline uint16_t CheckFaultCondition(FAULT_OBJECT_t* fltobj)
 {
-    uint16_t fres=0;
+    volatile uint16_t fres = 0, compare_value = 0;
     
-    // if the fault check of this object is disabled, ext here
-    if(!fltobj->status.flags.fltchken) return(1);
+    // if the fault object is not initialized, exit here
+    if(!fltobj->object == 0) { return(1); }
+    
+    // if the fault check of this object is disabled, exit here
+    if(!fltobj->status.flags.fltchken){ return(1); }
+
+    // derive value to monitor
+    compare_value = ((*fltobj->object) & (fltobj->object_bit_mask));
     
     // Check the given fault object on threshold violations
-    
-    if(fltobj->criteria.fault_ratio == FAULT_LEVEL_RATIO_GREATER_THAN)
+    if(fltobj->criteria.fault_ratio == (FAULT_LEVEL_RATIO_GREATER_THAN))
     {
         // if the fault level is defined to be greater than a given threshold...
         // (=> checking for maximum thresholds))
         
-        if(*fltobj->object > fltobj->criteria.trip_level)
+        if(compare_value > fltobj->criteria.trip_level)
         { // if the upper threshold is exceeded, increase error counter
             fltobj->status.flags.fltstat |= 1; // set "fault present" bit
             fltobj->criteria.counter++; // increment fault counter
         }
-        else if(*fltobj->object < fltobj->criteria.reset_level)
+        else if(compare_value < fltobj->criteria.reset_level)
         { // if the value is below the lower limit of the hysteresis of the threshold, 
           // reset error counter
             fltobj->status.flags.fltstat &= 0; // reset "fault present" bit
@@ -92,20 +101,21 @@ uint16_t CheckFaultCondition(FAULT_OBJECT_t* fltobj)
         else
         {
           // if the value hovers within the hysteresis of the threshold => do nothing
+            Nop();
         }
     }
-    else if (fltobj->criteria.fault_ratio == FAULT_LEVEL_RATIO_GREATER_THAN)
+    else if (fltobj->criteria.fault_ratio == (FAULT_LEVEL_RATIO_LESS_THAN))
     {
         // if the fault level is defined to be less than a given threshold 
         // (=> checking for minimum thresholds))
         
         
-        if(*fltobj->object < fltobj->criteria.trip_level)
+        if(compare_value < fltobj->criteria.trip_level)
         { // if the lower threshold is exceeded, increase error counter
             fltobj->status.flags.fltstat |= 1; // set "fault present" bit
             fltobj->criteria.counter++; // increment fault counter
         }
-        else if(*fltobj->object > fltobj->criteria.reset_level)
+        else if(compare_value > fltobj->criteria.reset_level)
         { // if the value is above the upper limit of the hysteresis of the threshold, 
           // reset error counter
             fltobj->criteria.counter = 0; // reset fault counter
@@ -113,10 +123,12 @@ uint16_t CheckFaultCondition(FAULT_OBJECT_t* fltobj)
         else
         {
           // if the value hovers within the hysteresis of the threshold => do nothing
+            Nop();
         }
     }
     else
     { // Uups -> something went horribly wrong => exit
+        Nop();
         return(0);
     }
     
@@ -154,9 +166,9 @@ uint16_t CheckFaultCondition(FAULT_OBJECT_t* fltobj)
  *     1 = Success (notification-level reset condition)
  *     2 = Warning (warning-level reset condition)
  * ***********************************************************************************************/
-uint16_t CheckCPUResetRootCause()
+inline uint16_t CheckCPUResetRootCause(void)
 {
-    uint16_t fres=0;
+    volatile uint16_t fres = 0;
     
     // TODO: return value needs to be properly defined and made accessible and fault handling 
     // routines need to be installed
@@ -167,6 +179,7 @@ uint16_t CheckCPUResetRootCause()
         /* TODO: handle exceptions after restart */
         Nop();    
         Nop();   
+        
         fres = 0;
     }
     else if (traplog.rcon_reg.reg_block & FLT_CPU_RESET_CLASS_WARNING) {
@@ -223,21 +236,24 @@ uint16_t CheckCPUResetRootCause()
  *          * a user defined function will be called (of form uint16_t xxxx(void) only)
  * 
  * ***********************************************************************************************/
-uint16_t ExecFaultHandler(FAULT_OBJECT_t* fltobj)
+inline uint16_t ExecFaultHandler(FAULT_OBJECT_t* fltobj)
 {
-    uint16_t fres = 0;
+    volatile uint16_t fres = 0, log_id = 0;
     
     if(fltobj->classes.class & FLT_CLASS_CATASTROPHIC)
     {
         // if fault is of class CATASTROPHIC, force main loop to reset CPU
         application.fault_status.flags.global_fault = 1;  // setting global fault bit
         task_mgr.op_mode.mode = OP_MODE_FAULT; // force main scheduler into fault mode
+        log_id = fltobj->id;
         run_main_loop = 0;
         return(1);
     }
     else
     {
-        // if fault is of any other class than CATASTROPHIC, perform response (multiple responses possible)
+        // if fault is of any other class than CATASTROPHIC, perform response. 
+        // Multiple responses are supported when the multiple fault classes are specified
+        // by ORing multiple FAULT CLASSES into fltobj.classes
 
         if(fltobj->classes.class & FLT_CLASS_CRITICAL)
         {
@@ -264,6 +280,7 @@ uint16_t ExecFaultHandler(FAULT_OBJECT_t* fltobj)
         {
             // if fault object is a USER_CLASS, fault response is handled in an external function
             application.fault_status.flags.global_usrflt = 1;
+            log_id = fltobj->id;
             fres = fltobj->user_action(); // Call/execute user defined function of type uint16_t xxxx(void) only
         }
 
@@ -286,9 +303,9 @@ uint16_t ExecFaultHandler(FAULT_OBJECT_t* fltobj)
  * any fault action triggered will be executed immediately after every individual fault object 
  * check.
  * ***********************************************************************************************/
-uint16_t exec_FaultCheckAll()
+uint16_t exec_FaultCheckAll(void)
 {
-    uint16_t i=0, fres = 0;
+    volatile uint16_t i = 0, fres = 0;
     
     // scan all fault objects for active fault flags
     for (i=0; i<fltobj_list_size; i++)
@@ -317,9 +334,9 @@ uint16_t exec_FaultCheckAll()
  * Any fault action triggered by any of the fault objects, will be executed immediately after every 
  * individual fault object check.
  * ***********************************************************************************************/
-uint16_t exec_FaultCheckSequential()
+uint16_t exec_FaultCheckSequential(void)
 {
-    uint16_t fres = 0;
+    volatile uint16_t fres = 0;
     
     // check next fault object
     fres = CheckFaultCondition(fault_object_list[fault_object_list_pointer]);

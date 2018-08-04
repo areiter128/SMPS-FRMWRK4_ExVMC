@@ -4,7 +4,7 @@
 
 uint16_t init_oscillator(void) {
     
-    uint16_t fres=0;
+    volatile uint16_t fres = 0;
     OSC_CONFIG_t osc;
     
     #if defined (_P33SMPS_WACA_) || defined (_P33SMPS_WACS_)
@@ -38,7 +38,7 @@ uint16_t init_oscillator(void) {
 
 uint16_t init_aux_oscillator(void) {
 
-    uint16_t fres=0;
+    volatile uint16_t fres = 0;
     AUXOSC_CONFIG_t auxosc;
     
     #if defined (_P33SMPS_WACA_) || defined (_P33SMPS_WACS_)

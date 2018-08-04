@@ -25,15 +25,7 @@
 #include "p33GS_irq.h"
 
 // Device header file
-#if defined(__XC16__)
-    #include <xc.h>
-#elif defined(__C30__)
-    #if defined(__dsPIC33E__)
-    	#include <p33Exxxx.h>
-    #elif defined(__dsPIC33F__)
-    	#include <p33Fxxxx.h>
-    #endif
-#endif
+#include <xc.h>
 
 
 /*@@p33GS_irq.c
@@ -61,10 +53,10 @@
  * are set here.
  * ***********************************************************************************************/
 
-int gsirq_init_irq(uint16_t regINTCON1, uint16_t regINTCON2)
+uint16_t gsirq_init_irq(uint16_t regINTCON1, uint16_t regINTCON2)
 {
 
-uint16_t reg_buf=0, i_res=0;
+    volatile uint16_t reg_buf=0, i_res=0;
 
 	reg_buf = (regINTCON1 & REG_INTCON1_WRITE_BIT_MSK);	// Status-bits will be masked out, flag bits will be reset
 	INTCON1 = reg_buf;                                  // Read register contents
@@ -74,6 +66,9 @@ uint16_t reg_buf=0, i_res=0;
 	INTCON2 = reg_buf;	
 	if((INTCON2 & REG_INTCON2_VALID_BIT_MSK) == reg_buf) i_res &= 1;
 
+	reg_buf = (0x0000 & REG_INTCON3_WRITE_BIT_MSK);	// Status-bits will be masked out
+	INTCON3 = reg_buf;	
+	if((INTCON3 & REG_INTCON3_VALID_BIT_MSK) == reg_buf) i_res &= 1;
 
 	return(i_res);
 	
@@ -95,10 +90,10 @@ uint16_t reg_buf=0, i_res=0;
  * a unsigned integer number
  * ***********************************************************************************************/
 
-int gsirq_get_current_irq_priority_level(void)
+uint16_t gsirq_get_current_irq_priority_level(void)
 {
 
-uint16_t reg_buf=0;
+    volatile uint16_t reg_buf=0;
 
 	reg_buf = (CORCONbits.IPL3);
     reg_buf <<= 3;
@@ -108,8 +103,23 @@ uint16_t reg_buf=0;
 	
 }
 
+/*@@gsirq_init_soft_traps
+ * ************************************************************************************************
+ * Summary:
+ * Initializes the soft traps for accumulator overflow options
+ *
+ * Parameters:
+ *	(none)
+ *
+ * Returns:
+ *  unsigned int (0...15)
+ * 
+ * Description:
+ * Initializes the soft traps for accumulator overflow of accumulator a and/or accumulator b
+ * and the catastrophic overflow event trap. (on/off options) 
+ * ***********************************************************************************************/
 
-int gsirq_init_soft_traps(unsigned int accumulator_a_overflow_trap_enable, unsigned int accumulator_b_overflow_trap_enable, 
+uint16_t gsirq_init_soft_traps(unsigned int accumulator_a_overflow_trap_enable, unsigned int accumulator_b_overflow_trap_enable, 
                     unsigned int accumulator_catastrophic_overflow_trap_enable)
 {
     

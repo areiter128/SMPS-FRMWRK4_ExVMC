@@ -63,8 +63,9 @@
 
 
 #define DUTY_RATIO_MIN      0.00    // Minimum duty ration 
-#define DUTY_RATIO_MAX      0.85    // maximum duty ratio
-
+#define DUTY_RATIO_MAX      0.90    // maximum duty ratio
+#define DUTY_RATIO_MIN_REG (int16_t)((float)DUTY_RATIO_MIN * (float)SWITCHING_PERIOD)
+#define DUTY_RATIO_MAX_REG (int16_t)((float)DUTY_RATIO_MAX * (float)SWITCHING_PERIOD)
 
 #endif	/* __SYSTEM_DESIGN_LIMITS_H__ */
 

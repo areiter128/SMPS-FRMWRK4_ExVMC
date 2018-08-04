@@ -63,32 +63,84 @@ system_operation_mode_t pre_op_mode; // Private flag variable pre-op-mode used b
 // execute task manager scheduler
 //------------------------------------------------------------------------------
 
-uint16_t task_manager_tick(void) {
+inline uint16_t task_manager_tick(void) {
 
-    uint16_t i_res=0;
+    uint16_t i_res = 0, err_code = 0;
 
     // The task manager scheduler runs through the currently selected task flow list in n steps.
     // After the last item of each list the operation mode switch-over check is performed and the 
     // task tick index is reset to zero, which cases the first task of the list to be called at 
     // the next scheduler tick.
 
-    if (task_mgr.task_list_tick_index <= (task_mgr.task_list_ubound)) { // Check for list boundary
+    // Indices 0 ... (n-1) are calling listed user tasks
+    task_mgr.exec_task_id = task_mgr.task_list[task_mgr.task_list_tick_index]; // Pick next task from list
 
-        // Indices 0 ... (n-1) are calling listed user tasks
-        
-        task_mgr.exec_task_id = task_mgr.task_list[task_mgr.task_list_tick_index]; // Pick next task from list
-        i_res = Task_Table[task_mgr.exec_task_id](); // Execute currently selected task
-        task_mgr.task_list_tick_index++; // Increment task table pointer
-        
+    // Determine error code for the upcoming task
+    err_code = ((task_mgr.op_mode.mode << 8) | (task_mgr.exec_task_id)); // build error code
+
+    // Capture task start time for time quota monitoring
+    task_mgr.task_time_buffer = *task_mgr.reg_task_timer_counter; // Capture timer counter to calculate remaining "free" time
+
+    // Execute next task on the list
+    i_res = Task_Table[task_mgr.exec_task_id](); // Execute currently selected task
+
+    task_mgr.exec_task_retval = i_res; // copy/publish most recent function result 
+
+    // Capture time to determine elapsed task executing time
+    task_mgr.task_time = *task_mgr.reg_task_timer_counter - task_mgr.task_time_buffer; // measure most recent task time
+    task_mgr.task_time_max_buffer |= task_mgr.task_time;
+
+
+    // Task execution analysis and fault flag settings
+
+    if (i_res == 1)
+        // if last executed task returned a value =1 (success), reset task execution failure condition
+    {
+        task_mgr.error_code = 0;
+        fault_object_list[FLTOBJ_TASK_EXECUTION_FAILURE]->error_code = 0;
+        fault_object_list[FLTOBJ_TASK_EXECUTION_FAILURE]->status.flags.fltstat = 0;
+    } else
+        // if last executed task returned a value !=1 (no success), indicate task execution failure condition
+    {
+        task_mgr.exec_task_retval = i_res; // copy/publish most recent function result 
+        task_mgr.error_code = err_code; // copy/publish most recent function result 
+        fault_object_list[FLTOBJ_TASK_EXECUTION_FAILURE]->error_code = err_code;
+        fault_object_list[FLTOBJ_TASK_EXECUTION_FAILURE]->status.flags.fltstat = 1;
     }
-    else{
+
+    if (task_mgr.task_time < task_mgr.task_period)
+        // if last task execution time was within the specified time frame, everything is OK
+    {
+        task_mgr.error_code = 0;
+        fault_object_list[FLTOBJ_TASK_TIME_QUOTA_VIOLATION]->error_code = 0;
+        fault_object_list[FLTOBJ_TASK_TIME_QUOTA_VIOLATION]->status.flags.fltstat = 0;
+    } else
+        // if last task execution took longer than specified, indicate task time quota violation condition
+    {
+        task_mgr.error_code = err_code;
+        fault_object_list[FLTOBJ_TASK_TIME_QUOTA_VIOLATION]->error_code = err_code;
+        fault_object_list[FLTOBJ_TASK_TIME_QUOTA_VIOLATION]->status.flags.fltstat = 1;
+    }
+
+    // Check for system-wide fault conditions
+    i_res &= exec_FaultCheckAll();
+    
+    // Increment task table pointer
+    task_mgr.task_list_tick_index++;
+
+    // if the list index is at/beyond the recent list boundary, roll-over and/or switch 
+    // task list
+    if (task_mgr.task_list_tick_index > (task_mgr.task_list_ubound)) { // Check for list boundary
+
         // at the roll-over point (one tick above the array size) the operation mode switch check
         // is executed by default
-        
-        i_res = task_CheckOperationModeStatus();
+
+        err_code = 0xFF00; // 0xFF indicates roll-over process
+        i_res &= task_CheckOperationModeStatus();
         task_mgr.task_list_tick_index = 0; // If end of list has bee reached, jump back to first item
-    
+
     }
+
 
     return (i_res);
 }
@@ -98,30 +150,18 @@ uint16_t task_manager_tick(void) {
 // Check operation mode status and switch op mode if needed
 //------------------------------------------------------------------------------
 
-uint16_t task_CheckOperationModeStatus(void) {
-
+inline uint16_t task_CheckOperationModeStatus(void) {
 
     // Short Fix if MCC Configuration is used
-    if((pre_op_mode.mode == OP_MODE_BOOT) && (task_mgr.op_mode.mode == OP_MODE_BOOT))
-    { // Boot-up task list is only run once
+    if ((pre_op_mode.mode == OP_MODE_BOOT) && (task_mgr.op_mode.mode == OP_MODE_BOOT)) { // Boot-up task list is only run once
         task_mgr.op_mode.mode = OP_MODE_DEVICE_STARTUP;
-    }
-    else if((pre_op_mode.mode == OP_MODE_DEVICE_STARTUP) && (task_mgr.op_mode.mode == OP_MODE_DEVICE_STARTUP))
-    { // device resources start-up task list is only run once
+    } else if ((pre_op_mode.mode == OP_MODE_DEVICE_STARTUP) && (task_mgr.op_mode.mode == OP_MODE_DEVICE_STARTUP)) { // device resources start-up task list is only run once
         task_mgr.op_mode.mode = OP_MODE_SYSTEM_STARTUP;
     }
-#if __DEBUG
-    else if(task_mgr.op_mode.mode == OP_MODE_FAULT)
-    { // this captures a fault event while debugging
-        Nop();
-        Nop();
-        Nop();
-    }
-#endif
-    
+
     // Skip execution if operation mode has not changed
     if (pre_op_mode.mode != task_mgr.op_mode.mode) {
-        
+
         // If a change was detected, set the task flow list and reset settings and flags
         switch (task_mgr.op_mode.mode) {
             case OP_MODE_BOOT:
@@ -130,7 +170,7 @@ uint16_t task_CheckOperationModeStatus(void) {
                 task_mgr.task_list_tick_index = 0; // Reset task list pointer
                 task_mgr.task_time = 0; // Reset maximum task time meter result
                 task_mgr.task_list = task_list_boot; // Set task flow list INIT
-                task_mgr.task_list_ubound = task_list_boot_size;
+                task_mgr.task_list_ubound = (task_list_boot_size-1);
                 break;
 
             case OP_MODE_DEVICE_STARTUP:
@@ -139,7 +179,7 @@ uint16_t task_CheckOperationModeStatus(void) {
                 task_mgr.task_list_tick_index = 0; // Reset task list pointer
                 task_mgr.task_time = 0; // Reset maximum task time meter result
                 task_mgr.task_list = task_list_device_startup; // Set task flow list DEVICE_STARTUP
-                task_mgr.task_list_ubound = task_list_device_startup_size;
+                task_mgr.task_list_ubound = (task_list_device_startup_size-1);
                 break;
 
             case OP_MODE_SYSTEM_STARTUP:
@@ -148,7 +188,7 @@ uint16_t task_CheckOperationModeStatus(void) {
                 task_mgr.task_list_tick_index = 0; // Reset task list pointer
                 task_mgr.task_time = 0; // Reset maximum task time meter result
                 task_mgr.task_list = task_list_system_startup; // Set task flow list SYSTEM_STARTUP
-                task_mgr.task_list_ubound = task_list_system_startup_size;
+                task_mgr.task_list_ubound = (task_list_system_startup_size-1);
                 break;
 
             case OP_MODE_NORMAL:
@@ -157,7 +197,7 @@ uint16_t task_CheckOperationModeStatus(void) {
                 task_mgr.task_list_tick_index = 0; // Reset task list pointer
                 task_mgr.task_time = 0; // Reset maximum task time meter result
                 task_mgr.task_list = task_list_normal; // Set task flow list NORMAL
-                task_mgr.task_list_ubound = task_list_normal_size;
+                task_mgr.task_list_ubound = (task_list_normal_size-1);
                 break;
 
             case OP_MODE_FAULT:
@@ -166,61 +206,62 @@ uint16_t task_CheckOperationModeStatus(void) {
                 task_mgr.task_list_tick_index = 0; // Reset task list pointer
                 task_mgr.task_time = 0; // Reset maximum task time meter result
                 task_mgr.task_list = task_list_fault; // Set task flow list FAULT
-                task_mgr.task_list_ubound = task_list_fault_size;
+                task_mgr.task_list_ubound = (task_list_fault_size-1);
                 break;
 
-            default:        // OP_MODE_STANDBY
+            default: // OP_MODE_STANDBY
                 // Switch to standby mode operation 
                 task_mgr.exec_task_id = TASK_IDLE; // Set task ID to DEFAULT (IDle Task))
                 task_mgr.task_list_tick_index = 0; // Reset task list pointer
                 task_mgr.task_time = 0; // Reset maximum task time meter result
                 task_mgr.task_list = task_list_standby; // Set task flow list STANDBY
-                task_mgr.task_list_ubound = task_list_standby_size;
+                task_mgr.task_list_ubound = (task_list_standby_size-1);
                 break;
 
         }
-        
-        pre_op_mode.mode = task_mgr.op_mode.mode;     // Sync OpMode Flags
-        
+
+        pre_op_mode.mode = task_mgr.op_mode.mode; // Sync OpMode Flags
+
     }
-    
-    
-    return(1);
+
+    return (1);
 }
 
 
 // ======================================================================================================
 // Basic Task Manager Structure Initialization
 // ==============================================================================================
+
 uint16_t init_TaskManager(void) {
 
-    uint16_t fres=1;
+    uint16_t fres = 1;
 
     // initialize private flag variable pre-op-mode used by task_CheckOperationModeStatus to identify changes in op_mode
     pre_op_mode.mode = OP_MODE_BOOT;
-        
+
     // Initialize basic Task Manager Status
     task_mgr.op_mode.mode = OP_MODE_BOOT; // Set operation mode to STANDBY
+    task_mgr.error_code = 0; // Reset error code
     task_mgr.exec_task_id = TASK_IDLE; // Set task ID to DEFAULT (IDle Task))
     task_mgr.task_list_tick_index = 0; // Reset task list pointer
     task_mgr.task_time = 0; // Reset maximum task time meter result
     task_mgr.task_list = task_list_boot; // Set task flow list INIT
-    task_mgr.task_list_ubound = task_list_boot_size;
-  
+    task_mgr.task_list_ubound = (task_list_boot_size-1);
+
     // Scheduler Timer Configuration
 
     task_mgr.task_timer_index = TASK_MGR_TIMER_INDEX; // Index of the timer peripheral used
-    
+
     task_mgr.reg_task_timer_counter = &TASK_MGR_TIMER_COUNTER_REGISTER;
     task_mgr.reg_task_timer_period = &TASK_MGR_TIMER_PERIOD_REGISTER;
     task_mgr.task_period = *task_mgr.reg_task_timer_period; // Global task execution period 
-    
+
     task_mgr.reg_task_timer_irq_flag = &TASK_MGR_TIMER_ISR_FLAG_REGISTER;
     task_mgr.task_timer_irq_flag_mask = TASK_MGR_TIMER_ISR_FLAG_BIT_MASK;
- 
+
     // CPU Load Monitor Configuration
     task_mgr.cpu_load.load = 0;
-    task_mgr.cpu_load.load_max_buffer = 0; 
+    task_mgr.cpu_load.load_max_buffer = 0;
     task_mgr.cpu_load.ticks = 0;
     task_mgr.cpu_load.loop_nomblk = TASK_MGR_CPU_LOAD_NOMBLK;
     task_mgr.cpu_load.load_factor = TASK_MGR_CPU_LOAD_FACTOR;

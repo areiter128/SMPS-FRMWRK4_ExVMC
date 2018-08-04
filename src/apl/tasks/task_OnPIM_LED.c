@@ -57,7 +57,7 @@ TASK_ON_BOARD_LED_CONFIG_t taskOnBoardLED_config;
 
 uint16_t task_OnBoardLED(void) {
 
-    uint16_t fres=0;
+    volatile uint16_t fres = 0;
     
     // change blink-rate in case of an active fault operating mode
     if (task_mgr.op_mode.mode == OP_MODE_FAULT)

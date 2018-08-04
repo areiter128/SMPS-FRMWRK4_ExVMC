@@ -89,7 +89,7 @@
 
 //  #warning -- internal RC oscillator will be used --
 
-  #define OSC_FREQ			FRC_OSC_FREQ	// FRC-frequency in Hz
+//  #define OSC_FREQ			OSC_FRC_FREQ	// FRC-frequency in Hz
 
   #if (MCU_SPEED == MIPS40)
 
@@ -120,7 +120,7 @@
 //	#warning === MCU speed set to 70 MIPS operation ===
 
 	#define OSCPLL_N1		2		// PLLPRE<4:0> PLL Phase Detector Input Divider value N1
-	#define OSCPLL_M		75		// PLLDIV<8:0> PLL Feedback Divisor value M
+	#define OSCPLL_M		74		// PLLDIV<8:0> PLL Feedback Divisor value M
 	#define OSCPLL_N2		2		// PLLPOST<1:0> PLL VCO Output Divider Select value N2
 
   #else

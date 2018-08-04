@@ -30,7 +30,7 @@
  * 
  * ***************************************************************************/
 
-#include "p33SMPS_swdt.h"
+#include "mcal.h"
 
 uint16_t swdt_enable(SWDT_CONFIGURATION_t swdt_enable_state) {
     
@@ -54,6 +54,7 @@ uint16_t swdt_enable(SWDT_CONFIGURATION_t swdt_enable_state) {
     
     
     #elif defined (_P33SMPS_TLAL_) || defined (_P33SMPS_TLAH_) || defined (_P33SMPS_TLAY_)
+
     RCONbits.SWDTEN = swdt_enable_state;    // enable/disable WDT
 
     #endif
@@ -62,13 +63,13 @@ uint16_t swdt_enable(SWDT_CONFIGURATION_t swdt_enable_state) {
 
 }
 
-uint16_t swdt_reset(void)
+inline uint16_t swdt_reset(void)
 {
 
     #if defined (_P33SMPS_WACA_) || defined (_P33SMPS_WACS_)
     WDTCONH = 0x5743;
     #elif defined (_P33SMPS_TLAL_) || defined (_P33SMPS_TLAH_) || defined (_P33SMPS_TLAY_)
-    asm volatile ("CLRWDT\n");
+    WDT_RESET;
     #endif
 
     return(1);

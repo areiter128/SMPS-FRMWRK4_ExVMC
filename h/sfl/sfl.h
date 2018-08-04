@@ -36,6 +36,7 @@
 #include "npnz16b.h"
 #include "cnpnz_vmc.h"
 #include "syscfg_cvrt.h"
+#include "task_SoftStart.h"
 
 /* ***********************************************************************************************
  * PROTOTYPES

@@ -40,12 +40,14 @@ typedef enum {
     FLTOBJ_TASK_EXECUTION_FAILURE = 1, // Fault object Task Execution Failure
     FLTOBJ_TASK_TIME_QUOTA_VIOLATION = 2, // Fault object Task Time Quota Violation
         
-    FLTOBJ_UVLO = 3, // Fault object Under Voltage Lock-Out
-    FLTOBJ_OVLO = 4, // Fault object Over Voltage Lock-Out
-    FLTOBJ_OVP  = 5, // Fault object Output Over Voltage Protection
-    FLTOBJ_OCP  = 6, // Fault object Over Current Protection
-    FLTOBJ_OTW  = 7, // Fault object Over Temperature Warning
-    FLTOBJ_OTP  = 8  // Fault object Over Temperature Protection
+    FLTOBJ_SOFT_START = 3, // Fault object Soft-Start Failure
+
+    FLTOBJ_UVLO = 4, // Fault object Under Voltage Lock-Out
+    FLTOBJ_OVLO = 5, // Fault object Over Voltage Lock-Out
+    FLTOBJ_OVP  = 6, // Fault object Output Over Voltage Protection
+    FLTOBJ_OCP  = 7, // Fault object Over Current Protection
+    FLTOBJ_OTW  = 8, // Fault object Over Temperature Warning
+    FLTOBJ_OTP  = 9  // Fault object Over Temperature Protection
 }fault_object_index_e;
 
 typedef enum

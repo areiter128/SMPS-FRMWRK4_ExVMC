@@ -115,9 +115,9 @@ typedef union
 typedef enum {
     FLT_CLASS_NONE         = 0b0000000000000000,    // no fault classification =< user handling required
     FLT_CLASS_NOTICE       = 0b0000000000000001,    // uncritical fault condition has been detected (notice only)
-    FLT_CLASS_WARNING      = 0b0000000000000011,    // warning level (approaching critical level)
-    FLT_CLASS_CRITICAL     = 0b0000000000000111,    // critical level 
-    FLT_CLASS_CATASTROPHIC = 0b0000000000001111,    // catastrophic level 
+    FLT_CLASS_WARNING      = 0b0000000000000010,    // warning level (approaching critical level)
+    FLT_CLASS_CRITICAL     = 0b0000000000000100,    // critical level 
+    FLT_CLASS_CATASTROPHIC = 0b0000000000001000,    // catastrophic level 
     FLT_CLASS_USER_ACTION  = 0b0000000100000000     // user defined level 
 } FAULT_OBJECT_CLASS_e;
 
@@ -156,12 +156,14 @@ typedef union
  * OK conditions and the maximum counter threshold at which a fault condition is reset.
  * ***********************************************************************************************/
 
+#define FAULT_OBJECT_BIT_MASK_DEFAULT   0xFFFF
+
 typedef enum
 {
     FAULT_LEVEL_RATIO_GREATER_THAN = 0b0000000000000000, // Flag if the fault level is greater than the value it is compared against
-    FAULT_LEVEL_RATIO_LESS_THAN = 0b1111111111111111 // Flag if the fault level is less than the value it is compared against
+    FAULT_LEVEL_RATIO_LESS_THAN    = 0b1111111111111111 // Flag if the fault level is less than the value it is compared against
 }FAULT_OBJECT_CONDITION_RATIO_e;
-
+    
 typedef struct
 {
     volatile uint16_t counter; // Fault hit counter
@@ -188,7 +190,9 @@ typedef struct
     volatile FAULT_OBJECT_CLASS_t classes; // fault class bit field
     volatile FAULT_CONDITION_SETTINGS_t criteria; // Fault check settings of the  fault object
     volatile uint16_t error_code; // error code helping to identify source module, system level and importance
+    volatile uint16_t id; // identifier of this fault object
     volatile uint16_t* object; // pointer to an object (e.g. variable or SFR) to be monitored
+    volatile uint16_t object_bit_mask; // bit mask filter to monitor specific bits within OBJECT
     volatile uint16_t (*user_action)(void); // pointer to a user function called when a defined fault condition is detected
 }__attribute__((packed))FAULT_OBJECT_t;
 
@@ -234,12 +238,10 @@ extern uint16_t fltobj_list_size;
  * Description:
  * The following function prototypes are publicly accessible.
  * ***********************************************************************************************/
+extern inline uint16_t CheckCPUResetRootCause(void);
 
-extern uint16_t CheckCPUResetRootCause();
-extern uint16_t CheckFaultCondition(FAULT_OBJECT_t* fltobj);
-extern uint16_t ExecFaultHandler(FAULT_OBJECT_t* fltobj);
-extern uint16_t exec_FaultCheckAll();
-extern uint16_t exec_FaultCheckSequential();
+extern inline uint16_t exec_FaultCheckAll(void);
+extern inline uint16_t exec_FaultCheckSequential(void);
 
 #endif	/* _APPLLICAITON_LAYER_FAULT_HANDLER_H_ */
 

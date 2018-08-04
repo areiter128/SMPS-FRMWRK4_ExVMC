@@ -40,12 +40,13 @@
 #define	_P33GS_INTERRUPT_CONFIG_DEF_H_
 
 #include <xc.h> // include processor files - each processor file is guarded.  
+#include <stdint.h>
 
 #include "p33SMPS_devices.h"
 
-extern int gsirq_init_irq(uint16_t regINTCON1, uint16_t regINTCON2);
-extern int gsirq_get_current_irq_priority_level(void);
-extern int gsirq_init_soft_traps(unsigned int accumulator_a_overflow_trap_enable, unsigned int accumulator_b_overflow_trap_enable, 
+extern inline uint16_t gsirq_init_irq(uint16_t regINTCON1, uint16_t regINTCON2);
+extern inline uint16_t gsirq_get_current_irq_priority_level(void);
+extern inline uint16_t gsirq_init_soft_traps(unsigned int accumulator_a_overflow_trap_enable, unsigned int accumulator_b_overflow_trap_enable, 
                     unsigned int accumulator_catastrophic_overflow_trap_enable);
 
 #if defined (_P33SMPS_TLAL_) || defined (_P33SMPS_TLAH_) || defined (_P33SMPS_TLAY_)
@@ -116,8 +117,11 @@ extern int gsirq_init_soft_traps(unsigned int accumulator_a_overflow_trap_enable
 #define REG_INTCON2_WRITE_BIT_MSK           0b1110000100010111      // Second interrupt configuration register for write operations (no status bits)
 #define REG_INTCON2_VALID_BIT_MSK           0b1110000100010111      // Second interrupt configuration register for read operations (incl. status bits)
 
-#define REG_INTCON2_GIE_ENABLED             0b1000000000000000
+#define REG_INTCON2_GIE_ENABLE              0b1000000000000000
 #define REG_INTCON2_GIE_DISABLED            0b0000000000000000
+
+#define REG_INTCON2_SWTRAP_ENABLE           0b0010000000000000
+#define REG_INTCON2_SWTRAP_DISABLE          0b0000000000000000
 
 #define REG_INTCON2_AIVTEN_ENABLE           0b0000000100000000
 #define REG_INTCON2_AIVTEN_DISABLE          0b0000000000000000

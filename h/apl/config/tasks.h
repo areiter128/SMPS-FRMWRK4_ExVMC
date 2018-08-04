@@ -49,6 +49,7 @@
 
 #include <xc.h> // include processor files - each processor file is guarded.  
 #include <stdint.h>
+#include <math.h>
 
 /* ***********************************************************************************************
  * INCLUDE OF HEADERS ALSO CONTAINING GLOBALLY AVAILABLE FUNCTION CALLS
@@ -106,12 +107,14 @@ typedef enum {
     
     // OS-level initialization
     TASK_IDLE = 0, // Default task not performing any action but occupying a task time frame
-    TASK_INIT_FAULT_OBJECTS = 1, // Task initializing default and user defined fault objects
-    TASK_EXEC_FAULT_CHECK_ALL = 2, // Task execute check of all default and user defined fault objects at once
-    TASK_EXEC_FAULT_CHECK_SEQUENTIAL = 3, // Task execute check of default and user defined fault objects sequentially
         
     // Chip level initialization
-    TASK_INIT_GPIO = 4, // Task initializing the chip GPIOs
+    TASK_INIT_GPIO = 1, // Task initializing the chip GPIOs
+    TASK_INIT_IRQ = 2, // Task initializing the interrupt controller
+    TASK_INIT_DSP = 3, // Task initializing the digital signal controller
+        
+    // cross-function modules
+    TASK_INIT_FAULT_OBJECTS = 4, // Task initializing default and user defined fault objects
 
     // board level initialization
     TASK_INIT_ON_BOARD_LED = 5, // Task initializing the on-board debug LED
@@ -134,9 +137,10 @@ typedef enum {
     TASK_LAUNCH_HSADC = 20, // Task launching the pre-configured high speed ADC module
     TASK_INIT_HSPWM = 21, // Task initializing the high speed PWM module
     TASK_LAUNCH_HSPWM = 22, // Task launching the pre-configured high speed PWM module
-    TASK_SOFT_START_HSPWM = 23, // Task soft-starting the pre-configured high speed PWM module (TEST CODE ONLY))
+    TASK_INIT_SOFT_START = 23, // Task soft-starting the pre-configured high speed PWM module (TEST CODE ONLY))
+    TASK_EXEC_SOFT_START = 24, // Task soft-starting the pre-configured high speed PWM module (TEST CODE ONLY))
 
-    TASK_INIT_CNPNZ_VMC = 24 // task initializing the voltage mode controller object
+    TASK_INIT_CNPNZ_VMC = 25 // task initializing the voltage mode controller object
 
 } task_id_no_e;
 

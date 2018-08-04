@@ -75,9 +75,9 @@
 
 /* General Settings */
 #if(TRIGGER_OPTION == TRG_OPTION_PWM)
-#define CVRT_SEV_DEFAULT_TRIGGER    0
-#define CVRT_SEV_ISR_ENABLE     SEV_INTERRUPT_ENABLE
-#define CVRT_SEV_ISR_PRIORITY   4
+#define CVRT_SEV_DEFAULT_TRIGGER    300
+#define CVRT_SEV_ISR_ENABLE     SEV_INTERRUPT_ENABLED
+#define CVRT_SEV_ISR_PRIORITY   5
 #else
 #define CVRT_SEV_ISR_ENABLE     SEV_INTERRUPT_DISABLE
 #define CVRT_SEV_ISR_PRIORITY   0
@@ -116,8 +116,8 @@
                                 )
 
 #if(TRIGGER_OPTION == TRG_OPTION_PWM)
-#define CVRT_PH1_PWM_ISR_ENABLE     PWMx_INTERRUPT_DISABLE          // Enable/Disable generation of interrupts of selected PWM channel
-#define CVRT_PH1_PWM_ISR_PRIORITY   5                               // Set interrupt priority for phase #1 inductor current sampling
+#define CVRT_PH1_PWM_ISR_ENABLE     PWMx_INTERRUPT_DISABLED          // Enable/Disable generation of interrupts of selected PWM channel
+#define CVRT_PH1_PWM_ISR_PRIORITY   0                               // Set interrupt priority for phase #1 inductor current sampling
 #else
 #define CVRT_PH1_PWM_ISR_ENABLE         PWMx_INTERRUPT_DISABLE      // Enable/Disable generation of interrupts of selected PWM channel
 #define CVRT_PH1_PWM_ISR_PRIORITY   0                               // Set interrupt priority for phase #1 inductor current sampling

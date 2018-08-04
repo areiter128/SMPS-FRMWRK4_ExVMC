@@ -1,5 +1,5 @@
 /* ***************************************************************************************
- * Digital Control Loop Designer Version 0.9.0.15.
+ * Digital Control Loop Designer Version 0.9.0.25.
  * ***************************************************************************************
  * 3p3z compensation filter coefficients derived for following operating conditions:
  * ***************************************************************************************
@@ -10,30 +10,28 @@
  * 	Scaling Mode:		1 - Single Bit-Shift Scaling
  * 	Input Gain:			1
  * 
- * ***************************************************************************************
- * Data Arrays:
- * The cNPNZ_t data structure contains a pointer to derived coefficients in X-space and
- * other pointers to controller and error history in Y-space.
-
- * This header file holds public declarations for variables and arrays defined in 
- * cnpnz_vmc.c
  * ***************************************************************************************/
 
-#ifndef _SPECIAL_FUNCTION_LAYER_CNPNZ_VMC_H_
-#define _SPECIAL_FUNCTION_LAYER_CNPNZ_VMC_H_
-
-#include "npnz16b.h"
+#ifndef __SPECIAL_FUNCTION_LAYER_CNPNZ_VMC_H__
+#define __SPECIAL_FUNCTION_LAYER_CNPNZ_VMC_H__
 
 #include <xc.h>
 #include <dsp.h>
 #include <stdint.h>
 
+#include "npnz16b.h"
 
-/* ****************************************************************************************
-* Type definition for A- and B- coefficient arrays and error- and control-hostory arrays, 
-* which are aligned in memory for optimized addressing during DSP computations.           
-* These data structures need to be placed in specific memory locations to allow direct    
-* X/Y-access from the DSP. (coefficients in x-space, histories in y-space)                
+/* ***************************************************************************************
+ * Data Arrays:
+ * The cNPNZ_t data structure contains a pointer to derived coefficients in X-space and
+ * other pointers to controller and error history in Y-space.
+ * This header file holds public declarations for variables and arrays defined in 
+ * cnpnz_vmc.c
+ * 
+ * Type definition for A- and B- coefficient arrays and error- and control-history arrays, 
+ * which are aligned in memory for optimized addressing during DSP computations.           
+ * These data structures need to be placed in specific memory locations to allow direct    
+ * X/Y-access from the DSP. (coefficients in x-space, histories in y-space)                
  * ***************************************************************************************/
 
 	typedef struct
@@ -71,5 +69,4 @@ extern void cnpnz_vmc_Update( // Calls the 3P3Z controller
 	volatile cNPNZ16b_t* controller // Pointer to nPnZ data structure
 	);
 
-//#endif	// end of __CNPNZ_VMC__ global controller type identifier definition section
-#endif	// end of _SPECIAL_FUNCTION_LAYER_CNPNZ_VMC_H_ header file section
+#endif	// end of __SPECIAL_FUNCTION_LAYER_CNPNZ_VMC_H__ header file section

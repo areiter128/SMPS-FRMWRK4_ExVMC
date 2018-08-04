@@ -90,6 +90,8 @@ typedef enum
 
     TRAP_SOFT_TRAP_ERROR        = 0x0020,   // Trap ID for generic soft trap exception vector
     TRAP_HARD_TRAP_ERROR        = 0x0040,   // Trap ID for generic hard trap exception vector
+    TRAP_RESERVED_TRAP_5_ERROR  = 0x0080,   // Trap ID for generic exception vector
+    TRAP_RESERVED_TRAP_7_ERROR  = 0x0080,   // Trap ID for generic exception vector
 
 	TRAP_ALT_OSCILLATOR_FAIL	= 0x0100,	// Trap ID for alternate exception vector
 	TRAP_ALT_ADDRESS_ERROR		= 0x0200,	// Trap ID for alternate exception vector

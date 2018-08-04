@@ -36,12 +36,8 @@
  * 07/28/2017	File created
  * ***********************************************************************************************/
 
-#ifndef ROOT_TASK_MANAGER_CONFIGURATION_H
-#define	ROOT_TASK_MANAGER_CONFIGURATION_H
-
-#ifdef	__cplusplus
-extern "C" {
-#endif
+#ifndef _ROOT_TASK_MANAGER_CONFIGURATION_H_
+#define	_ROOT_TASK_MANAGER_CONFIGURATION_H_
 
 /* ***********************************************************************************************
  * DEFAULT INCLUDES
@@ -50,7 +46,8 @@ extern "C" {
 #include <stdint.h>
 #include <math.h>
 #include "p33SMPS_devices.h"
-    
+#include "devcfg_clock.h"
+
 /* ***********************************************************************************************
  * PROJECT SPECIFIC INCLUDES
  * ***********************************************************************************************/
@@ -58,8 +55,11 @@ extern "C" {
 /* ***********************************************************************************************
  * DECLARATIONS
  * ***********************************************************************************************/
+
+#define TASK_MGR_TIME_STEP                  (float)(100.0e-6)     // Schedule time step in [sec]
+#define TASK_MGR_PERIOD                     (uint16_t)((float)FCY * (float)TASK_MGR_TIME_STEP)
+
 #define TASK_MGR_TIMER_INDEX                1
-#define TASK_MGR_PERIOD                     7010
 #define TASK_MGR_TIMER_COUNTER_REGISTER     TMR1
 #define TASK_MGR_TIMER_PERIOD_REGISTER      PR1
 #define TASK_MGR_TIMER_ISR_FLAG_REGISTER    IFS0
@@ -86,11 +86,7 @@ extern "C" {
  * PROTOTYPES
  * ***********************************************************************************************/
 
-    
-#ifdef	__cplusplus
-}
-#endif
 
-#endif	/* ROOT_TASK_MANAGER_CONFIGURATION_H */
+#endif	/* _ROOT_TASK_MANAGER_CONFIGURATION_H_ */
 
 // EOF

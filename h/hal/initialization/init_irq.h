@@ -1,5 +1,4 @@
-/*LICENSE ********************************************************************
- * Microchip Technology Inc. and its subsidiaries.  You may use this software 
+/* Microchip Technology Inc. and its subsidiaries.  You may use this software 
  * and any derivatives exclusively with Microchip products. 
  * 
  * THIS SOFTWARE IS SUPPLIED BY MICROCHIP "AS IS".  NO WARRANTIES, WHETHER 
@@ -18,26 +17,24 @@
  *
  * MICROCHIP PROVIDES THIS SOFTWARE CONDITIONALLY UPON YOUR ACCEPTANCE OF THESE 
  * TERMS. 
- * ***************************************************************************/
-/* @@init_hspwm.h
- * *************************************************************************** 
- * File:   init_hspwm.h
- * Author: M91406
- *
- * Created on July 28, 2017, 11:04 AM
- * ***************************************************************************/
+ */
 
-#ifndef _HARDWARE_ABSTRACTION_LAYER_INITIALIZE_HIGH_SPEED_PWM_H_
-#define	_HARDWARE_ABSTRACTION_LAYER_INITIALIZE_HIGH_SPEED_PWM_H_
+/* 
+ * File:   
+ * Author: 
+ * Comments:
+ * Revision history: 
+ */
 
-#include <xc.h>
+// This is a guard condition so that contents of this file are not included
+// more than once.  
+#ifndef _HARDWARE_ABSTRACTION_LAYER_INITIALIZE_INTERRUPT_CONTROLLER_
+#define	_HARDWARE_ABSTRACTION_LAYER_INITIALIZE_INTERRUPT_CONTROLLER_
+
+#include <xc.h> // include processor files - each processor file is guarded.  
 #include <stdint.h>
-    
-/* ***********************************************************************************************
- * PROTOTYPES
- * ***********************************************************************************************/
-extern uint16_t init_hspwm(void);
-extern uint16_t exec_launch_hspwm(void);
 
-#endif	/* _HARDWARE_ABSTRACTION_LAYER_INITIALIZE_HIGH_SPEED_PWM_H_ */
+extern uint16_t init_irq(void);
+    
+#endif	/* _HARDWARE_ABSTRACTION_LAYER_INITIALIZE_INTERRUPT_CONTROLLER_ */
 

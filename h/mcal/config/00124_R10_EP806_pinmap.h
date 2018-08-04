@@ -20,7 +20,7 @@
  */
 
 /* 
- * File:        00124_R02_EP806_pinmap.h
+ * File:        00124_R10_EP806_pinmap.h
  * Author:      M91406
  * Comments:    Hardware abstraction layer for dsPIC33EP128GS806 daughter card version 0.2
  * Revision history: 1.0    (initial release)
@@ -28,10 +28,11 @@
 
 // This is a guard condition so that contents of this file are not included
 // more than once.  
-#ifndef _00124_R02_EP806_PINMAP_H
-#define	_00124_R02_EP806_PINMAP_H
+#ifndef _00124_R10_EP806_PINMAP_H
+#define	_00124_R10_EP806_PINMAP_H
 
 #include <xc.h> // include processor files - each processor file is guarded.  
+#include <stdint.h>
 
 // Generic defines
 #ifndef PINDIR_INPUT
@@ -96,6 +97,7 @@
 #define	TP09_WR     LATCbits.LATC9
 #define	TP09_RD     PORTCbits.RC9
 
+#define TP10_ADC_IN 3
 #define	TP10_TRIS   TRISBbits.TRISB3
 #define	TP10_WR     LATBbits.LATB3
 #define	TP10_RD     PORTBbits.RB3
@@ -104,6 +106,7 @@
 #define	TP11_WR     LATDbits.LATD2
 #define	TP11_RD     PORTDbits.RD2
 
+#define TP12_ADC_IN 0
 #define	TP12_TRIS   TRISAbits.TRISA0
 #define	TP12_WR     LATAbits.LATA0
 #define	TP12_RD     PORTAbits.RA0
@@ -114,9 +117,12 @@
 #define	TP13_RD
    not connected */
 
-#define	TP14_TRIS   
-#define	TP14_WR
-#define	TP14_RD
+#define TP14_ADC_IN     1
+#define TP14_ADC_CORE   1
+#define TP14_ADC_BUFFER ADCBUF1
+#define	TP14_TRIS       TRISAbits.TRISA1
+#define	TP14_WR         LATAbits.LATA1
+#define	TP14_RD         PORTAbits.RA1
 
 /* not connected 
 #define	TP15_TRIS
@@ -275,5 +281,5 @@
 
 
 
-#endif	/* _00124_R02_EP806_PINMAP_H */
+#endif	/* _00124_R10_EP806_PINMAP_H */
 

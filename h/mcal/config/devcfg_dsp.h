@@ -19,45 +19,47 @@
  * MICROCHIP PROVIDES THIS SOFTWARE CONDITIONALLY UPON YOUR ACCEPTANCE OF THESE 
  * TERMS. 
  * *****************************************************************************************************
- * File:   devcfg_irq.h
+ * File:   devcfg_dsp.h
  * Author: M91406
- * Comments: User configuration of the interrupt controller
+ * Comments: User configuration of the digital signal controller
  * Revision history: v1.0, first release
  * *****************************************************************************************************/
 
 // This is a guard condition so that contents of this file are not included
 // more than once.  
-#ifndef _DEVICE_CONFIGURATION_IRQ_H
-#define	_DEVICE_CONFIGURATION_IRQ_H
+#ifndef _DEVICE_CONFIGURATION_DSP_H
+#define	_DEVICE_CONFIGURATION_DSP_H
 
 #include <xc.h> // include processor files - each processor file is guarded.  
 #include <stdint.h>
+
 #include "mcal.h"
 
-/* INTCON1 Settings */
+/* CORCON Settings */
 
-#define IRQ_INTCON1_CFG    (REG_INTCON1_NSTDIS_ENABLED | \
-                            REG_INTCON1_OVATE_DISABLE | \
-                            REG_INTCON1_OVBTE_DISABLE | \
-                            REG_INTCON1_COVTE_DISABLE | \
-                            REG_INTCON1_OVAERR_FLAG_CLEAR | \
-                            REG_INTCON1_OVBERR_FLAG_CLEAR | \
-                            REG_INTCON1_COVAERR_FLAG_CLEAR | \
-                            REG_INTCON1_COVBERR_FLAG_CLEAR \
+// Variable Exception Processing Latency disabled
+// Signed multiplications
+// Early DO loop termination disabled
+// Saturation enabled for accumulator A
+// Saturation enabled for accumulator B
+// Saturation enabled for writes to data space
+// Accumulator saturation mode 1.31
+// Unbiased (convergent) rounding enabled
+// Fractional multiplier mode enabled
+
+/*
+#define DSP_CORCON_CFG     (REG_CORCON_VAR_FIXED | \	
+                            REG_CORCON_US_SIGNED | \
+                            REG_CORCON_EDT_OFF | \
+                            REG_CORCON_SATA_ON | \
+                            REG_CORCON_SATB_ON | \
+                            REG_CORCON_SATDW_ON | \
+                            REG_CORCON_ACCSAT_131 | \
+                            REG_CORCON_RND_UNBIASED | \
+                            REG_CORCON_IF_FRACTIONAL | \
+                            REG_CORCON_SFA_ACTIVE \
                             )
+*/
 
-/* INTCON2 Settings */
-
-#define IRQ_INTCON2_CFG    (REG_INTCON2_GIE_ENABLE | \
-                            REG_INTCON2_STAT_DISI_CLEAR | \
-                            REG_INTCON2_SWTRAP_DISABLE | \
-                            REG_INTCON2_AIVTEN_DISABLE | \
-                            REG_INTCON2_INT4EP_RISING | \
-                            REG_INTCON2_INT2EP_RISING | \
-                            REG_INTCON2_INT1EP_RISING | \
-                            REG_INTCON2_INT0EP_RISING \
-                            )
-
-
-#endif	/* _DEVICE_CONFIGURATION_IRQ_H */
+#endif	/* _DEVICE_CONFIGURATION_DSP_H */
 

@@ -1,7 +1,5 @@
-#include "cnpnz_vmc.h"
-
 /* ***************************************************************************************
- * Digital Control Loop Designer Version 0.9.0.15.
+ * Digital Control Loop Designer Version 0.9.0.25.
  * ***************************************************************************************
  * 3p3z compensation filter coefficients derived for following operating conditions:
  * ***************************************************************************************
@@ -12,12 +10,16 @@
  * 	Scaling Mode:		1 - Single Bit-Shift Scaling
  * 	Input Gain:			1
  * 
- * ***************************************************************************************
+ * ***************************************************************************************/
+
+#include "cnpnz_vmc.h"
+
+/* ***************************************************************************************
  * Data Arrays:
  * The cNPNZ_t data structure contains a pointer to derived coefficients in X-space and
  * other pointers to controller and error history in Y-space.
- * This source declares the static parameters of the z-domain compensation filter.
- * These declarations re made publicly accessible through defines in cnpnz_vmc.h
+ * This source file declares the default parameters of the z-domain compensation filter.
+ * These declarations are made publicly accessible through defines in cnpnz_vmc.h
  * ***************************************************************************************/
 
 	cnpnz_vmc_CONTROL_LOOP_COEFFICIENTS_t __attribute__((space(xmemory), near)) cnpnz_vmc_coefficients; // A/B-Coefficients 
@@ -32,10 +34,10 @@
  * 	Pole&Zero Placement:
  * ***************************************************************************************
  *
- * 	fP0:	500 Hz 
- * 	fP1:	20000 Hz 
- * 	fZ1:	3000 Hz 
- * 	fP2:	90000 Hz 
+ * 	fP0:	200 Hz 
+ * 	fP1:	40000 Hz 
+ * 	fZ1:	2000 Hz 
+ * 	fP2:	120000 Hz 
  * 	fZ2:	6000 Hz 
  *
  * ***************************************************************************************
@@ -44,17 +46,17 @@
 
 	fractional cnpnz_vmc_ACoefficients [3] = 
 	{
-		0x625C,	// Coefficient A1 will be multiplied with controller output u(n-1)
-		0xDFFF,	// Coefficient A2 will be multiplied with controller output u(n-2)
-		0xFDA6	// Coefficient A3 will be multiplied with controller output u(n-3)
+		0x4839,	// Coefficient A1 will be multiplied with controller output u(n-1)
+		0xFC13,	// Coefficient A2 will be multiplied with controller output u(n-2)
+		0xFBB6	// Coefficient A3 will be multiplied with controller output u(n-3)
 	};
 
 	fractional cnpnz_vmc_BCoefficients [4] = 
 	{
-		0x10D5,	// Coefficient B0 will be multiplied with error input e(n)
-		0xF2C1,	// Coefficient B1 will be multiplied with error input e(n-1)
-		0xEF58,	// Coefficient B2 will be multiplied with error input e(n-2)
-		0x0D6B	// Coefficient B3 will be multiplied with error input e(n-3)
+		0x12D3,	// Coefficient B0 will be multiplied with error input e(n)
+		0xF0BE,	// Coefficient B1 will be multiplied with error input e(n-1)
+		0xED4F,	// Coefficient B2 will be multiplied with error input e(n-2)
+		0x0F64	// Coefficient B3 will be multiplied with error input e(n-3)
 	};
 
 
@@ -107,5 +109,4 @@ uint16_t cnpnz_vmc_Init(void)
 	return(1);
 }
 
-// end of file
 

@@ -54,7 +54,7 @@
 
 int main(void) {
 
-    uint16_t fres=0, err_code=0;
+    volatile uint16_t fres = 0;
     
 #if __DEBUG
     uint16_t cnt=0;
@@ -85,7 +85,7 @@ int main(void) {
         }
 
 #if (USE_TASK_EXECUTION_CLOCKOUT_PIN==1)
-#if defined (CLKOUT_WR)
+#ifdef CLKOUT_WR
   CLKOUT_WR = PINSTATE_HIGH;                  // Drive debug pin high
 #else
   #error === Task-timing clock output pin is not defined. Task execution clock output is not available ===
@@ -114,7 +114,7 @@ int main(void) {
 
         
 #if (USE_TASK_EXECUTION_CLOCKOUT_PIN==1)
-#if defined (CLKOUT_WR)
+#ifdef CLKOUT_WR
   CLKOUT_WR = PINSTATE_LOW;                  // Drive debug pin low
   Nop();
   CLKOUT_WR = PINSTATE_HIGH;                 // Drive debug pin high
@@ -122,56 +122,10 @@ int main(void) {
 #endif
         
         // Call most recent task with execution time measurement
-        err_code = ((task_mgr.op_mode.mode << 8) | (task_mgr.exec_task_id)); // build error code
-        
-        task_mgr.task_time_buffer = *task_mgr.reg_task_timer_counter; // Capture timer counter to calculate remaining "free" time
         fres = task_manager_tick();     // Step through pre-defined task lists
-        task_mgr.task_time = *task_mgr.reg_task_timer_counter - task_mgr.task_time_buffer;  // measure most recent task time
-        task_mgr.task_time_max_buffer |= task_mgr.task_time;
-        
-#if (USE_TASK_EXECUTION_CLOCKOUT_PIN==1)
-#if defined (CLKOUT_WR)
-  CLKOUT_WR = PINSTATE_LOW;                  // Drive debug pin low
-  Nop();
-  CLKOUT_WR = PINSTATE_HIGH;                 // Drive debug pin high
-#endif
-#endif
-        
-        // Task execution analysis and fault flag settings
-        
-        // if last executed task returned a value !=1 (no success), indicate task execution failure condition
-        if (fres != 1)  
-        {
-            task_mgr.error_code = err_code;
-            fault_object_list[FLTOBJ_TASK_EXECUTION_FAILURE]->error_code = err_code;
-            fault_object_list[FLTOBJ_TASK_EXECUTION_FAILURE]->status.flags.fltstat = 1;
-        }
-        // if last executed task returned a value =1 (success), reset task execution failure condition
-        else
-        {
-            task_mgr.error_code = 0;
-            fault_object_list[FLTOBJ_TASK_EXECUTION_FAILURE]->error_code = 0;
-            fault_object_list[FLTOBJ_TASK_EXECUTION_FAILURE]->status.flags.fltstat = 0;
-        }
-  
-        // if last task execution took longer than specified, indicate task time quota violation condition
-        if(task_mgr.task_time >= task_mgr.task_period)
-        {
-            task_mgr.error_code = err_code;
-            fault_object_list[FLTOBJ_TASK_EXECUTION_FAILURE]->error_code = err_code;
-            fault_object_list[FLTOBJ_TASK_TIME_QUOTA_VIOLATION]->status.flags.fltstat = 1;
-        }
-        // if last task execution took longer than specified, reset task time quota violation condition
-        else
-        {
-            task_mgr.error_code = 0;
-            fault_object_list[FLTOBJ_TASK_EXECUTION_FAILURE]->error_code = 0;
-            fault_object_list[FLTOBJ_TASK_TIME_QUOTA_VIOLATION]->status.flags.fltstat = 0;
-        }
 
-  
 #if (USE_TASK_EXECUTION_CLOCKOUT_PIN==1)
-#if defined (CLKOUT_WR)
+#ifdef CLKOUT_WR
   CLKOUT_WR = PINSTATE_LOW;                  // Drive debug pin low
 #endif
 #endif
@@ -179,7 +133,6 @@ int main(void) {
         // Reset Watchdog Timer
         swdt_reset();
   
-#if __DEBUG
 #if (USE_TASK_MANAGER_TIMING_DEBUG_ARRAYS == 1)
 // In debugging mode CPU load and task time is measured and logged in two arrays
 // to examine the recent code execution profile
@@ -197,7 +150,6 @@ else
     cnt++;                                      // Increment array index
 }
 #endif
-#endif          
         
     }   // End of main loop
 

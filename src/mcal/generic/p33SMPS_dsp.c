@@ -50,10 +50,10 @@
  * are set here.
  * ***********************************************************************************************/
 
-int gsdsp_init_dsp(uint16_t regCORCON)
+uint16_t gsdsp_init_dsp(uint16_t regCORCON)
 {
 
-uint16_t reg_buf=0, i_res=0;
+volatile uint16_t reg_buf=0, i_res=0;
 
 	reg_buf = (regCORCON & REG_CORCON_WRITE_MSK);	// Status-bits will be masked out
 	CORCON = reg_buf;	

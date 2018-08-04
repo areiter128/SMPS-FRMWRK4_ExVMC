@@ -33,11 +33,11 @@
 #include "hal.h"
 #include "mcal.h"
 
-/*@@init_cpu
+/*@@init_dsp
  *****************************************************************************
- * Function:	 void init_DSP(void)
+ * Function:	 void init_dsp(void)
  * Arguments:	 (none)
- * Return Value: (none)
+ * Return Value: true/false
  *
  * Summary:
  * initializes the embedded digital signal processor core
@@ -51,7 +51,9 @@
 uint16_t init_dsp(void)
 {
 
-	gsdsp_init_dsp(
+    volatile uint16_t fres = 0;
+    
+	fres = gsdsp_init_dsp(
 	
 		REG_CORCON_VAR_FIXED	|		// Variable Exception Processing Latency disabled
         REG_CORCON_US_SIGNED	|		// Signed multiplications
@@ -61,12 +63,12 @@ uint16_t init_dsp(void)
 		REG_CORCON_SATDW_ON		|		// Saturation enabled for writes to data space
 		REG_CORCON_ACCSAT_131	|		// Accumulator saturation mode 1.31
 		REG_CORCON_RND_UNBIASED	|		// Unbiased (convergent) rounding enabled
-		REG_CORCON_IF_FRACTIONAL		// Fractional multiplier mode enabled
+		REG_CORCON_IF_FRACTIONAL |		// Fractional multiplier mode enabled
+        REG_CORCON_SFA_ACTIVE           // WREG14/WREG15 are used for stack- and frame pointer
 	
 	);
 
-
-	return(1);
+	return(fres);
 
 }
 

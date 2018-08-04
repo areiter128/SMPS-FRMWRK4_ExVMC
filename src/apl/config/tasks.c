@@ -68,13 +68,15 @@ uint16_t (*Task_Table[])(void) = {
     
     // OS-level initialization
     task_Idle,              // simple task doing nothing 
-    init_FaultObjects, // call fault object initialization
-    exec_FaultCheckAll,       // execute check of all default and user defined fault objects at once
-    exec_FaultCheckSequential, // execute check of default and user defined fault objects sequentially
     
     // Chip level initialization
     init_gpio,              // task initializing all used GPIOs in accordance to their application specific function
+    init_irq,               // task initializing the interrupt controller
+    init_dsp,               // task initializing all digital signal controller
 
+    // cross-function modules
+    init_FaultObjects, // call fault object initialization
+    
     // board level initialization
     init_TaskOnBoardLED,    // task initializing the on-board LED control pin and debug LED data structure
     init_TaskSwitchButton,  // task initializing the expander board switch button
@@ -96,7 +98,8 @@ uint16_t (*Task_Table[])(void) = {
     exec_launch_hsadc,      // task launching the pre-configured high-speed ADC module
     init_hspwm,             // task initializing the high-speed PWM module
     exec_launch_hspwm,      // task launching the pre-configured high-speed PWM module
-    exec_soft_start_hspwm,  // task soft-starting the pre-configured high-speed PWM module (TEST CODE ONLY)
+    init_soft_start,  // task initializing the soft-start configuration object
+    exec_soft_start,  // task soft-starting the converter
 
     init_VMC_Controller     // task initializing the voltage mode controller object
         
@@ -116,68 +119,60 @@ uint16_t (*Task_Table[])(void) = {
 
 uint16_t task_list_boot[] = {
     TASK_INIT_GPIO, // Step #0
-    TASK_INIT_ON_BOARD_LED, // Step #1
-    TASK_INIT_SWITCH, // Step #2
-    TASK_INIT_LED_RED, // Step #3
-    TASK_INIT_LED_GREEN // Step #4
+    TASK_INIT_IRQ, // Step #1
+    TASK_INIT_DSP, // Step #2
+    TASK_INIT_ON_BOARD_LED, // Step #3
+    TASK_INIT_SWITCH, // Step #4
+    TASK_INIT_LED_RED, // Step #5
+    TASK_INIT_LED_GREEN // Step #6
 };
-uint16_t task_list_boot_size = (sizeof(task_list_boot)/sizeof(task_list_boot[0])) - 1;
+uint16_t task_list_boot_size = (sizeof(task_list_boot)/sizeof(task_list_boot[0]));
 
 uint16_t task_list_device_startup[] = {
     TASK_IDLE, // Step #0
     TASK_INIT_FAULT_OBJECTS, // Step #1
     TASK_LED_GREEN_ON, // Step #2
-    TASK_IDLE, // Step #3
-    TASK_IDLE, // Step #4
-    TASK_IDLE, // Step #5
-    TASK_IDLE, // Step #6
-    TASK_IDLE, // Step #7
-    TASK_INIT_HSADC, // Step #8
-    TASK_INIT_HSPWM, // Step #9
-    TASK_INIT_CNPNZ_VMC // Step #10
+    TASK_INIT_CNPNZ_VMC, // Step #3
+    TASK_INIT_HSADC, // Step #4
+    TASK_INIT_HSPWM, // Step #5
+    TASK_INIT_SOFT_START, // Step #6
+    TASK_LAUNCH_HSPWM, // Step #7
+    TASK_LAUNCH_HSADC // Step #8
 };
-uint16_t task_list_device_startup_size = (sizeof(task_list_device_startup)/sizeof(task_list_device_startup[0])) - 1;
+uint16_t task_list_device_startup_size = (sizeof(task_list_device_startup)/sizeof(task_list_device_startup[0]));
 
 uint16_t task_list_system_startup[] = {
     TASK_IDLE, // Step #0
-    TASK_ON_BOARD_LED, // Step #1
-    TASK_READ_SWITCH, // Step #2
-    TASK_LED_RED, // Step #3
-    TASK_LED_GREEN, // Step #4
-    TASK_LAUNCH_HSPWM, // Step #5
-    TASK_SOFT_START_HSPWM, // Step #6
-    TASK_EXEC_FAULT_CHECK_ALL // Step #7
+    TASK_LED_RED_ON, // Step #2
+    TASK_EXEC_SOFT_START // Step #3
 };
-uint16_t task_list_system_startup_size = (sizeof(task_list_system_startup)/sizeof(task_list_system_startup[0])) - 1;
+uint16_t task_list_system_startup_size = (sizeof(task_list_system_startup)/sizeof(task_list_system_startup[0]));
 
 uint16_t task_list_normal[] = {
     TASK_IDLE, // Step #0
     TASK_ON_BOARD_LED, // Step #1
     TASK_READ_SWITCH, // Step #2
     TASK_LED_RED, // Step #3
-    TASK_LED_GREEN, // Step #4
-    TASK_EXEC_FAULT_CHECK_ALL // Step #5
+    TASK_LED_GREEN // Step #4
 };
-uint16_t task_list_normal_size = (sizeof(task_list_normal)/sizeof(task_list_normal[0])) - 1;
+uint16_t task_list_normal_size = (sizeof(task_list_normal)/sizeof(task_list_normal[0]));
 
 uint16_t task_list_fault[] = {
     TASK_IDLE, // Step #0
     TASK_ON_BOARD_LED, // Step #1
     TASK_READ_SWITCH, // Step #2
     TASK_LED_RED, // Step #3
-    TASK_LED_GREEN, // Step #4
-    TASK_EXEC_FAULT_CHECK_ALL // Step #5
+    TASK_LED_GREEN // Step #4
 };
-uint16_t task_list_fault_size = (sizeof(task_list_fault)/sizeof(task_list_fault[0])) - 1;
+uint16_t task_list_fault_size = (sizeof(task_list_fault)/sizeof(task_list_fault[0]));
 
 uint16_t task_list_standby[] = {
     TASK_IDLE, // Step #0
     TASK_ON_BOARD_LED, // Step #1
     TASK_READ_SWITCH, // Step #2
     TASK_LED_RED, // Step #3
-    TASK_LED_GREEN, // Step #4
-    TASK_EXEC_FAULT_CHECK_ALL // Step #5
+    TASK_LED_GREEN // Step #4
 };
-uint16_t task_list_standby_size = (sizeof(task_list_standby)/sizeof(task_list_standby[0])) - 1;
+uint16_t task_list_standby_size = (sizeof(task_list_standby)/sizeof(task_list_standby[0]));
 
 // EOF

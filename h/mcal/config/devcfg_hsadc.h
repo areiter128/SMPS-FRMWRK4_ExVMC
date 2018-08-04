@@ -128,12 +128,63 @@
                                )
 
 
+// ADC Triggers provided by other paripherals
+
+#if (PWM_MPH_PHASE_COUNT >= 1)
+#define ADC_PH1_IL_TRIG         TRIG1				// ADC Trigger Register of inductor current phase #1
+#elif (PWM_MPH_PHASE_COUNT >= 2)
+#define ADC_PH2_IL_TRIG         TRIG2				// ADC Trigger Register of inductor current phase #2
+#elif (PWM_MPH_PHASE_COUNT >= 3)
+#define ADC_PH3_IL_TRIG         TRIG3				// ADC Trigger Register of inductor current phase #3
+#elif (PWM_MPH_PHASE_COUNT >= 4)
+#define ADC_PH4_IL_TRIG         TRIG4				// ADC Trigger Register of inductor current phase #4
+#elif (PWM_MPH_PHASE_COUNT >= 5)
+#define ADC_PH4_IL_TRIG         TRIG5				// ADC Trigger Register of inductor current phase #5
+#elif (PWM_MPH_PHASE_COUNT >= 6)
+#define ADC_PH4_IL_TRIG         TRIG6				// ADC Trigger Register of inductor current phase #6
+#elif (PWM_MPH_PHASE_COUNT >= 7)
+#define ADC_PH4_IL_TRIG         TRIG7				// ADC Trigger Register of inductor current phase #7
+#elif (PWM_MPH_PHASE_COUNT == 8)
+#define ADC_PH4_IL_TRIG         TRIG8				// ADC Trigger Register of inductor current phase #8
+#elif (PWM_MPH_PHASE_COUNT > 8)
+#error === converter phase count recently not supported by this library ===
+#endif
+
+#if (PWM_MPH_PHASE_COUNT >= 1)
+  #define ADC_VIN_TRIG			STRIG1				// ADC Trigger Register for input voltage
+  #define ADC_VOUT_TRIG			TRIG1				// ADC Trigger Register for output voltage
+#elif (PWM_MPH_PHASE_COUNT >= 2)
+  #define ADC_VIN_TRIG			TRIG2				// ADC Trigger Register for input voltage
+  #define ADC_VOUT_TRIG			TRIG2				// ADC Trigger Register for output voltage
+#elif (PWM_MPH_PHASE_COUNT >= 3)
+  #define ADC_VIN_TRIG			TRIG3				// ADC Trigger Register for input voltage
+  #define ADC_VOUT_TRIG			TRIG3				// ADC Trigger Register for output voltage
+#elif (PWM_MPH_PHASE_COUNT >= 4)
+  #define ADC_VIN_TRIG			TRIG4				// ADC Trigger Register for input voltage
+  #define ADC_VOUT_TRIG			TRIG4				// ADC Trigger Register for output voltage
+#elif (PWM_MPH_PHASE_COUNT >= 5)
+  #define ADC_VIN_TRIG			TRIG5				// ADC Trigger Register for input voltage
+  #define ADC_VOUT_TRIG			TRIG5				// ADC Trigger Register for output voltage
+#elif (PWM_MPH_PHASE_COUNT >= 6)
+  #define ADC_VIN_TRIG			TRIG6				// ADC Trigger Register for input voltage
+  #define ADC_VOUT_TRIG			TRIG6				// ADC Trigger Register for output voltage
+#elif (PWM_MPH_PHASE_COUNT >= 7)
+  #define ADC_VIN_TRIG			TRIG7				// ADC Trigger Register for input voltage
+  #define ADC_VOUT_TRIG			TRIG7				// ADC Trigger Register for output voltage
+#elif (PWM_MPH_PHASE_COUNT == 8)
+  #define ADC_VIN_TRIG			TRIG8				// ADC Trigger Register for input voltage
+  #define ADC_VOUT_TRIG			TRIG8				// ADC Trigger Register for output voltage
+#elif (PWM_MPH_PHASE_COUNT > 8)
+  #error === converter phase count recently not supported by this library ===
+#endif
+
+
 // ADC Feedback
 
 // Output Voltage Sensing
-#define ADC_VOUT_ADCORE         3   				// ADC buffer where the output voltage value is written to
-#define ADC_VOUT_ANALOG_INPUT   3                   // Index number of the analog input used
-#define ADC_VOUT_ADCBUF         ADCBUF3				// ADC buffer where the output voltage value is written to
+#define ADC_VOUT_ADCORE         TP14_ADC_CORE   	// ADC buffer where the output voltage value is written to
+#define ADC_VOUT_ANALOG_INPUT   TP14_ADC_IN         // Index number of the analog input used
+#define ADC_VOUT_ADCBUF         TP14_ADC_BUFFER 	// ADC buffer where the output voltage value is written to
 
 #define ADC_VOUT_ADCORExL_CFG   REG_SAMC(2)
 
@@ -165,9 +216,9 @@
 #define ADC_VOUT_ADCMP_IP       IPC44bits.ADCMP1IP  // Interrupt priority of ADC comparator triggering VIN OORs
 
 // Input Voltage Sensing
-#define ADC_VIN_ADCORE          2   				// ADC buffer where the output voltage value is written to
-#define ADC_VIN_ANALOG_INPUT    2                   // Index number of the analog input used
-#define ADC_VIN_ADCBUF			ADCBUF2				// ADC buffer where the input current value is written to
+#define ADC_VIN_ADCORE          3   				// ADC buffer where the output voltage value is written to
+#define ADC_VIN_ANALOG_INPUT    3                   // Index number of the analog input used
+#define ADC_VIN_ADCBUF			ADCBUF3				// ADC buffer where the input current value is written to
 
 #define ADC_VIN_ADCORExL_CFG    REG_SAMC(2)
 
@@ -177,7 +228,7 @@
                                )
 
 #define ADC_VIN_TRIG_COMPARE    ADC_VIN_TRIG                    // PWM Trigger Compare Register of input voltage
-#define ADC_VIN_TRIG_SOURCE     REG_ADTRIGx_TRGSRC_PWM1_SEC     // ADC Trigger Source Register of input voltage
+#define ADC_VIN_TRIG_SOURCE     REG_ADTRIGx_TRGSRC_PWM1_PRIM    // ADC Trigger Source Register of input voltage
                                 
 #define ADC_VIN_ADCORE_EIE      ADC_ANx_EARLY_INTERRUPT_ENABLE  // Enable/Disable Early Interrupts for selected analog input
 #define ADC_VIN_ADIN_IE         ADC_ANx_INTERRUPT_DISABLE       // Enable/Disable generation of interrupts of selected analog input
@@ -197,7 +248,7 @@
 // Inductor Current Sensing Phase #1
 #define ADC_PH1_IL_ADCORE		0   				// ADC buffer where the output voltage value is written to
 #define ADC_PH1_IL_ANALOG_INPUT 0                   // Index number of the analog input used
-#define ADC_PH1_IL_ADCBUF		ADCBUF1				// ADC buffer where the inductor current value is written to
+#define ADC_PH1_IL_ADCBUF		ADCBUF0				// ADC buffer where the inductor current value is written to
 
 #define ADC_PH1_IL_ADCORExL_CFG REG_SAMC(2)
 
@@ -213,7 +264,7 @@
 
 #define ADC_PH1_IL_ADCORE_EIE   ADC_ANx_EARLY_INTERRUPT_ENABLE  // Enable/Disable Early Interrupts for selected analog input
 #define ADC_PH1_IL_ADIN_IE      ADC_ANx_INTERRUPT_DISABLE       // Enable/Disable generation of interrupts of selected analog input
-#define ADC_PH1_IL_ISR_PRIORITY 5                               // Set interrupt priority for phase #1 inductor current sampling
+#define ADC_PH1_IL_ISR_PRIORITY 4                               // Set interrupt priority for phase #1 inductor current sampling
 #else
 #define ADC_PH1_IL_ADCORE_EIE   ADC_ANx_EARLY_INTERRUPT_DISABLE  // Enable/Disable Early Interrupts for selected analog input
 #define ADC_PH1_IL_ADIN_IE      ADC_ANx_INTERRUPT_DISABLE       // Enable/Disable generation of interrupts of selected analog input
@@ -323,40 +374,10 @@
 #define ADC_PH4_IL_ADC_IP		IPC28bits.ADCAN2IP	// Interrupt priority of AN2
 
 
-#elif (PWM_MPH_PHASE_COUNT >= 5)
+#elif (PWM_MPH_PHASE_COUNT > 8)
 
 #error === converter phase count recently not supported by this library ===
 
-#endif
- 
-// ADC Triggers
-
-#if (PWM_MPH_PHASE_COUNT >= 1)
-#define ADC_PH1_IL_TRIG         TRIG1				// ADC Trigger Register of inductor current phase #1
-#elif (PWM_MPH_PHASE_COUNT >= 2)
-#define ADC_PH2_IL_TRIG         TRIG2				// ADC Trigger Register of inductor current phase #2
-#elif (PWM_MPH_PHASE_COUNT >= 3)
-#define ADC_PH3_IL_TRIG         TRIG3				// ADC Trigger Register of inductor current phase #3
-#elif (PWM_MPH_PHASE_COUNT >= 4)
-#define ADC_PH4_IL_TRIG         TRIG4				// ADC Trigger Register of inductor current phase #4
-#elif (PWM_MPH_PHASE_COUNT >= 5)
-#error === converter phase count recently not supported by this library ===
-#endif
-
-#if (PWM_MPH_PHASE_COUNT >= 1)
-  #define ADC_VIN_TRIG			STRIG1				// ADC Trigger Register for input voltage
-  #define ADC_VOUT_TRIG			TRIG1				// ADC Trigger Register for output voltage
-#elif (PWM_MPH_PHASE_COUNT >= 2)
-  #define ADC_VIN_TRIG			TRIG2				// ADC Trigger Register for input voltage
-  #define ADC_VOUT_TRIG			TRIG2				// ADC Trigger Register for output voltage
-#elif (PWM_MPH_PHASE_COUNT >= 3)
-  #define ADC_VIN_TRIG			TRIG3				// ADC Trigger Register for input voltage
-  #define ADC_VOUT_TRIG			TRIG3				// ADC Trigger Register for output voltage
-#elif (PWM_MPH_PHASE_COUNT >= 4)
-  #define ADC_VIN_TRIG			TRIG4				// ADC Trigger Register for input voltage
-  #define ADC_VOUT_TRIG			TRIG4				// ADC Trigger Register for output voltage
-#elif (PWM_MPH_PHASE_COUNT >= 5)
-  #error === converter phase count recently not supported by this library ===
 #endif
 
 

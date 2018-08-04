@@ -139,54 +139,54 @@ uint16_t gpio_reset(void) {
 
     /* Reset pin direction settings to input */
     #ifdef TRISA        
-        TRISA = 0x1111;
+        TRISA = 0xFFFF;
     #endif
     #ifdef TRISB
-        TRISB = 0x1111;
+        TRISB = 0xFFFF;
     #endif
     #ifdef TRISC        
-        TRISC = 0x1111;
+        TRISC = 0xFFFF;
     #endif
     #ifdef TRISD        
-        TRISD = 0x1111;
+        TRISD = 0xFFFF;
     #endif
     #ifdef TRISE        
-        TRISE = 0x1111;
+        TRISE = 0xFFFF;
     #endif
     #ifdef TRISF        
-        TRISF = 0x1111;
+        TRISF = 0xFFFF;
     #endif
     #ifdef TRISG        
-        TRISG = 0x1111;
+        TRISG = 0xFFFF;
     #endif
     #ifdef TRISH        
-        TRISH = 0x1111;
+        TRISH = 0xFFFF;
     #endif
         
     /* Reset port latch registers to high */
     #ifdef LATA
-        LATA = 0x1111;
+        LATA = 0xFFFF;
     #endif
     #ifdef LATB
-        LATB = 0x1111;
+        LATB = 0xFFFF;
     #endif
     #ifdef LATC
-        LATC = 0x1111;
+        LATC = 0xFFFF;
     #endif
     #ifdef LATD
-        LATD = 0x1111;
+        LATD = 0xFFFF;
     #endif
     #ifdef LATE
-        LATE = 0x1111;
+        LATE = 0xFFFF;
     #endif
     #ifdef LATF
-        LATF = 0x1111;
+        LATF = 0xFFFF;
     #endif
     #ifdef LATG
-        LATG = 0x1111;
+        LATG = 0xFFFF;
     #endif
     #ifdef LATH
-        LATH = 0x1111;
+        LATH = 0xFFFF;
     #endif
         
         

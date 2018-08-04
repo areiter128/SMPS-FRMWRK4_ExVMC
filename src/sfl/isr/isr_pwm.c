@@ -33,24 +33,30 @@
 
 #include "globals.h"
 
+#ifdef _PSEMIF
 /***************************************************************************
 ISR: 		PWM Special Event Match Interrupt
 Description: 
 ***************************************************************************/
-void __attribute__((__interrupt__,no_auto_psv, context)) _PWMSpEventMatchInterrupt()
+void __attribute__((__interrupt__,no_auto_psv)) _PWMSpEventMatchInterrupt(void)
 {	
 
 #if(TRIGGER_OPTION == TRG_OPTION_PWM)
-	// Call outer voltage control loop
-    cnpnz_vmc_Update(&cnpnz_vmc);
+    Nop();
+    cnpnz_vmc_Update(&cnpnz_vmc);   // Call voltage control loop controller
 #endif
     
+    _PSEMIF = 0;
 	IFS3bits.PSEMIF = 0; // clear interrupt flag
 
 	return;
 
 }
-
+/***************************************************************************
+End of ISR
+***************************************************************************/
+#endif
+#ifdef _PSESIF
 /***************************************************************************
 ISR: 		PWM Secondary Special Event Match Interrupt
 Description: 
@@ -66,24 +72,30 @@ void __attribute__((__interrupt__,no_auto_psv)) _PWMSecSpEventMatchInterrupt()
     return;
     
 }
-
+/***************************************************************************
+End of ISR
+***************************************************************************/
+#endif
+#ifdef _PWM1IF
 /***************************************************************************
 ISR: 		PWM1Interrupt
 Description:	
 ***************************************************************************/
-void __attribute__((__interrupt__,no_auto_psv, context)) _PWM1Interrupt() 
+void __attribute__((__interrupt__,no_auto_psv)) _PWM1Interrupt() 
 {	
-
-    
+//    volatile uint16_t dummy = 0;
+    Nop();
+    cnpnz_vmc_Update(&cnpnz_vmc);   // Call voltage control loop controller
 	IFS5bits.PWM1IF = 0;	// Clear interrupt flag bit
-
-	return;
+    
+    return;
 
 }
 /***************************************************************************
 End of ISR
 ***************************************************************************/
-
+#endif
+#ifdef _PWM2IF
 /***************************************************************************
 ISR: 		PWM2Interrupt
 Description:	
@@ -98,7 +110,8 @@ void __attribute__((__interrupt__,no_auto_psv, context)) _PWM2Interrupt()
 /***************************************************************************
 End of ISR
 ***************************************************************************/
-
+#endif
+#ifdef _PWM3IF
 /***************************************************************************
 ISR: 		PWM3Interrupt
 Description:	
@@ -112,7 +125,8 @@ void __attribute__((__interrupt__,no_auto_psv, context)) _PWM3Interrupt()
 /***************************************************************************
 End of ISR
 ***************************************************************************/
-
+#endif
+#ifdef _PWM4IF
 /***************************************************************************
 ISR: 		PWM4Interrupt
 Description:	
@@ -126,9 +140,8 @@ void __attribute__((__interrupt__,no_auto_psv, context)) _PWM4Interrupt()
 /***************************************************************************
 End of ISR
 ***************************************************************************/
-
-#if defined (_P33GS_UEAA_) || defined (_P33GS_TLAH_) || defined (_P33GS_TLAY_)
-
+#endif
+#ifdef _PWM5IF
 /***************************************************************************
 ISR: 		PWM5Interrupt
 Description:	
@@ -145,9 +158,8 @@ void __attribute__((__interrupt__,no_auto_psv)) _PWM5Interrupt()
 /***************************************************************************
 End of ISR
 ***************************************************************************/
-
-#elif defined (_P33GS_UEAA_) || defined (_P33GS_TLAY_)
-
+#endif
+#ifdef _PWM6IF
 /***************************************************************************
 ISR: 		PWM6Interrupt
 Description:	
@@ -161,14 +173,11 @@ void __attribute__((__interrupt__,no_auto_psv)) _PWM6Interrupt()
 	return;
 
 }
-#endif
 /***************************************************************************
 End of ISR
 ***************************************************************************/
-
-#if defined (__dsPIC33FJ32GS608__) || defined (__dsPIC33FJ32GS610__) || \
-	defined (__dsPIC33FJ64GS608__) || defined (__dsPIC33FJ64GS610__)
-
+#endif
+#ifdef _PWM7IF
 /***************************************************************************
 ISR: 		PWM7Interrupt
 Description:	
@@ -186,10 +195,7 @@ void __attribute__((__interrupt__,no_auto_psv)) _PWM7Interrupt()
 End of ISR
 ***************************************************************************/
 #endif
-
-#if defined (__dsPIC33FJ32GS608__) || defined (__dsPIC33FJ32GS610__) || \
-	defined (__dsPIC33FJ64GS608__) || defined (__dsPIC33FJ64GS610__)
-
+#ifdef _PWM8IF
 /***************************************************************************
 ISR: 		PWM8Interrupt
 Description:	
@@ -207,9 +213,7 @@ void __attribute__((__interrupt__,no_auto_psv)) _PWM8Interrupt()
 End of ISR
 ***************************************************************************/
 #endif
-
-#if defined (__dsPIC33FJ32GS610__) || defined (__dsPIC33FJ64GS610__)
-
+#ifdef _PWM9IF
 /***************************************************************************
 ISR: 		PWM9Interrupt
 Description:	
