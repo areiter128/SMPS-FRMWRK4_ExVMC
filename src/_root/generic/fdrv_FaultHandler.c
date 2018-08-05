@@ -73,7 +73,7 @@ inline uint16_t CheckFaultCondition(FAULT_OBJECT_t* fltobj)
     volatile uint16_t fres = 0, compare_value = 0;
     
     // if the fault object is not initialized, exit here
-    if(!fltobj->object == 0) { return(1); }
+    if(!fltobj->object == NULL) { return(1); }
     
     // if the fault check of this object is disabled, exit here
     if(!fltobj->status.flags.fltchken){ return(1); }
