@@ -187,7 +187,7 @@ uint16_t init_TaskExecutionFaultObject(void)
     // Configuring the Task Execution Failure fault object
     
     // specify the target value/register to be monitored
-    fltobj_TaskExecutionFailure.object = &task_mgr.error_code;
+    fltobj_TaskExecutionFailure.object = &task_mgr.proc_code.segments.retval;
     fltobj_TaskExecutionFailure.object_bit_mask = FAULT_OBJECT_BIT_MASK_DEFAULT;
     fltobj_TaskExecutionFailure.error_code = (uint16_t)ERR_TASK_EXECUTION_FAILURE;
     fltobj_TaskExecutionFailure.id = (uint16_t)ERR_TASK_EXECUTION_FAILURE;
@@ -240,9 +240,9 @@ uint16_t init_TaskTimeQuotaViolationFaultObject(void)
     // configuring the trip and reset levels as well as trip and reset event filter setting
     fltobj_TaskTimeQuotaViolation.criteria.counter = 0;      // Set/reset fault counter
     fltobj_TaskTimeQuotaViolation.criteria.fault_ratio = FAULT_LEVEL_RATIO_GREATER_THAN;
-    fltobj_TaskTimeQuotaViolation.criteria.trip_level = (task_mgr.task_period - (task_mgr.task_period >> 3));   // Set/reset trip level value
+    fltobj_TaskTimeQuotaViolation.criteria.trip_level = (task_mgr.task_time_quota - (task_mgr.task_time_quota >> 3));   // Set/reset trip level value
     fltobj_TaskTimeQuotaViolation.criteria.trip_cnt_threshold = 1; // Set/reset number of successive trips before triggering fault event
-    fltobj_TaskTimeQuotaViolation.criteria.reset_level = (task_mgr.task_period - (task_mgr.task_period >> 2));  // Set/reset fault release level value
+    fltobj_TaskTimeQuotaViolation.criteria.reset_level = (task_mgr.task_time_quota - (task_mgr.task_time_quota >> 2));  // Set/reset fault release level value
     fltobj_TaskTimeQuotaViolation.criteria.reset_cnt_threshold = 10; // Set/reset number of successive resets before triggering fault release
         
     // specifying fault class, fault level and enable/disable status

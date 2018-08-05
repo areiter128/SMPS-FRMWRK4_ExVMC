@@ -77,7 +77,7 @@ int main(void) {
         // Wait for timer to expire before calling the next task
         while (
            !(*task_mgr.reg_task_timer_irq_flag & task_mgr.task_timer_irq_flag_mask)
-            && (task_mgr.cpu_load.ticks != task_mgr.task_period)
+            && (task_mgr.cpu_load.ticks != task_mgr.task_time_quota)
             )
         {
             // Increment CPU tick counter
@@ -93,7 +93,7 @@ int main(void) {
 #endif
         
         // CPU Meter Fault Trigger for CPU Load Lockout Check
-        if(task_mgr.cpu_load.ticks >= task_mgr.task_period){
+        if(task_mgr.cpu_load.ticks >= task_mgr.task_time_quota){
             // When this error condition has been detected, something went wrong with
             // the timer interrupt bit (oscillator, timer or interrupt controller is corrupted)
             // => Immediate reconfiguration and firmware initialization is required

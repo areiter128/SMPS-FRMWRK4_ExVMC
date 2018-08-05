@@ -85,15 +85,25 @@ typedef struct {
 } cpu_load_settings_t;
 
 typedef struct {
+    volatile uint16_t retval;
+    volatile uint8_t task_id;
+    volatile uint8_t op_mode;
+} __attribute__((packed))task_manager_process_code_segment_t;
+
+typedef union {
+    volatile uint32_t value;
+    volatile task_manager_process_code_segment_t segments;
+} task_manager_process_code_t;
+
+typedef struct {
 
     /* System operation mode (selects the active task flow list) */
     volatile system_operation_mode_t op_mode; // ID of current operating mode
-    volatile uint16_t error_code;   // in case an execution error occurred, this code contains task ID
+    volatile task_manager_process_code_t proc_code;   // in case an execution error occurred, this code contains task ID
                                     // and list ID which caused the error 
     
     /* Active task list properties */
     volatile uint16_t exec_task_id; // Main task ID from task id definition list
-    volatile uint16_t exec_task_retval; // last return code of most recently executed task
     volatile uint16_t *task_list; // Pointer to the task flow list (lookup table of task flow combinations)
     volatile uint16_t task_list_ubound; // Number of tasks in the current list (1-n))
     volatile uint16_t task_list_tick_index; // Recent task tick counter
@@ -106,7 +116,7 @@ typedef struct {
     volatile uint16_t task_timer_irq_flag_mask; // Bit-Mask for filtering on dedicated interrupt flag bit
 
     /* Generic timer settings and buffer variables */
-    volatile uint16_t task_period; // Global task execution period
+    volatile uint16_t task_time_quota; // Global task execution period
     volatile uint16_t task_time_buffer; // Buffer of task time meter result
     volatile uint16_t task_time; // Execution time meter result of last called task
     volatile uint16_t task_time_max_buffer; // Task time meter maximum is tracked and logged

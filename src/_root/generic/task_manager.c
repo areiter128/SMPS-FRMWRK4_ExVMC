@@ -65,7 +65,7 @@ volatile system_operation_mode_t pre_op_mode; // Private flag variable pre-op-mo
 
 uint16_t task_manager_tick(void) {
 
-    uint16_t fres = 0, err_code = 0;
+    volatile uint16_t fres = 0;
 
     // The task manager scheduler runs through the currently selected task flow list in n steps.
     // After the last item of each list the operation mode switch-over check is performed and the 
@@ -76,7 +76,8 @@ uint16_t task_manager_tick(void) {
     task_mgr.exec_task_id = task_mgr.task_list[task_mgr.task_list_tick_index]; // Pick next task from list
 
     // Determine error code for the upcoming task
-    err_code = ((task_mgr.op_mode.mode << 8) | (task_mgr.exec_task_id)); // build error code
+    task_mgr.proc_code.segments.op_mode = (task_mgr.op_mode.mode);    // log operation mode
+    task_mgr.proc_code.segments.task_id = (task_mgr.exec_task_id);   // log upcoming task-ID
 
     // Capture task start time for time quota monitoring
     task_mgr.task_time_buffer = *task_mgr.reg_task_timer_counter; // Capture timer counter to calculate remaining "free" time
@@ -84,8 +85,9 @@ uint16_t task_manager_tick(void) {
     // Execute next task on the list
     fres = Task_Table[task_mgr.exec_task_id](); // Execute currently selected task
 
-    task_mgr.exec_task_retval = fres; // copy/publish most recent function result 
-
+    // copy return value into process code for fault analysis
+    task_mgr.proc_code.segments.retval = fres;
+    
     // Capture time to determine elapsed task executing time
     task_mgr.task_time = *task_mgr.reg_task_timer_counter - task_mgr.task_time_buffer; // measure most recent task time
     task_mgr.task_time_max_buffer |= task_mgr.task_time;
@@ -93,32 +95,14 @@ uint16_t task_manager_tick(void) {
 
     // Task execution analysis and fault flag settings
 
-    if (fres == 1)
-        // if last executed task returned a value =1 (success), reset task execution failure condition
-    {
-        task_mgr.error_code = 0;
-        fault_object_list[FLTOBJ_TASK_EXECUTION_FAILURE]->error_code = 0;
-        fault_object_list[FLTOBJ_TASK_EXECUTION_FAILURE]->status.flags.fltstat = 0;
-    } else
-        // if last executed task returned a value !=1 (no success), indicate task execution failure condition
-    {
-        task_mgr.exec_task_retval = fres; // copy/publish most recent function result 
-        task_mgr.error_code = err_code; // copy/publish most recent function result 
-        fault_object_list[FLTOBJ_TASK_EXECUTION_FAILURE]->error_code = err_code;
-        fault_object_list[FLTOBJ_TASK_EXECUTION_FAILURE]->status.flags.fltstat = 1;
-    }
 
-    if (task_mgr.task_time < task_mgr.task_period)
+    if (task_mgr.task_time < task_mgr.task_time_quota)
         // if last task execution time was within the specified time frame, everything is OK
     {
-        task_mgr.error_code = 0;
-        fault_object_list[FLTOBJ_TASK_TIME_QUOTA_VIOLATION]->error_code = 0;
         fault_object_list[FLTOBJ_TASK_TIME_QUOTA_VIOLATION]->status.flags.fltstat = 0;
     } else
         // if last task execution took longer than specified, indicate task time quota violation condition
     {
-        task_mgr.error_code = err_code;
-        fault_object_list[FLTOBJ_TASK_TIME_QUOTA_VIOLATION]->error_code = err_code;
         fault_object_list[FLTOBJ_TASK_TIME_QUOTA_VIOLATION]->status.flags.fltstat = 1;
     }
 
@@ -135,7 +119,6 @@ uint16_t task_manager_tick(void) {
         // at the roll-over point (one tick above the array size) the operation mode switch check
         // is executed by default
 
-        err_code = 0xFF00; // 0xFF indicates roll-over process
         fres &= task_CheckOperationModeStatus();
         task_mgr.task_list_tick_index = 0; // If end of list has bee reached, jump back to first item
 
@@ -241,7 +224,7 @@ uint16_t init_TaskManager(void) {
 
     // Initialize basic Task Manager Status
     task_mgr.op_mode.mode = OP_MODE_BOOT; // Set operation mode to STANDBY
-    task_mgr.error_code = 0; // Reset error code
+    task_mgr.proc_code.value = 0; // Reset process code
     task_mgr.exec_task_id = TASK_IDLE; // Set task ID to DEFAULT (IDle Task))
     task_mgr.task_list_tick_index = 0; // Reset task list pointer
     task_mgr.task_time = 0; // Reset maximum task time meter result
@@ -254,7 +237,7 @@ uint16_t init_TaskManager(void) {
 
     task_mgr.reg_task_timer_counter = &TASK_MGR_TIMER_COUNTER_REGISTER;
     task_mgr.reg_task_timer_period = &TASK_MGR_TIMER_PERIOD_REGISTER;
-    task_mgr.task_period = *task_mgr.reg_task_timer_period; // Global task execution period 
+    task_mgr.task_time_quota = *task_mgr.reg_task_timer_period; // Global task execution period 
 
     task_mgr.reg_task_timer_irq_flag = &TASK_MGR_TIMER_ISR_FLAG_REGISTER;
     task_mgr.task_timer_irq_flag_mask = TASK_MGR_TIMER_ISR_FLAG_BIT_MASK;
