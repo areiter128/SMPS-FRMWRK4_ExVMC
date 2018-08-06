@@ -41,8 +41,8 @@
 
 // This is a guard condition so that contents of this file are not included
 // more than once.  
-#ifndef MCAL_P33_SMPS_PDM_H
-#define	MCAL_P33_SMPS_PDM_H
+#ifndef _MCAL_P33_SMPS_PDM_H_
+#define	_MCAL_P33_SMPS_PDM_H_
 
 #include <xc.h> // include processor files - each processor file is guarded.  
 #include <stdint.h>

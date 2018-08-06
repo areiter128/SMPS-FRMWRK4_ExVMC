@@ -30,13 +30,13 @@
 
 // This is a guard condition so that contents of this file are not included
 // more than once.  
-#ifndef MCAL_P33_SMPS_GPIO_H
-#define	MCAL_P33_SMPS_GPIO_H
+#ifndef __MCAL_P33_SMPS_GPIO_H__
+#define	__MCAL_P33_SMPS_GPIO_H__
 
 #include <xc.h> // include processor files - each processor file is guarded.  
 #include <stdint.h>
 
 extern uint16_t gpio_reset(void);
 
-#endif	/* MCAL_P33_SMPS_GPIO_H */
+#endif	/* __MCAL_P33_SMPS_GPIO_H__ */
 

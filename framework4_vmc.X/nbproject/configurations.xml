@@ -70,7 +70,6 @@
           <itemPath>../h/mcal/generic/p33GS_hsacmp.h</itemPath>
           <itemPath>../h/mcal/generic/p33GS_hsadc.h</itemPath>
           <itemPath>../h/mcal/generic/p33GS_hspwm.h</itemPath>
-          <itemPath>../h/mcal/generic/p33GS_irq.h</itemPath>
           <itemPath>../h/mcal/generic/p33SMPS_devices.h</itemPath>
           <itemPath>../h/mcal/generic/p33SMPS_gpio.h</itemPath>
           <itemPath>../h/mcal/generic/p33SMPS_oscillator.h</itemPath>
@@ -78,6 +77,7 @@
           <itemPath>../h/mcal/generic/p33SMPS_swdt.h</itemPath>
           <itemPath>../h/mcal/generic/p33SMPS_timer.h</itemPath>
           <itemPath>../h/mcal/generic/p33SMPS_dsp.h</itemPath>
+          <itemPath>../h/mcal/generic/p33SMPS_irq.h</itemPath>
         </logicalFolder>
         <itemPath>../h/mcal/cpu_macros.h</itemPath>
         <itemPath>../h/mcal/mcal.h</itemPath>
@@ -154,13 +154,13 @@
           <itemPath>../src/mcal/generic/p33GS_hsacmp.c</itemPath>
           <itemPath>../src/mcal/generic/p33GS_hsadc.c</itemPath>
           <itemPath>../src/mcal/generic/p33GS_hspwm.c</itemPath>
-          <itemPath>../src/mcal/generic/p33GS_irq.c</itemPath>
           <itemPath>../src/mcal/generic/p33SMPS_gpio.c</itemPath>
           <itemPath>../src/mcal/generic/p33SMPS_oscillator.c</itemPath>
           <itemPath>../src/mcal/generic/p33SMPS_pmd.c</itemPath>
           <itemPath>../src/mcal/generic/p33SMPS_swdt.c</itemPath>
           <itemPath>../src/mcal/generic/p33SMPS_timer.c</itemPath>
           <itemPath>../src/mcal/generic/p33SMPS_dsp.c</itemPath>
+          <itemPath>../src/mcal/generic/p33SMPS_irq.c</itemPath>
         </logicalFolder>
         <itemPath>../src/mcal/mcal.c</itemPath>
       </logicalFolder>
@@ -221,7 +221,7 @@
         <targetDevice>dsPIC33EP64GS806</targetDevice>
         <targetHeader></targetHeader>
         <targetPluginBoard></targetPluginBoard>
-        <platformTool>RealICEPlatformTool</platformTool>
+        <platformTool>ICD4Tool</platformTool>
         <languageToolchain>XC16</languageToolchain>
         <languageToolchainVersion>1.35</languageToolchainVersion>
         <platform>3</platform>

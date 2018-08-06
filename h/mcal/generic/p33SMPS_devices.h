@@ -138,15 +138,15 @@
     #define __P33SMPS_FJ504__
 
 #elif defined (__dsPIC33FJ06GS001__) 
-    #define __P33SMPS_FJA001
+    #define __P33SMPS_FJA001__
 #elif defined (__dsPIC33FJ06GS101A__) 
-    #define __P33SMPS_FJA101
+    #define __P33SMPS_FJA101__
 #elif defined (__dsPIC33FJ06GS102A__)
-    #define __P33SMPS_FJA102
+    #define __P33SMPS_FJA102__
 #elif defined (__dsPIC33FJ16GS202A__) 
-    #define __P33SMPS_FJA202
+    #define __P33SMPS_FJA202__
 #elif defined (__dsPIC33FJ09GS302__) 
-    #define __P33SMPS_FJA302
+    #define __P33SMPS_FJA302__
 
 #elif defined (__dsPIC33FJ32GS406__) || defined (__dsPIC33FJ64GS406__)
     #define __P33SMPS_FJ406__
@@ -220,6 +220,8 @@
     #define __P33SMPS_CK506__
 #elif defined (__dsPIC33CK64MP508__) || defined (__dsPIC33CK128MP508__) || defined (__dsPIC33CK256MP508__)
     #define __P33SMPS_CK508__
+#else
+    #error === selected device not supported by peripheral driver libraries ===
 #endif
 
 

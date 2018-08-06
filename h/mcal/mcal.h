@@ -75,7 +75,7 @@ extern "C" {
 */
 
     
-#include "p33GS_irq.h"
+#include "p33SMPS_irq.h"
 #include "p33SMPS_dsp.h"
 #include "p33SMPS_gpio.h"
 #include "p33SMPS_oscillator.h"

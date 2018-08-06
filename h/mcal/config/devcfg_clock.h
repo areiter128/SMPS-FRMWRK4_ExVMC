@@ -79,6 +79,12 @@
     #define OSC_FRC_TUN         31          // <OSCTUN> FRC Oscillator Tuning Rregister value
     #define OSC_TUN_SCALER      0.00047     // Oscillator frequency step size of <OSCTUN>
 
+#elif defined (__P33SMPS_CH__) || defined (__P33SMPS_CK__) 
+
+    #define OSC_FRC_FREQ        8000000     // Frequency of the internal oscillator in [Hz]
+    #define OSC_FRC_TUN         0           // <OSCTUN> FRC Oscillator Tuning Rregister value
+    #define OSC_TUN_SCALER      0.00047     // Oscillator frequency step size of <OSCTUN>
+
 #else
 
     #error === device cannot be recognized to select oscillator settings ===
@@ -93,35 +99,120 @@
 
   #if (MCU_SPEED == MIPS40)
 
-//	#warning === MCU speed set to 40 MIPS operation ===
+    #if defined (__P33SMPS_FJ__) || defined (__P33SMPS_FJA__) || defined (__P33SMPS_FJC__) || \
+        defined (__P33SMPS_EP2__) || defined (__P33SMPS_EP5__) || defined (__P33SMPS_EP7__)
 
-	#define OSCPLL_N1		2		// PLLPRE<4:0> PLL Phase Detector Input Divider value N1
-	#define OSCPLL_M		43		// PLLDIV<8:0> PLL Feedback Divisor value M
-	#define OSCPLL_N2		2		// PLLPOST<1:0> PLL VCO Output Divider Select value N2
+        #define OSCPLL_N1		2		// PLLPRE<4:0> PLL Phase Detector Input Divider value N1
+        #define OSCPLL_M		43		// PLLDIV<8:0> PLL Feedback Divisor value M
+        #define OSCPLL_N2		2		// PLLPOST<1:0> PLL VCO Output Divider Select value N2
+
+    #elif defined (__P33SMPS_CH__) || defined (__P33SMPS_CK__) 
+
+        #error === MCU speed set to 40 MIPS operation for CH/CK not validated ===
+
+        #define OSCPLL_N1		2		// PLLPRE<4:0> PLL Phase Detector Input Divider value N1
+        #define OSCPLL_M		43		// PLLDIV<8:0> PLL Feedback Divisor value M
+        #define OSCPLL_N2		2		// PLLPOST<1:0> PLL VCO Output Divider Select value N2
+        #define OSCPLL_N3		2		// PLLPOST<1:0> PLL VCO Output Divider Select value N3
+
+    #endif
 
   #elif (MCU_SPEED == MIPS50)
 
-//	#warning === MCU speed set to 50 MIPS operation ===
-  
-	#define OSCPLL_N1		2		// PLLPRE<4:0> PLL Phase Detector Input Divider value N1
-	#define OSCPLL_M		53		// PLLDIV<8:0> PLL Feedback Divisor value M
-	#define OSCPLL_N2		2		// PLLPOST<1:0> PLL VCO Output Divider Select value N2
+    #if defined (__P33SMPS_FJ__) || defined (__P33SMPS_FJA__) || defined (__P33SMPS_FJC__) || \
+        defined (__P33SMPS_EP2__) || defined (__P33SMPS_EP5__) || defined (__P33SMPS_EP7__)
+
+        #define OSCPLL_N1		2		// PLLPRE<4:0> PLL Phase Detector Input Divider value N1
+        #define OSCPLL_M		53		// PLLDIV<8:0> PLL Feedback Divisor value M
+        #define OSCPLL_N2		2		// PLLPOST<1:0> PLL VCO Output Divider Select value N2
+    
+    #elif defined (__P33SMPS_CH__) || defined (__P33SMPS_CK__) 
+
+        #error === MCU speed set to 50 MIPS operation for CH/CK not validated ===
+
+        #define OSCPLL_N1		2		// PLLPRE<4:0> PLL Phase Detector Input Divider value N1
+        #define OSCPLL_M		43		// PLLDIV<8:0> PLL Feedback Divisor value M
+        #define OSCPLL_N2		2		// PLLPOST<1:0> PLL VCO Output Divider Select value N2
+        #define OSCPLL_N3		2		// PLLPOST<1:0> PLL VCO Output Divider Select value N3
+
+    #endif
 
   #elif (MCU_SPEED == MIPS60)
 
-//	#warning === MCU speed set to 60 MIPS operation ===
-  
-	#define OSCPLL_N1		2		// PLLPRE<4:0> PLL Phase Detector Input Divider value N1
-	#define OSCPLL_M		64		// PLLDIV<8:0> PLL Feedback Divisor value M
-	#define OSCPLL_N2		2		// PLLPOST<1:0> PLL VCO Output Divider Select value N2
+    #if defined (__P33SMPS_EP2__) || defined (__P33SMPS_EP5__) || defined (__P33SMPS_EP7__)
+
+        #define OSCPLL_N1		2		// PLLPRE<4:0> PLL Phase Detector Input Divider value N1
+        #define OSCPLL_M		64		// PLLDIV<8:0> PLL Feedback Divisor value M
+        #define OSCPLL_N2		2		// PLLPOST<1:0> PLL VCO Output Divider Select value N2
+
+    #elif defined (__P33SMPS_CH__) || defined (__P33SMPS_CK__) 
+
+        #error === MCU speed set to 60 MIPS operation for CH/CK not validated ===
+
+        #define OSCPLL_N1		2		// PLLPRE<4:0> PLL Phase Detector Input Divider value N1
+        #define OSCPLL_M		43		// PLLDIV<8:0> PLL Feedback Divisor value M
+        #define OSCPLL_N2		2		// PLLPOST<1:0> PLL VCO Output Divider Select value N2
+        #define OSCPLL_N3		2		// PLLPOST<1:0> PLL VCO Output Divider Select value N3
+
+    #endif
 
   #elif (MCU_SPEED == MIPS70)
 
-//	#warning === MCU speed set to 70 MIPS operation ===
+    #if defined (__P33SMPS_EP2__) || defined (__P33SMPS_EP5__) || defined (__P33SMPS_EP7__)
 
-	#define OSCPLL_N1		2		// PLLPRE<4:0> PLL Phase Detector Input Divider value N1
-	#define OSCPLL_M		74		// PLLDIV<8:0> PLL Feedback Divisor value M
-	#define OSCPLL_N2		2		// PLLPOST<1:0> PLL VCO Output Divider Select value N2
+        #define OSCPLL_N1		2		// PLLPRE<4:0> PLL Phase Detector Input Divider value N1
+        #define OSCPLL_M		74		// PLLDIV<8:0> PLL Feedback Divisor value M
+        #define OSCPLL_N2		2		// PLLPOST<1:0> PLL VCO Output Divider Select value N2
+
+    #elif defined (__P33SMPS_CH__) || defined (__P33SMPS_CK__) 
+
+        #error === MCU speed set to 70 MIPS operation for CH/CK not validated ===
+
+        #define OSCPLL_N1		2		// PLLPRE<4:0> PLL Phase Detector Input Divider value N1
+        #define OSCPLL_M		43		// PLLDIV<8:0> PLL Feedback Divisor value M
+        #define OSCPLL_N2		2		// PLLPOST<1:0> PLL VCO Output Divider Select value N2
+        #define OSCPLL_N3		2		// PLLPOST<1:0> PLL VCO Output Divider Select value N3
+
+    #endif
+
+  #elif (MCU_SPEED == MIPS80)
+
+    #if defined (__P33SMPS_CH__) || defined (__P33SMPS_CK__) 
+
+        #error === MCU speed set to 80 MIPS operation for CH/CK not validated ===
+
+        #define OSCPLL_N1		2		// PLLPRE<4:0> PLL Phase Detector Input Divider value N1
+        #define OSCPLL_M		43		// PLLDIV<8:0> PLL Feedback Divisor value M
+        #define OSCPLL_N2		2		// PLLPOST<1:0> PLL VCO Output Divider Select value N2
+        #define OSCPLL_N3		2		// PLLPOST<1:0> PLL VCO Output Divider Select value N3
+
+    #endif
+
+  #elif (MCU_SPEED == MIPS90)
+
+    #if defined (__P33SMPS_CH__) || defined (__P33SMPS_CK__) 
+
+        #error === MCU speed set to 90 MIPS operation for CH/CK not validated ===
+
+        #define OSCPLL_N1		2		// PLLPRE<4:0> PLL Phase Detector Input Divider value N1
+        #define OSCPLL_M		43		// PLLDIV<8:0> PLL Feedback Divisor value M
+        #define OSCPLL_N2		2		// PLLPOST<1:0> PLL VCO Output Divider Select value N2
+        #define OSCPLL_N3		2		// PLLPOST<1:0> PLL VCO Output Divider Select value N3
+
+    #endif
+
+  #elif (MCU_SPEED == MIPS100)
+
+    #if defined (__P33SMPS_CH__)  
+
+        #error === MCU speed set to 100 MIPS operation for CH/CK not validated ===
+
+        #define OSCPLL_N1		2		// PLLPRE<4:0> PLL Phase Detector Input Divider value N1
+        #define OSCPLL_M		43		// PLLDIV<8:0> PLL Feedback Divisor value M
+        #define OSCPLL_N2		2		// PLLPOST<1:0> PLL VCO Output Divider Select value N2
+        #define OSCPLL_N3		2		// PLLPOST<1:0> PLL VCO Output Divider Select value N3
+
+    #endif
 
   #else
   

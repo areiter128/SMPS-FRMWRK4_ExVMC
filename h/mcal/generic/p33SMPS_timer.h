@@ -62,20 +62,17 @@
 	#define GSTMR_TIMER_COUNT	5
 #elif defined (__P33SMPS_EP2__)
 	#define GSTMR_TIMER_COUNT	3
-#elif defined (__P33SMPS_EP5__)
+#elif defined (__P33SMPS_EP5__) || defined (__P33SMPS_EP7__)
 	#define GSTMR_TIMER_COUNT	5
-#elif defined (__P33SMPS_EP7__)
-	#define GSTMR_TIMER_COUNT	5
-#elif defined (__P33SMPS_CH2__)
+#elif defined (__P33SMPS_CH__) || defined (__P33SMPS_CK__)
 	#define GSTMR_TIMER_COUNT	1
-#elif defined (__P33SMPS_CH5__)
-	#define GSTMR_TIMER_COUNT	1
+
 #else
 	#error === selected device not supported ===
 #endif
 
 #if defined (__P33SMPS_FJ__) || defined (__P33SMPS_FJC__) || defined (_P33SMPS_UAEG_) || \
-    defined (__P33SMPS_EP2__) || defined (__P33SMPS_EP5__) || defined (__P33SMPS_EP7__)
+    defined (__P33SMPS_EP__) 
 
     #define TIMER1_TCON_REG_WRITE_MASK		0xA076
     #define TIMER2_4_TCON_REG_WRITE_MASK	0xA07A
@@ -86,7 +83,7 @@
     #define TIMERx_TCON_REG_READ_MASK		0xA072
 
 
-#elif defined (__P33SMPS_CH2__) || defined (__P33SMPS_CH5__)
+#elif defined (__P33SMPS_CH__) || defined (__P33SMPS_CK__)
 
     // Bit masks for register read and write operations
     #define TIMER1_TCON_REG_WRITE_MASK    0b1011001110110110
@@ -232,7 +229,7 @@ typedef enum
         volatile unsigned ton   :1;	// Bit #15: Timer X On bit
     }__attribute__((packed))TxCON_CONTROL_REGISTER_BIT_FIELD_t;
 
-#elif defined (__P33SMPS_CH2__) || defined (__P33SMPS_CH5__)
+#elif defined (__P33SMPS_CH__) || defined (__P33SMPS_CK__)
 
     // Full Register Bit Fields
     typedef enum

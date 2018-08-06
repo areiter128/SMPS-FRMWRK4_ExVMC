@@ -22,7 +22,7 @@
  * ***********************************************************************************************/
 
 #include <stdint.h>
-#include "p33GS_irq.h"
+#include "p33SMPS_irq.h"
 
 // Device header file
 #include <xc.h>

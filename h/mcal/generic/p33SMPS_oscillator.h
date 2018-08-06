@@ -28,8 +28,8 @@
  * Created on October 27, 2017, 11:24 AM
  * ***************************************************************************/
 
-#ifndef MCAL_P33_SMPS_OSCILLATOR_H
-#define MCAL_P33_SMPS_OSCILLATOR_H
+#ifndef __MCAL_P33_SMPS_OSCILLATOR_H__
+#define __MCAL_P33_SMPS_OSCILLATOR_H__
 
 #include <stdint.h>
 #include "p33SMPS_devices.h"
@@ -73,7 +73,7 @@ typedef enum
     OSC_DOZE_DIV_1128 = 0b111 	// FCY Clock Divider Setting 1:128
 }OSC_DOZE_DIV_e;
 
-#if defined (__P33SMPS_EP2__) || defined (__P33SMPS_EP5__) || defined (__P33SMPS_EP7__) 
+#if defined (__P33SMPS_EP__) 
 
 typedef enum
 {
@@ -118,7 +118,7 @@ typedef enum
     OSC_PLLDIV_N2_8 = 0b11,	// PLL Output Clock Divider Setting 1:8
 }OSC_PLL_POSTDIV1_N2_e;
 
-#elif defined (__P33SMPS_CH2__) || defined (__P33SMPS_CH5__) 
+#elif defined (__P33SMPS_CH__) || defined (__P33SMPS_CK__) 
 
 
 typedef enum
@@ -197,7 +197,7 @@ typedef struct
     volatile OSC_PLL_PREDIV_N1_e N1;
     volatile uint8_t M;
     volatile OSC_PLL_POSTDIV1_N2_e N2;
-    #if defined (__P33SMPS_CH2__) || defined (__P33SMPS_CH5__)
+    #if defined (__P33SMPS_CH__) || defined (__P33SMPS_CK__)
     volatile OSC_PLL_POSTDIV2_N3_e N3;
     volatile OSC_PLL_VCODIV_e VCODIV;
     #endif
@@ -212,8 +212,8 @@ typedef struct
 }AUXOSC_CONFIG_t;
 
 
-#if defined (__P33SMPS_EP2__) || defined (__P33SMPS_EP5__) || defined (__P33SMPS_EP7__) || defined (__P33SMPS_CH2__) || \
-    defined (__P33SMPS_CH5__) || defined (__P33SMPS_FJC__) || defined (__P33SMPS_FJA__) || defined (__P33SMPS_FJ__)
+#if defined (__P33SMPS_EP__) || defined (__P33SMPS_CH__) || \
+    defined (__P33SMPS_FJ__) || defined (__P33SMPS_FJA__) || defined (__P33SMPS_FJC__)
   #define FRCTUN_MIN      -32     // maximum tuning value
   #define FRCTUN_MAX      31      // minimum tuning value
 #else
@@ -290,7 +290,7 @@ typedef enum
             );									
 
 #if defined (__P33SMPS_FJ__) || defined (__P33SMPS_FJA__) || defined (__P33SMPS_FJC__) || \
-    defined (__P33SMPS_EP2__) || defined (__P33SMPS_EP5__) || defined (__P33SMPS_EP7__)
+    defined (__P33SMPS_EP__) 
   
   extern uint16_t init_ACLK(
                 AUXOSC_CONFIG_t aux_clock_config // Auxiliary PLL Input Clock, e.g. OSC_AUX_CLOCK_PRI
@@ -304,9 +304,9 @@ typedef enum
   				OSC_REFCLK_SLEEP_CFG_e RunInSleep	// Enable/Disable RefClock in Sleep Mode
   			);
   
-#elif defined (__P33SMPS_CH2__) || defined (__P33SMPS_CH5__)
+#elif defined (__P33SMPS_CH__) || defined (__P33SMPS_CK__)
   
-  
+  #error === selected device not supported by peripheral driver libraries ===
   
 #else
   #error === selected device not supported by peripheral driver libraries ===
@@ -315,4 +315,4 @@ typedef enum
 
 
   
-#endif  /* MCAL_P33_SMPS_OSCILLATOR_H */
+#endif  /* __MCAL_P33_SMPS_OSCILLATOR_H__ */

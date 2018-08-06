@@ -87,150 +87,108 @@ extern inline uint16_t gspwm_channel_output_enable(uint16_t index, uint16_t sub_
 
 // Device-specific Defines
 
-#if   defined (__dsPIC33FJ06GS001__)
+#if   defined (__P33SMPS_FJA001__)
 	#define HSPWM_CHANNEL_COUNT	2
 	#define HSPWM_CHANNEL_REG_OFFSET	0x0010
-#elif   defined (__dsPIC33FJ06GS101__)
+#elif   defined (__P33SMPS_FJ101__)
 	#define HSPWM_CHANNEL_COUNT	2
 	#define HSPWM_CHANNEL_REG_OFFSET	0x0010
-#elif   defined (__dsPIC33FJ06GS101A__)
+#elif   defined (__P33SMPS_FJA101__)
 	#define HSPWM_CHANNEL_COUNT	2
 	#define HSPWM_CHANNEL_REG_OFFSET	0x0010
-#elif defined (__dsPIC33FJ06GS102__)
+#elif defined (__P33SMPS_FJ102__)
 	#define HSPWM_CHANNEL_COUNT	2
 	#define HSPWM_CHANNEL_REG_OFFSET	0x0010
-#elif defined (__dsPIC33FJ06GS102A__)
+#elif defined (__P33SMPS_FJA102__)
 	#define HSPWM_CHANNEL_COUNT	2
 	#define HSPWM_CHANNEL_REG_OFFSET	0x0010
-#elif defined (__dsPIC33FJ06GS202__)
+#elif defined (__P33SMPS_FJ202__)
 	#define HSPWM_CHANNEL_COUNT	2
 	#define HSPWM_CHANNEL_REG_OFFSET	0x0010
-#elif   defined (__dsPIC33FJ06GS202A__)
+#elif   defined (__P33SMPS_FJA202__)
 	#define HSPWM_CHANNEL_COUNT	2
 	#define HSPWM_CHANNEL_REG_OFFSET	0x0010
-#elif   defined (__dsPIC33FJ09GS302__)
+#elif   defined (__P33SMPS_FJ302__)
 	#define HSPWM_CHANNEL_COUNT	3
 	#define HSPWM_CHANNEL_REG_OFFSET	0x0010
-#elif defined (__dsPIC33FJ16GS402__)
+#elif defined (__P33SMPS_FJ402__)
 	#define HSPWM_CHANNEL_COUNT	3
 	#define HSPWM_CHANNEL_REG_OFFSET	0x0010
-#elif defined (__dsPIC33FJ16GS404__)
+#elif defined (__P33SMPS_FJ404__)
 	#define HSPWM_CHANNEL_COUNT	3
 	#define HSPWM_CHANNEL_REG_OFFSET	0x0010
-#elif defined (__dsPIC33FJ16GS502__)
+#elif defined (__P33SMPS_FJ502__)
 	#define HSPWM_CHANNEL_COUNT	4
 	#define HSPWM_CHANNEL_REG_OFFSET	0x0010
-#elif defined (__dsPIC33FJ16GS504__)
+#elif defined (__P33SMPS_FJ504__)
 	#define HSPWM_CHANNEL_COUNT	4
 	#define HSPWM_CHANNEL_REG_OFFSET	0x0010
-#elif defined (__dsPIC33FJ32GS406__)
+#elif defined (__P33SMPS_FJ406__)
 	#define HSPWM_CHANNEL_COUNT	6
 	#define HSPWM_CHANNEL_REG_OFFSET	0x0010
-#elif defined (__dsPIC33FJ32GS606__)
+#elif defined (__P33SMPS_FJ606__)
 	#define HSPWM_CHANNEL_COUNT	6
 	#define HSPWM_CHANNEL_REG_OFFSET	0x0010
-#elif defined (__dsPIC33FJ32GS608__)
+#elif defined (__P33SMPS_FJ608__)
 	#define HSPWM_CHANNEL_COUNT	8
 	#define HSPWM_CHANNEL_REG_OFFSET	0x0010
-#elif defined (__dsPIC33FJ32GS610__)
+#elif defined (__P33SMPS_FJ610__)
 	#define HSPWM_CHANNEL_COUNT	9
 	#define HSPWM_CHANNEL_REG_OFFSET	0x0010
-#elif defined (__dsPIC33FJ64GS406__)
+#elif defined (__P33SMPS_FJ406__)
 	#define HSPWM_CHANNEL_COUNT	6
 	#define HSPWM_CHANNEL_REG_OFFSET	0x0010
-#elif defined (__dsPIC33FJ64GS606__)
+#elif defined (__P33SMPS_FJ606__)
 	#define HSPWM_CHANNEL_COUNT	6
 	#define HSPWM_CHANNEL_REG_OFFSET	0x0010
-#elif defined (__dsPIC33FJ64GS608__)
+#elif defined (__P33SMPS_FJ608__)
 	#define HSPWM_CHANNEL_COUNT	8
 	#define HSPWM_CHANNEL_REG_OFFSET	0x0010
-#elif defined (__dsPIC33FJ64GS610__)
+#elif defined (__P33SMPS_FJ610__)
 	#define HSPWM_CHANNEL_COUNT	9
 	#define HSPWM_CHANNEL_REG_OFFSET	0x0010
 
-#elif defined (__dsPIC33EP16GS202__)
+#elif defined (__P33SMPS_EP202__)
 	#define HSPWM_CHANNEL_COUNT	3
 	#define HSPWM_CHANNEL_REG_OFFSET	0x0010
-#elif defined (__dsPIC33EP32GS202__)
-	#define HSPWM_CHANNEL_COUNT	3
-	#define HSPWM_CHANNEL_REG_OFFSET	0x0010
-#elif defined (__dsPIC33EP16GS502__)
+#elif defined (__P33SMPS_EP502__)
 	#define HSPWM_CHANNEL_COUNT	5
 	#define HSPWM_CHANNEL_REG_OFFSET	0x0010
-#elif defined (__dsPIC33EP32GS502__)
+#elif defined (__P33SMPS_EP504__)
 	#define HSPWM_CHANNEL_COUNT	5
 	#define HSPWM_CHANNEL_REG_OFFSET	0x0010
-#elif defined (__dsPIC33EP64GS502__)
+#elif defined (__P33SMPS_EP505__)
 	#define HSPWM_CHANNEL_COUNT	5
 	#define HSPWM_CHANNEL_REG_OFFSET	0x0010
-#elif defined (__dsPIC33EP16GS504__)
-	#define HSPWM_CHANNEL_COUNT	5
-	#define HSPWM_CHANNEL_REG_OFFSET	0x0010
-#elif defined (__dsPIC33EP32GS504__)
-	#define HSPWM_CHANNEL_COUNT	5
-	#define HSPWM_CHANNEL_REG_OFFSET	0x0010
-#elif defined (__dsPIC33EP64GS504__)
-	#define HSPWM_CHANNEL_COUNT	5
-	#define HSPWM_CHANNEL_REG_OFFSET	0x0010
-#elif defined (__dsPIC33EP16GS505__)
-	#define HSPWM_CHANNEL_COUNT	5
-	#define HSPWM_CHANNEL_REG_OFFSET	0x0010
-#elif defined (__dsPIC33EP32GS505__)
-	#define HSPWM_CHANNEL_COUNT	5
-	#define HSPWM_CHANNEL_REG_OFFSET	0x0010
-#elif defined (__dsPIC33EP64GS505__)
-	#define HSPWM_CHANNEL_COUNT	5
-	#define HSPWM_CHANNEL_REG_OFFSET	0x0010
-#elif defined (__dsPIC33EP16GS506__)
-	#define HSPWM_CHANNEL_COUNT	5
-	#define HSPWM_CHANNEL_REG_OFFSET	0x0010
-#elif defined (__dsPIC33EP32GS506__)
-	#define HSPWM_CHANNEL_COUNT	5
-	#define HSPWM_CHANNEL_REG_OFFSET	0x0010
-#elif defined (__dsPIC33EP64GS506__)
+#elif defined (__P33SMPS_EP506__)
 	#define HSPWM_CHANNEL_COUNT	5
 	#define HSPWM_CHANNEL_REG_OFFSET	0x0010
 
-#elif defined (__dsPIC33EP128GS702__)
+#elif defined (__P33SMPS_EP702__)
 	#define HSPWM_CHANNEL_COUNT	8
 	#define HSPWM_CHANNEL_REG_OFFSET	0x0010
-#elif defined (__dsPIC33EP128GS704__)
+#elif defined (__P33SMPS_EP704__)
 	#define HSPWM_CHANNEL_COUNT	8
 	#define HSPWM_CHANNEL_REG_OFFSET	0x0010
-#elif defined (__dsPIC33EP128GS705__)
+#elif defined (__P33SMPS_EP705__)
 	#define HSPWM_CHANNEL_COUNT	8
 	#define HSPWM_CHANNEL_REG_OFFSET	0x0010
-#elif defined (__dsPIC33EP128GS706__)
+#elif defined (__P33SMPS_EP706__)
 	#define HSPWM_CHANNEL_COUNT	8
 	#define HSPWM_CHANNEL_REG_OFFSET	0x0010
-#elif defined (__dsPIC33EP64GS708__)
+#elif defined (__P33SMPS_EP708__)
 	#define HSPWM_CHANNEL_COUNT	8
 	#define HSPWM_CHANNEL_REG_OFFSET	0x0010
-#elif defined (__dsPIC33EP128GS708__)
+#elif defined (__P33SMPS_EP804__)
 	#define HSPWM_CHANNEL_COUNT	8
 	#define HSPWM_CHANNEL_REG_OFFSET	0x0010
-#elif defined (__dsPIC33EP64GS804__)
+#elif defined (__P33SMPS_EP805__)
 	#define HSPWM_CHANNEL_COUNT	8
 	#define HSPWM_CHANNEL_REG_OFFSET	0x0010
-#elif defined (__dsPIC33EP128GS804__)
+#elif defined (__P33SMPS_EP806__)
 	#define HSPWM_CHANNEL_COUNT	8
 	#define HSPWM_CHANNEL_REG_OFFSET	0x0010
-#elif defined (__dsPIC33EP64GS805__)
-	#define HSPWM_CHANNEL_COUNT	8
-	#define HSPWM_CHANNEL_REG_OFFSET	0x0010
-#elif defined (__dsPIC33EP128GS805__)
-	#define HSPWM_CHANNEL_COUNT	8
-	#define HSPWM_CHANNEL_REG_OFFSET	0x0010
-#elif defined (__dsPIC33EP64GS806__)
-	#define HSPWM_CHANNEL_COUNT	8
-	#define HSPWM_CHANNEL_REG_OFFSET	0x0010
-#elif defined (__dsPIC33EP128GS806__)
-	#define HSPWM_CHANNEL_COUNT	8
-	#define HSPWM_CHANNEL_REG_OFFSET	0x0010
-#elif defined (__dsPIC33EP64GS808__)
-	#define HSPWM_CHANNEL_COUNT	8
-	#define HSPWM_CHANNEL_REG_OFFSET	0x0010
-#elif defined (__dsPIC33EP128GS808__)
+#elif defined (__P33SMPS_EP808__)
 	#define HSPWM_CHANNEL_COUNT	8
 	#define HSPWM_CHANNEL_REG_OFFSET	0x0010
 

@@ -49,7 +49,7 @@ extern inline uint16_t gsirq_get_current_irq_priority_level(void);
 extern inline uint16_t gsirq_init_soft_traps(unsigned int accumulator_a_overflow_trap_enable, unsigned int accumulator_b_overflow_trap_enable, 
                     unsigned int accumulator_catastrophic_overflow_trap_enable);
 
-#if defined (__P33SMPS_EP2__) || defined (__P33SMPS_EP5__) || defined (__P33SMPS_EP7__)
+#if defined (__P33SMPS_EP__) || defined (__P33SMPS_CH__) || defined (__P33SMPS_CK__)
 
 // Defines for gsirq_init_soft_traps(...)
 #define ACCA_OVERFLOW_TRAP_ENABLE                   1
@@ -161,12 +161,18 @@ extern inline uint16_t gsirq_init_soft_traps(unsigned int accumulator_a_overflow
 
 
 // INTCON4 Configuration Bits
+
 #define REG_INTCON4_WRITE_BIT_MSK           0b0000000000000000      // Fourth interrupt configuration register for write operations (no status bits)
 #define REG_INTCON4_VALID_BIT_MSK           0b0000000000000001      // Fourth interrupt configuration register for read operations (incl. status bits)
 
 #define REG_INTCON4_STAT_SGHT_SET           0b0000000000000001
 #define REG_INTCON4_STAT_SGHT_CLEAR         0b0000000000000000
 
+#if defined (__P33SMPS_CH__) || defined (__P33SMPS_CK__)
+// ECCDBE: ECC Double-Bit Error Trap bit
+  #define REG_INTCON4_STAT_ECCDBE_SET       0b0000000000000010
+  #define REG_INTCON4_STAT_ECCDBE_CLEAR     0b0000000000000000
+#endif
 
 // INTTREG: INTERRUPT CONTROL AND STATUS REGISTER
 #define REG_INTTREG_VALID_BIT_MSK           0b0000111111111111      // Fourth interrupt configuration register for read operations (incl. status bits)

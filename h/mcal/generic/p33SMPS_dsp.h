@@ -21,8 +21,8 @@
  *
  * ***********************************************************************************************/
 
-#ifndef _P33EGS_DSP_H_
-#define _P33EGS_DSP_H_
+#ifndef __P33EGS_DSP_H__
+#define __P33EGS_DSP_H__
 
 #include "p33SMPS_devices.h"
 
@@ -48,18 +48,16 @@ extern inline uint16_t gsdsp_init_dsp(uint16_t regCORCON);
   #define REG_CORCON_UNUSED_MSK         0b1110000000000000
   #define REG_CORCON_WRITE_MSK			0b0001100011110111
 
-#elif defined (__P33SMPS_EP2__) || defined (__P33SMPS_EP5__) || defined (__P33SMPS_EP7__)
+#elif defined (__P33SMPS_EP__) || defined (__P33SMPS_CH__) || defined (__P33SMPS_CK__)
 
   #define REG_CORCON_UNUSED_MSK         0b0100000000000000
   #define REG_CORCON_WRITE_MSK			0b1011100011110011
-
-#elif defined (__P33SMPS_CH2__) || defined (__P33SMPS_CH5__)
 
 #endif
 
 // CORCON: CORE CONTROL REGISTER
 
-#if defined (__P33SMPS_EP2__) || defined (__P33SMPS_EP5__) || defined (__P33SMPS_EP7__)
+#if defined (__P33SMPS_EP__) || defined (__P33SMPS_CH__) || defined (__P33SMPS_CK__)
 
   #define REG_CORCON_VAR_VARIABLE       0b1000000000000000
   #define REG_CORCON_VAR_FIXED          0b0000000000000000
@@ -103,7 +101,7 @@ extern inline uint16_t gsdsp_init_dsp(uint16_t regCORCON);
   #define REG_CORCON_PSV_ON				0b0000000000000100
   #define REG_CORCON_PSV_OFF			0b0000000000000000
 
-#elif defined (__P33SMPS_EP2__) || defined (__P33SMPS_EP5__) || defined (__P33SMPS_EP7__)
+#elif defined (__P33SMPS_EP__) || defined (__P33SMPS_CH__) || defined (__P33SMPS_CK__)
 
   #define REG_CORCON_SFA_ACTIVE			0b0000000000000100
   #define REG_CORCON_SFA_INACTIVE		0b0000000000000000
@@ -117,5 +115,5 @@ extern inline uint16_t gsdsp_init_dsp(uint16_t regCORCON);
 #define REG_CORCON_IF_FRACTIONAL		0b0000000000000000
 
 
-#endif
+#endif /* end of __P33EGS_DSP_H__ */ 
 

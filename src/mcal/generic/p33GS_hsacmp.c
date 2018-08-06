@@ -92,7 +92,7 @@ volatile uint16_t reg_offset=0;
 
 uint16_t gscmp_module_power_up(void)
 {
-    #if defined (__P33SMPS_EP5__)
+    #if defined (__P33SMPS_EP5__) || defined (__P33SMPS_EP7__)
     _ABGMD = 0;     // Turn on power to analog bandgap reference for DAC
     #endif
     

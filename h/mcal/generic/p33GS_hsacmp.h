@@ -225,7 +225,7 @@ extern uint16_t gscmp_channel_power_down(uint16_t index);
 #define REG_CMPPOL_INVERTED				0b0000000000000010		// Bit 1
 #define REG_CMPPOL_NON_INVERTED			0b0000000000000000
 
-#if defined (__P33SMPS_EP5__)
+#if defined (__P33SMPS_EP5__) || defined (__P33SMPS_EP7__)
 
 	#define REG_RANGE_HIGH				0b0000000000000001		// Bit0
 
@@ -275,7 +275,7 @@ extern uint16_t gscmp_channel_power_down(uint16_t index);
 #define CMPPOL_INVERTED					0b1						// Bit 1
 #define CMPPOL_NON_INVERTED				0b0
 
-#if defined (__P33SMPS_EP5__)
+#if defined (__P33SMPS_EP5__) || defined (__P33SMPS_EP7__)
 
 	#define RANGE_HIGH					0b1						// Bit 0
 
