@@ -86,9 +86,9 @@ int main(void) {
 
 #if (USE_TASK_EXECUTION_CLOCKOUT_PIN==1)
 #ifdef CLKOUT_WR
-  CLKOUT_WR = PINSTATE_HIGH;                  // Drive debug pin high
+        CLKOUT_WR = PINSTATE_HIGH;                  // Drive debug pin high
 #else
-  #error === Task-timing clock output pin is not defined. Task execution clock output is not available ===
+    #error === Task-timing clock output pin is not defined. Task execution clock output is not available ===
 #endif
 #endif
         
@@ -115,40 +115,75 @@ int main(void) {
         
 #if (USE_TASK_EXECUTION_CLOCKOUT_PIN==1)
 #ifdef CLKOUT_WR
-  CLKOUT_WR = PINSTATE_LOW;                  // Drive debug pin low
-  Nop();
-  CLKOUT_WR = PINSTATE_HIGH;                 // Drive debug pin high
+        CLKOUT_WR = PINSTATE_LOW;                  // Drive debug pin low
+        Nop();
+        Nop();
+        Nop();
+        CLKOUT_WR = PINSTATE_HIGH;                 // Drive debug pin high
 #endif
 #endif
         
         // Call most recent task with execution time measurement
         fres = task_manager_tick();     // Step through pre-defined task lists
 
+
 #if (USE_TASK_EXECUTION_CLOCKOUT_PIN==1)
 #ifdef CLKOUT_WR
-  CLKOUT_WR = PINSTATE_LOW;                  // Drive debug pin low
+        CLKOUT_WR = PINSTATE_LOW;                  // Drive debug pin low
+        Nop();
+        Nop();
+        Nop();
+        CLKOUT_WR = PINSTATE_HIGH;                 // Drive debug pin high
 #endif
 #endif
+
         
-        // Reset Watchdog Timer
-        swdt_reset();
+        // call the fault handler to check all defined fault objects
+        fres &= exec_FaultCheckAll();
   
+        // Reset Watchdog Timer
+        fres &= swdt_reset();
+        
+        // Increment task table pointer
+        task_mgr.task_list_tick_index++;
+
+        // if the list index is at/beyond the recent list boundary, roll-over and/or switch task list
+        if (task_mgr.task_list_tick_index > (task_mgr.task_list_ubound)) 
+        // Check for list boundary
+        {
+            // at the roll-over point (one tick above the array size) the operation mode switch check
+            // is executed by default
+
+            fres &= task_CheckOperationModeStatus();
+            task_mgr.task_list_tick_index = 0; // If end of list has bee reached, jump back to first item
+
+        }
+
+        
+#if (USE_TASK_EXECUTION_CLOCKOUT_PIN==1)
+#ifdef CLKOUT_WR
+        CLKOUT_WR = PINSTATE_LOW;                  // Drive debug pin low
+#endif
+#endif
+
+        
+        
 #if (USE_TASK_MANAGER_TIMING_DEBUG_ARRAYS == 1)
 // In debugging mode CPU load and task time is measured and logged in two arrays
 // to examine the recent code execution profile
-if(cnt == CPU_LOAD_DEBUG_BUFFER_LENGTH)
-{
-    Nop();  // place breakpoint here to hold firmware when arrays are filled
-    Nop();
-    Nop();
-    cnt = 0;
-}
-else
-{
-    task_time_buffer[cnt] = task_mgr.task_time;   // Log task most recent time
-    cpu_time_buffer[cnt] = task_mgr.cpu_load.load;    // Log most recent CPU Load
-    cnt++;                                      // Increment array index
-}
+        if(cnt == CPU_LOAD_DEBUG_BUFFER_LENGTH)
+        {
+            Nop();  // place breakpoint here to hold firmware when arrays are filled
+            Nop();
+            Nop();
+            cnt = 0;
+        }
+        else
+        {
+            task_time_buffer[cnt] = task_mgr.task_time;   // Log task most recent time
+            cpu_time_buffer[cnt] = task_mgr.cpu_load.load;    // Log most recent CPU Load
+            cnt++;                                      // Increment array index
+        }
 #endif
         
     }   // End of main loop

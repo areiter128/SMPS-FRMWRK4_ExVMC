@@ -194,7 +194,7 @@ uint16_t init_TaskExecutionFaultObject(void)
     
     // configuring the trip and reset levels as well as trip and reset event filter setting
     fltobj_TaskExecutionFailure.criteria.counter = 0;      // Set/reset fault counter
-    fltobj_TaskExecutionFailure.criteria.fault_ratio = FAULT_LEVEL_RATIO_GREATER_THAN;
+    fltobj_TaskExecutionFailure.criteria.fault_ratio = FAULT_LEVEL_RATIO_NOT_EQUAL;
     fltobj_TaskExecutionFailure.criteria.trip_level = 1;   // Set/reset trip level value
     fltobj_TaskExecutionFailure.criteria.trip_cnt_threshold = 1; // Set/reset number of successive trips before triggering fault event
     fltobj_TaskExecutionFailure.criteria.reset_level = 0;  // Set/reset fault release level value
@@ -231,7 +231,7 @@ uint16_t init_TaskExecutionFaultObject(void)
 uint16_t init_TaskTimeQuotaViolationFaultObject(void)
 {
     // Configuring the Task Time Quota Violation fault object
-    fltobj_TaskTimeQuotaViolation.object = &task_mgr.task_time_max_buffer;
+    fltobj_TaskTimeQuotaViolation.object = &task_mgr.task_time_maximum;
     fltobj_TaskTimeQuotaViolation.object_bit_mask = FAULT_OBJECT_BIT_MASK_DEFAULT;
     fltobj_TaskTimeQuotaViolation.error_code = (uint16_t)FLTOBJ_TASK_TIME_QUOTA_VIOLATION;
     fltobj_TaskTimeQuotaViolation.id = (uint16_t)FLTOBJ_TASK_TIME_QUOTA_VIOLATION;
@@ -282,11 +282,11 @@ uint16_t init_SoftStartFailureFaultObject(void)
 
     // configuring the trip and reset levels as well as trip and reset event filter setting
     fltobj_SoftStartFailure.criteria.counter = 0;      // Set/reset fault counter
-    fltobj_SoftStartFailure.criteria.fault_ratio = FAULT_LEVEL_RATIO_GREATER_THAN;
+    fltobj_SoftStartFailure.criteria.fault_ratio = FAULT_LEVEL_RATIO_EQUAL;
     fltobj_SoftStartFailure.criteria.trip_level = 1;   // Set/reset trip level value
-    fltobj_SoftStartFailure.criteria.trip_cnt_threshold = 100; // Set/reset number of successive trips before triggering fault event
+    fltobj_SoftStartFailure.criteria.trip_cnt_threshold = 10; // Set/reset number of successive trips before triggering fault event
     fltobj_SoftStartFailure.criteria.reset_level = 0;  // Set/reset fault release level value
-    fltobj_SoftStartFailure.criteria.reset_cnt_threshold = 100; // Set/reset number of successive resets before triggering fault release
+    fltobj_SoftStartFailure.criteria.reset_cnt_threshold = 10; // Set/reset number of successive resets before triggering fault release
         
     // specifying fault class, fault level and enable/disable status
     fltobj_SoftStartFailure.classes.flags.notify = 1;   // Set =1 if this fault object triggers a fault condition notification

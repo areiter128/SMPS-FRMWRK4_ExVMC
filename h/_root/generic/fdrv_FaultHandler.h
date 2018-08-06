@@ -57,8 +57,8 @@ typedef struct {
 	volatile unsigned :1;	// Bit #10: Reserved
 	volatile unsigned :1;	// Bit #11: Reserved
 	volatile unsigned :1;	// Bit #12: Reserved
-	volatile unsigned fltstat   :1;	// Bit #13: Flag bit indicating that fault condition is present
-	volatile unsigned fltactive :1; // Bit #14: Flag bit indicating that fault condition is active
+	volatile unsigned fltactive :1; // Bit #14: Flag bit indicating temporary fault condition is present
+	volatile unsigned fltstat   :1;	// Bit #13: Flag bit indicating that a fault has been tripped (latched until gone)
 	volatile unsigned fltchken  :1;	// Bit #15: Fault check enable/disable flag bit
 }__attribute__((packed))FAULT_OBJECT_STATUS_BIT_FIELD_t;
 
@@ -160,8 +160,10 @@ typedef union
 
 typedef enum
 {
-    FAULT_LEVEL_RATIO_GREATER_THAN = 0b0000000000000000, // Flag if the fault level is greater than the value it is compared against
-    FAULT_LEVEL_RATIO_LESS_THAN    = 0b1111111111111111 // Flag if the fault level is less than the value it is compared against
+    FAULT_LEVEL_RATIO_GREATER_THAN = 0b0000000000000000, // Flag to perform "greater than" comparison
+    FAULT_LEVEL_RATIO_LESS_THAN    = 0b1111111111111111, // Flag to perform "less than" comparison
+    FAULT_LEVEL_RATIO_EQUAL        = 0b0000000011111111, // Flag to perform "is equal" comparison
+    FAULT_LEVEL_RATIO_NOT_EQUAL    = 0b1111111100000000  // Flag to perform "is not equal than" comparison
 }FAULT_OBJECT_CONDITION_RATIO_e;
     
 typedef struct
@@ -193,7 +195,8 @@ typedef struct
     volatile uint16_t id; // identifier of this fault object
     volatile uint16_t* object; // pointer to an object (e.g. variable or SFR) to be monitored
     volatile uint16_t object_bit_mask; // bit mask filter to monitor specific bits within OBJECT
-    volatile uint16_t (*user_action)(void); // pointer to a user function called when a defined fault condition is detected
+    volatile uint16_t (*user_fault_action)(void); // pointer to a user function called when a defined fault condition is detected
+    volatile uint16_t (*user_fault_reset)(void); // pointer to a user function called when a defined fault condition is detected
 }__attribute__((packed))FAULT_OBJECT_t;
 
 /*@@fault_object_list[]

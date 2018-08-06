@@ -65,7 +65,7 @@ volatile system_operation_mode_t pre_op_mode; // Private flag variable pre-op-mo
 
 uint16_t task_manager_tick(void) {
 
-    volatile uint16_t fres = 0;
+    volatile uint16_t fres = 0, tbuf = 0;
 
     // The task manager scheduler runs through the currently selected task flow list in n steps.
     // After the last item of each list the operation mode switch-over check is performed and the 
@@ -80,51 +80,35 @@ uint16_t task_manager_tick(void) {
     task_mgr.proc_code.segments.task_id = (task_mgr.exec_task_id);   // log upcoming task-ID
 
     // Capture task start time for time quota monitoring
-    task_mgr.task_time_buffer = *task_mgr.reg_task_timer_counter; // Capture timer counter to calculate remaining "free" time
+    task_mgr.task_time_buffer = *task_mgr.reg_task_timer_counter; // Capture timer counter before task execution
 
     // Execute next task on the list
     fres = Task_Table[task_mgr.exec_task_id](); // Execute currently selected task
 
-    // copy return value into process code for fault analysis
+    // Capture time to determine elapsed task executing time
+    tbuf = *task_mgr.reg_task_timer_counter;
+    
+    // Copy return value into process code for fault analysis
     task_mgr.proc_code.segments.retval = fres;
     
-    // Capture time to determine elapsed task executing time
-    task_mgr.task_time = *task_mgr.reg_task_timer_counter - task_mgr.task_time_buffer; // measure most recent task time
-    task_mgr.task_time_max_buffer |= task_mgr.task_time;
-
-
-    // Task execution analysis and fault flag settings
-
-
-    if (task_mgr.task_time < task_mgr.task_time_quota)
-        // if last task execution time was within the specified time frame, everything is OK
+    if(tbuf > task_mgr.task_time_buffer)
+    // if timer period has not expired ...
+    { 
+        task_mgr.task_time = tbuf - task_mgr.task_time_buffer; // measure most recent task time
+    }
+    else
+    // if timer has overrun try to capture the total elapsed time
     {
-        fault_object_list[FLTOBJ_TASK_TIME_QUOTA_VIOLATION]->status.flags.fltstat = 0;
-    } else
-        // if last task execution took longer than specified, indicate task time quota violation condition
-    {
-        fault_object_list[FLTOBJ_TASK_TIME_QUOTA_VIOLATION]->status.flags.fltstat = 1;
+        tbuf = (*task_mgr.reg_task_timer_period - tbuf); // capture expired time until end of timer period
+        task_mgr.task_time = (tbuf + task_mgr.task_time_buffer); // add elapsed time into the new period
     }
 
-    // Check for system-wide fault conditions
-    fres &= exec_FaultCheckAll();
+    // track maximum execution time
+    if(task_mgr.task_time > task_mgr.task_time_maximum)
+    {
+        task_mgr.task_time_maximum = task_mgr.task_time; // override maximum time buffer value
+    }
     
-    // Increment task table pointer
-    task_mgr.task_list_tick_index++;
-
-    // if the list index is at/beyond the recent list boundary, roll-over and/or switch 
-    // task list
-    if (task_mgr.task_list_tick_index > (task_mgr.task_list_ubound)) { // Check for list boundary
-
-        // at the roll-over point (one tick above the array size) the operation mode switch check
-        // is executed by default
-
-        fres &= task_CheckOperationModeStatus();
-        task_mgr.task_list_tick_index = 0; // If end of list has bee reached, jump back to first item
-
-    }
-
-
     return (fres);
 }
 
@@ -136,9 +120,14 @@ uint16_t task_manager_tick(void) {
 uint16_t task_CheckOperationModeStatus(void) {
 
     // Short Fix if MCC Configuration is used
-    if ((pre_op_mode.mode == OP_MODE_BOOT) && (task_mgr.op_mode.mode == OP_MODE_BOOT)) { // Boot-up task list is only run once
+    if ((pre_op_mode.mode == OP_MODE_BOOT) && (task_mgr.op_mode.mode == OP_MODE_BOOT)) 
+     // Boot-up task list is only run once
+    {
         task_mgr.op_mode.mode = OP_MODE_DEVICE_STARTUP;
-    } else if ((pre_op_mode.mode == OP_MODE_DEVICE_STARTUP) && (task_mgr.op_mode.mode == OP_MODE_DEVICE_STARTUP)) { // device resources start-up task list is only run once
+    } 
+    else if ((pre_op_mode.mode == OP_MODE_DEVICE_STARTUP) && (task_mgr.op_mode.mode == OP_MODE_DEVICE_STARTUP)) 
+    // device resources start-up task list is only run once
+    { 
         task_mgr.op_mode.mode = OP_MODE_SYSTEM_STARTUP;
     }
 

@@ -119,7 +119,7 @@ typedef struct {
     volatile uint16_t task_time_quota; // Global task execution period
     volatile uint16_t task_time_buffer; // Buffer of task time meter result
     volatile uint16_t task_time; // Execution time meter result of last called task
-    volatile uint16_t task_time_max_buffer; // Task time meter maximum is tracked and logged
+    volatile uint16_t task_time_maximum; // Task time meter maximum is tracked and logged
 
     /* CPU Load Meter variables */
     volatile cpu_load_settings_t cpu_load;
