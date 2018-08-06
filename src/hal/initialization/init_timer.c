@@ -17,7 +17,7 @@ uint16_t init_system_timer(void) {
     tmr.flags.tgate = TGATE_DISABLED;
     tmr.flags.tsync = TSYNC_NONE;
 
-    #if defined (_P33SMPS_WACA_) || defined (_P33SMPS_WACS_)
+    #if defined (__P33SMPS_CH2__) || defined (__P33SMPS_CH5__)
     
     tmr.flags.tmwdis = TMWDIS_ENABLED;
     tmr.flags.tmwip = TMWIP_COMPLETE;

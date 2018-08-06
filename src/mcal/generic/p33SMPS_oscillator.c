@@ -77,7 +77,7 @@
 int16_t init_FOSC(OSC_CONFIG_t OscCfg, OSC_FRCDIVN_e FrcDiv, int8_t FrcTune)
 {
 
-    volatile uint16_t i=0, err=0, res=0;
+    volatile uint16_t i=0, err=0, fres=0;
 
 // Configure Oscillator to operate the device at desired speed
 //
@@ -93,7 +93,7 @@ int16_t init_FOSC(OSC_CONFIG_t OscCfg, OSC_FRCDIVN_e FrcDiv, int8_t FrcTune)
     // Set oscillator tuning
     if ((FrcTune < FRCTUN_MIN) || (FrcTune > FRCTUN_MAX)) // If FRC Tuning register value is out of range, exit here
     {
-        res |= OSCERR_FRCTUN;
+        fres |= OSCERR_FRCTUN;
     }
     else if(FrcTune != OSCTUNbits.TUN)      // If oscillator tuning is requested...
     {
@@ -129,7 +129,7 @@ int16_t init_FOSC(OSC_CONFIG_t OscCfg, OSC_FRCDIVN_e FrcDiv, int8_t FrcTune)
         i=0;    // reset counter
 	
 		if ((OSCCONbits.OSWEN == 1) || (OSCCONbits.COSC != OSCCONbits.NOSC) || (err==1)) 	// Error occurred? 
-		{ res |= OSCERR_CSF; }									// => If yes, return error code
+		{ fres |= OSCERR_CSF; }									// => If yes, return error code
 																
 
 	}
@@ -137,11 +137,11 @@ int16_t init_FOSC(OSC_CONFIG_t OscCfg, OSC_FRCDIVN_e FrcDiv, int8_t FrcTune)
 	{ // If clock switching is disabled, and the current clock differs from the desired clock,
 	  // return error code
 
-			res |= OSCERR_CSD;
+			fres |= OSCERR_CSD;
 	}
 
 
-#if defined (_P33SMPS_WACA_) || defined (_P33SMPS_WACS_)
+#if defined (__P33SMPS_CH2__) || defined (__P33SMPS_CH5__)
 	// Configure PLL pre-scaler, PLL post-scaler, PLL divisor
     
     CLKDIVbits.PLLPRE	= OscCfg.N1;		// N1 (non zero)
@@ -151,8 +151,8 @@ int16_t init_FOSC(OSC_CONFIG_t OscCfg, OSC_FRCDIVN_e FrcDiv, int8_t FrcTune)
 
 	PLLDIVbits.VCODIV   = OscCfg.VCODIV;    // FVCO Scaler 1:1
 
-#elif defined (_P33SMPS_YGAR_) || defined (_P33SMPS_UEAG_) || defined (_P33SMPS_UEAA_) || \
-      defined (_P33SMPS_TLAL_) || defined (_P33SMPS_TLAH_) || defined (_P33SMPS_TLAY_)
+#elif defined (__P33SMPS_FJ__) || defined (__P33SMPS_FJA__) || defined (__P33SMPS_FJC__) || \
+      defined (__P33SMPS_EP2__) || defined (__P33SMPS_EP5__) || defined (__P33SMPS_EP7__)
 
     CLKDIVbits.PLLPRE	= OscCfg.N1;		// N1 (non zero)
 	PLLFBD				= (OscCfg.M - 2);   // M  = PLLFBD 
@@ -170,11 +170,11 @@ int16_t init_FOSC(OSC_CONFIG_t OscCfg, OSC_FRCDIVN_e FrcDiv, int8_t FrcTune)
     i=0;    // reset counter
 	
 	if ((OSCCONbits.LOCK != 1) || (i>=OSC_CLKSW_TIMEOUT))		// Error occurred? 
-	{ res |= OSCERR_PLL_LCK; }						// => If yes, return error code
+	{ fres |= OSCERR_PLL_LCK; }						// => If yes, return error code
 
 // Return Success/Failure
-    if( res == 0 ) res = (1 - OSCCONbits.CF);       // Return oscillator fail status bit
-	return(res);                                    // (1=Success, 0=Failure)
+    if( fres == 0 ) fres = (1 - OSCCONbits.CF);       // Return oscillator fail status bit
+	return(fres);                                    // (1=Success, 0=Failure)
 
 }
 
@@ -190,8 +190,8 @@ int16_t init_FOSC(OSC_CONFIG_t OscCfg, OSC_FRCDIVN_e FrcDiv, int8_t FrcTune)
 //	on devices of the switch mode power supply and motor control families of the dsPIC33F.
 //
 // =================================================================================================
-#if defined (_P33SMPS_YGAR_) || defined (_P33SMPS_UEAG_) || defined (_P33SMPS_UEAA_) || \
-    defined (_P33SMPS_TLAL_) || defined (_P33SMPS_TLAH_) || defined (_P33SMPS_TLAY_)
+#if defined (__P33SMPS_FJ__) || defined (__P33SMPS_FJA__) || defined (__P33SMPS_FJC__) || \
+    defined (__P33SMPS_EP2__) || defined (__P33SMPS_EP5__) || defined (__P33SMPS_EP7__)
 
 uint16_t init_ACLK( AUXOSC_CONFIG_t aux_clock_config )
 {

@@ -33,7 +33,7 @@
 
 #include "p33SMPS_devices.h"
 
-#if defined (_P33SMPS_TLAL_)
+#if defined (__P33SMPS_EP2__)
 
 //------------------------------------------------------------------------------
 // DSPIC33EPxxGS202 Configuration Bit Settings
@@ -81,7 +81,7 @@
 #pragma config CTXT2 = OFF              // Specifies Interrupt Priority Level (IPL) Associated to Alternate Working Register 2 bits (Not Assigned)
 
 
-#elif defined (_P33SMPS_TLAH_)
+#elif defined (__P33SMPS_EP5__)
 
 //------------------------------------------------------------------------------
 // DSPIC33EPxxGS502 Configuration Bit Settings
@@ -134,7 +134,7 @@
 
 
 
-#elif defined (_P33SMPS_TLAY_)
+#elif defined (__P33SMPS_EP7__)
 
 //------------------------------------------------------------------------------
 // DSPIC33EPxxGS502 Configuration Bit Settings
@@ -188,7 +188,7 @@
 #pragma config CTXT4 = OFF              // Specifies Interrupt Priority Level (IPL) Associated to Alternate Working Register 2 bits (Not Assigned)
 
 
-#elif defined (_P33SMPS_WACS_)
+#elif defined (__P33SMPS_CH5__)
 
 // FSEC
 #pragma config BWRP = OFF               // Boot Segment Write-Protect bit (Boot Segment may be written)

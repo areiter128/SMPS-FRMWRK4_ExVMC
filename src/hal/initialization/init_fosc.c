@@ -7,7 +7,7 @@ uint16_t init_oscillator(void) {
     volatile uint16_t fres = 0;
     OSC_CONFIG_t osc;
     
-    #if defined (_P33SMPS_WACA_) || defined (_P33SMPS_WACS_)
+    #if defined (__P33SMPS_CH2__) || defined (__P33SMPS_CH5__)
     osc.osc_type = OSC_FRCPLL;
     osc.N1 = OSC_PLLDIV_N1_1;
     osc.M = 180;
@@ -16,13 +16,13 @@ uint16_t init_oscillator(void) {
     osc.VCODIV = OSC_PLL_VCODIV_1;
     osc.frc_tune = 31;
     
-    #elif defined (_P33SMPS_YGAR_) || defined (_P33SMPS_UEAG_) || defined (_P33SMPS_UEAA_)
+    #elif defined (__P33SMPS_FJ__) || defined (__P33SMPS_FJA__) || defined (__P33SMPS_FJC__)
     osc.osc_type = OSC_FRCPLL;
     osc.N1 = OSC_PLLDIV_N1_2;
     osc.M = 50;
     osc.N2 = OSC_PLLDIV_N2_2;
 
-    #elif defined (_P33SMPS_TLAL_) || defined (_P33SMPS_TLAH_) || defined (_P33SMPS_TLAY_)
+    #elif defined (__P33SMPS_EP2__) || defined (__P33SMPS_EP5__) || defined (__P33SMPS_EP7__)
     osc.osc_type = OSC_FRCPLL;
     osc.N1 = OSC_PLLDIV_N1_2;
     osc.M = 75; //180;
@@ -41,17 +41,17 @@ uint16_t init_aux_oscillator(void) {
     volatile uint16_t fres = 0;
     AUXOSC_CONFIG_t auxosc;
     
-    #if defined (_P33SMPS_WACA_) || defined (_P33SMPS_WACS_)
+    #if defined (__P33SMPS_CH2__) || defined (__P33SMPS_CH5__)
     auxosc.clock_source = OSC_AUX_CLOCK_FRC;
     auxosc.divider = OSC_AUX_PREDIV_1;
     auxosc.enableAUXPLL = OSC_AUXPLL_ON;
     
-    #elif defined (_P33SMPS_YGAR_) || defined (_P33SMPS_UEAG_) || defined (_P33SMPS_UEAA_)
+    #elif defined (__P33SMPS_FJ__) || defined (__P33SMPS_FJA__) || defined (__P33SMPS_FJC__)
     auxosc.clock_source = OSC_AUX_CLOCK_FRC;
     auxosc.divider = OSC_AUX_PREDIV_1;
     auxosc.enableAUXPLL = OSC_AUXPLL_ON;
 
-    #elif defined (_P33SMPS_TLAL_) || defined (_P33SMPS_TLAH_) || defined (_P33SMPS_TLAY_)
+    #elif defined (__P33SMPS_EP2__) || defined (__P33SMPS_EP5__) || defined (__P33SMPS_EP7__)
 
     auxosc.clock_source = OSC_AUX_CLOCK_FRC;
     auxosc.divider = OSC_AUX_PREDIV_1;

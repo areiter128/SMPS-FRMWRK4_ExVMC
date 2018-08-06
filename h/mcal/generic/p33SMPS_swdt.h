@@ -40,14 +40,14 @@
 #include "p33SMPS_devices.h"
 
 
-#if defined (_P33SMPS_TLAL_) || defined (_P33SMPS_TLAH_) || defined (_P33SMPS_TLAY_)
+#if defined (__P33SMPS_EP2__) || defined (__P33SMPS_EP5__) || defined (__P33SMPS_EP7__)
 typedef enum
 {
     SWDT_DISABLED = 0,
     SWDT_ENABLED = 1 
 }SWDT_CONFIGURATION_t;
 
-#elif defined (_P33SMPS_WACA_) || defined (_P33SMPS_WACS_)
+#elif defined (__P33SMPS_CH2__) || defined (__P33SMPS_CH5__)
 
 #define SWDT_POSTSCALER_DIV_BY_2     0b00000
 #define SWDT_POSTSCALER_DIV_BY_4     0b00001

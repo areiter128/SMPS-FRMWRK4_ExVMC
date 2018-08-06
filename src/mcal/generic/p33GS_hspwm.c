@@ -103,7 +103,7 @@ volatile uint16_t *regptr;
 
 		break;
 
-    #if defined (_P33SMPS_UEAA_) || defined (_P33SMPS_TLAL_) || defined (_P33SMPS_TLAH_) || defined (_P33SMPS_TLAY_)
+    #if defined (__P33SMPS_FJC__) || defined (__P33SMPS_EP2__) || defined (__P33SMPS_EP5__) || defined (__P33SMPS_EP7__)
 
 	case 2:
 	
@@ -158,7 +158,7 @@ volatile uint16_t *regptr;
 	
 		break;
 
-    #if defined (_P33SMPS_UEAA_) || defined (_P33SMPS_TLAL_) || defined (_P33SMPS_TLAH_) || defined (_P33SMPS_TLAY_)
+    #if defined (__P33SMPS_FJC__) || defined (__P33SMPS_EP2__) || defined (__P33SMPS_EP5__) || defined (__P33SMPS_EP7__)
 
 	case 2:
 	
@@ -210,7 +210,7 @@ volatile uint16_t reg_buf=0;
 	
 		break;
 
-    #if defined (_P33SMPS_UEAA_) || defined (_P33SMPS_TLAL_) || defined (_P33SMPS_TLAH_) || defined (_P33SMPS_TLAY_)
+    #if defined (__P33SMPS_FJC__) || defined (__P33SMPS_EP2__) || defined (__P33SMPS_EP5__) || defined (__P33SMPS_EP7__)
 
 	case 2:
 	
@@ -496,7 +496,7 @@ volatile uint16_t *regptr;
         *regptr = (period & REG_SEVTCMP_VALID_BIT_MSK);
         break;
 
-    #if defined (_P33SMPS_UEAA_) || defined (_P33SMPS_TLAL_) || defined (_P33SMPS_TLAH_) || defined (_P33SMPS_TLAY_)
+    #if defined (__P33SMPS_FJC__) || defined (__P33SMPS_EP2__) || defined (__P33SMPS_EP5__) || defined (__P33SMPS_EP7__)
         
     case 2: // Secondary time base special event compare register
         
@@ -545,7 +545,7 @@ volatile uint16_t reg_buf=0;
         reg_buf = (*regptr & REG_SEVTCMP_VALID_BIT_MSK);
         break;
 
-    #if defined (_P33SMPS_UEAA_) || defined (_P33SMPS_TLAL_) || defined (_P33SMPS_TLAH_) || defined (_P33SMPS_TLAY_)
+    #if defined (__P33SMPS_FJC__) || defined (__P33SMPS_EP2__) || defined (__P33SMPS_EP5__) || defined (__P33SMPS_EP7__)
         
     case 2: // Secondary time base special event compare register
         
@@ -588,12 +588,12 @@ volatile uint16_t reg_offset=0;
 	
 	reg_offset = ((index-1) * HSPWM_CHANNEL_REG_OFFSET);
 
-    #if defined (_P33SMPS_UEAG_) || defined (_P33SMPS_YGAR_)
+    #if defined (__P33SMPS_FJA__) || defined (__P33SMPS_FJ__)
 
 			regptr  = (volatile uint16_t *)&LEBCON1 + reg_offset;
 			*regptr = (period & REG_LEBCONx_VALID_BIT_MSK);
 
-    #elif defined (_P33SMPS_UEAA) || defined (_P33SMPS_TLAL_) || defined (_P33SMPS_TLAH_) || defined (_P33SMPS_TLAY_)
+    #elif defined (_P33SMPS_UEAA) || defined (__P33SMPS_EP2__) || defined (__P33SMPS_EP5__) || defined (__P33SMPS_EP7__)
 
 			regptr  = (volatile uint16_t *)&LEBDLY1 + reg_offset;
 			*regptr = (period & REG_LEBDLYx_VALID_BIT_MSK);
@@ -635,12 +635,12 @@ volatile uint16_t reg_buf=0;
 	
 	reg_offset = ((index-1) * HSPWM_CHANNEL_REG_OFFSET);
 
-    #if defined (_P33SMPS_UEAG_) || defined (_P33SMPS_YGAR_)
+    #if defined (__P33SMPS_FJA__) || defined (__P33SMPS_FJ__)
 
 			regptr  = (volatile uint16_t *)&LEBCON1 + reg_offset;
             reg_buf = (*regptr & REG_LEBCONx_LEB_BIT_MSK);
 
-    #elif defined (_P33SMPS_UEAA_) || defined (_P33SMPS_TLAL_) || defined (_P33SMPS_TLAH_) || defined (_P33SMPS_TLAY_)
+    #elif defined (__P33SMPS_FJC__) || defined (__P33SMPS_EP2__) || defined (__P33SMPS_EP5__) || defined (__P33SMPS_EP7__)
 
 			regptr  = (volatile uint16_t *)&LEBDLY1 + reg_offset;
 			reg_buf = (*regptr & REG_LEBDLYx_VALID_BIT_MSK);
@@ -1506,7 +1506,7 @@ volatile uint16_t reg_buf=0;
  * PWM register protection has to be enabled by setting the configuration bit 
  * #pragma config PWMLOCK = ON.
  * *****************************************************************************************************/
-#if defined (_P33SMPS_TLAL_) || defined (_P33SMPS_TLAH_) || defined (_P33SMPS_TLAY_)
+#if defined (__P33SMPS_EP2__) || defined (__P33SMPS_EP5__) || defined (__P33SMPS_EP7__)
 
 uint16_t gspwm_write_wp_fclcon(uint16_t index, uint16_t regFCLCON)
 {

@@ -64,11 +64,11 @@
 #define TASK_MGR_TIMER_PERIOD_REGISTER      PR1
 #define TASK_MGR_TIMER_ISR_FLAG_REGISTER    IFS0
 
-#if defined (_P33SMPS_WACA_) || defined (_P33SMPS_WACS_)
+#if defined (__P33SMPS_CH2__) || defined (__P33SMPS_CH5__)
   #define TASK_MGR_TIMER_ISR_FLAG_BIT_MASK        0b0000000000000010
-#elif defined (_P33SMPS_TLAL_) || defined (_P33SMPS_TLAH_) || defined (_P33SMPS_TLAY_)
+#elif defined (__P33SMPS_EP2__) || defined (__P33SMPS_EP5__) || defined (__P33SMPS_EP7__)
   #define TASK_MGR_TIMER_ISR_FLAG_BIT_MASK        0b0000000000001000
-#elif defined (_P33SMPS_YGAR_) || defined (_P33SMPS_UEAG_) || defined (_P33SMPS_UEAA_)
+#elif defined (__P33SMPS_FJ__) || defined (__P33SMPS_FJA__) || defined (__P33SMPS_FJC__)
   #define TASK_MGR_TIMER_ISR_FLAG_BIT_MASK        0b0000000000001000
 #else
     

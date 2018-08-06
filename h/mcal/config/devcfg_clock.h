@@ -58,21 +58,21 @@
  * frequencies of Timer, PWM or ADC accordingly.
  * ***********************************************************************************************/
 
-#if defined (_P33SMPS_YGAR_) || defined (_P33SMPS_UEAG_)
+#if defined (__P33SMPS_FJ__) || defined (__P33SMPS_FJA__)
     /* YGAR and UEAG Devices */
 
     #define OSC_FRC_FREQ        7370000     // Frequency of the internal oscillator in [Hz]
     #define OSC_FRC_TUN         5           // <OSCTUN> FRC Oscillator Tuning Rregister value
     #define OSC_TUN_SCALER      0.00375     // Oscillator frequency step size of <OSCTUN>
 
-#elif defined (_P33SMPS_UEAA_)
+#elif defined (__P33SMPS_FJC__)
     /* UEAA Devices */
 
     #define OSC_FRC_FREQ        7370000     // Frequency of the internal oscillator in [Hz]
     #define OSC_FRC_TUN         19          // <OSCTUN> FRC Oscillator Tuning Rregister value
     #define OSC_TUN_SCALER      0.000938    // Oscillator frequency step size of <OSCTUN>
 
-#elif defined (_P33SMPS_TLAL_) || defined (_P33SMPS_TLAH_) || defined (_P33SMPS_TLAY_)
+#elif defined (__P33SMPS_EP2__) || defined (__P33SMPS_EP5__) || defined (__P33SMPS_EP7__)
     /* TLAL, TLAH and TLAY Devices */
 
     #define OSC_FRC_FREQ        7370000     // Frequency of the internal oscillator in [Hz]

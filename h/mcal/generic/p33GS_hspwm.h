@@ -79,7 +79,7 @@ extern inline uint16_t gspwm_ovr_output_release(uint16_t index, uint16_t sub_ind
 extern inline uint16_t gspwm_channel_output_disable(uint16_t index, uint16_t sub_index);
 extern inline uint16_t gspwm_channel_output_enable(uint16_t index, uint16_t sub_index);
 
-#if defined (_P33SMPS_TLAL_) || defined (_P33SMPS_TLAH_) || defined (_P33SMPS_TLAY_)
+#if defined (__P33SMPS_EP2__) || defined (__P33SMPS_EP5__) || defined (__P33SMPS_EP7__)
 
   extern inline uint16_t gspwm_write_wp_fclcon(uint16_t index, uint16_t regFCLCON);
 
@@ -239,7 +239,7 @@ extern inline uint16_t gspwm_channel_output_enable(uint16_t index, uint16_t sub_
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //  Bit Masks for unimplemented register bits for all PWM registers
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#if defined (_P33SMPS_YGAR_)
+#if defined (__P33SMPS_FJ__)
 // YGAR family of devices
 
     // TODO: Review YGAR bit patterns 
@@ -275,7 +275,7 @@ extern inline uint16_t gspwm_channel_output_enable(uint16_t index, uint16_t sub_
 #define REG_PWMCAPx_VALID_BIT_MSK          0b0000000000000111      // PWMxH Capture register        
 
   
-#elif defined (_P33SMPS_UEAA_)
+#elif defined (__P33SMPS_FJC__)
 // UEAA family of devices
 
   // TODO: Review UEAA bit patterns 
@@ -319,7 +319,7 @@ extern inline uint16_t gspwm_channel_output_enable(uint16_t index, uint16_t sub_
 #define REG_PWMCAPx_VALID_BIT_MSK          0b0000000000000111      // PWMxH Capture register        
 
 
-#elif defined (_P33SMPS_UEAG_)
+#elif defined (__P33SMPS_FJA__)
 // UEAG family of devices
   
   // TODO: Review UAEG bit patterns 
@@ -357,7 +357,7 @@ extern inline uint16_t gspwm_channel_output_enable(uint16_t index, uint16_t sub_
 #define REG_PWMCAPx_VALID_BIT_MSK          0b0000000000000111      // PWMxH Capture register        
 
 
-#elif defined (_P33SMPS_TLAL_)
+#elif defined (__P33SMPS_EP2__)
 // TLAL family of devices
 
 #define REG_PWMKEY_VALID_BIT_MSK        0b1111111111111111      // PWM Lock/Unlock Sequence register
@@ -394,7 +394,7 @@ extern inline uint16_t gspwm_channel_output_enable(uint16_t index, uint16_t sub_
 #define REG_AUXCONx_VALID_BIT_MSK       0b1100111100111111      // PWMx generator auxiliary control register
 #define REG_PWMCAPx_VALID_BIT_MSK       0b1111111111111000      // PWMxH Capture register        
 
-#elif defined (_P33SMPS_TLAH_)
+#elif defined (__P33SMPS_EP5__)
 // TLAH family of devices
 
 #define REG_PWMKEY_VALID_BIT_MSK        0b1111111111111111      // PWM Lock/Unlock Sequence register
@@ -431,7 +431,7 @@ extern inline uint16_t gspwm_channel_output_enable(uint16_t index, uint16_t sub_
 #define REG_AUXCONx_VALID_BIT_MSK       0b1100111100111111      // PWMx generator auxiliary control register
 #define REG_PWMCAPx_VALID_BIT_MSK       0b1111111111111000      // PWMxH Capture register        
 
-#elif defined (_P33SMPS_TLAY_)
+#elif defined (__P33SMPS_EP7__)
 // TLAH family of devices
 
 #define REG_PWMKEY_VALID_BIT_MSK        0b1111111111111111      // PWM Lock/Unlock Sequence register
@@ -835,7 +835,7 @@ extern inline uint16_t gspwm_channel_output_enable(uint16_t index, uint16_t sub_
 #define IFLTMOD_INDEPENDENT				0b1
 #define IFLTMOD_NORMAL					0b0
 
-#if defined (_P33SMPS_YGAR_) || defined (_P33SMPS_UEAG_)
+#if defined (__P33SMPS_FJ__) || defined (__P33SMPS_FJA__)
 
 // Please note:
 // The bit settings for the current limit sources are different on different generations of the 
@@ -867,7 +867,7 @@ extern inline uint16_t gspwm_channel_output_enable(uint16_t index, uint16_t sub_
 // Select. For this function 4 virtual peripheral pins are available which are not connected to
 // any physical pin.
 
-#elif defined (_P33SMPS_UEAA_)
+#elif defined (__P33SMPS_FJC__)
 
 // Please note:
 // The bit settings for the current limit sources are different on different generations of the 
@@ -943,7 +943,7 @@ extern inline uint16_t gspwm_channel_output_enable(uint16_t index, uint16_t sub_
 #define CLSRC_ACMP4					0b00011
 
 
-#elif defined (_P33SMPS_TLAL_)
+#elif defined (__P33SMPS_EP2__)
 
 // Please note:
 // The bit settings for the current limit sources are different on different generations of the 
@@ -981,7 +981,7 @@ extern inline uint16_t gspwm_channel_output_enable(uint16_t index, uint16_t sub_
 #define CLSRC_ACMP2					0b01110
 
 
-#elif defined (_P33SMPS_TLAH_)
+#elif defined (__P33SMPS_EP5__)
 
 // Please note:
 // The bit settings for the current limit sources are different on different generations of the 
@@ -1032,7 +1032,7 @@ extern inline uint16_t gspwm_channel_output_enable(uint16_t index, uint16_t sub_
 #define CLSRC_ACMP4					0b10000
 
   
-#elif defined (_P33SMPS_TLAY_)
+#elif defined (__P33SMPS_EP7__)
 
 // Please note:
 // The bit settings for the current limit sources are different on different generations of the 
@@ -1106,7 +1106,7 @@ extern inline uint16_t gspwm_channel_output_enable(uint16_t index, uint16_t sub_
 #define CLMOD_ON					0b1
 #define CLMOD_OFF					0b0
 
-#if defined (_P33SMPS_YGAR_) || defined (_P33SMPS_UEAG_)
+#if defined (__P33SMPS_FJ__) || defined (__P33SMPS_FJA__)
 
 // Please note:
 // The bit settings for the current limit sources are different on different generations of the 
@@ -1138,7 +1138,7 @@ extern inline uint16_t gspwm_channel_output_enable(uint16_t index, uint16_t sub_
 // Select. For this function 4 virtual peripheral pins are available which are not connected to
 // any physical pin.
 
-#elif defined (_P33SMPS_UEAA_)
+#elif defined (__P33SMPS_FJC__)
 
 // Please note:
 // The bit settings for the current limit sources are different on different generations of the 
@@ -1213,7 +1213,7 @@ extern inline uint16_t gspwm_channel_output_enable(uint16_t index, uint16_t sub_
 #define FLTSRC_ACMP3					0b00010
 #define FLTSRC_ACMP4					0b00011
 
-#elif defined (_P33SMPS_TLAL_)
+#elif defined (__P33SMPS_EP2__)
 
 // Please note:
 // The bit settings for the current limit sources are different on different generations of the 
@@ -1248,7 +1248,7 @@ extern inline uint16_t gspwm_channel_output_enable(uint16_t index, uint16_t sub_
 #define FLTSRC_ACMP1                	0b01101
 #define FLTSRC_ACMP2                	0b01110
 
-#elif defined (_P33SMPS_TLAH_)
+#elif defined (__P33SMPS_EP5__)
 
 // Please note:
 // The bit settings for the current limit sources are different on different generations of the 
@@ -1295,7 +1295,7 @@ extern inline uint16_t gspwm_channel_output_enable(uint16_t index, uint16_t sub_
 #define FLTSRC_ACMP3                	0b01111
 #define FLTSRC_ACMP4                	0b10000
 
-#elif defined (_P33SMPS_TLAY_)
+#elif defined (__P33SMPS_EP7__)
 
 // Please note:
 // The bit settings for the current limit sources are different on different generations of the 
@@ -1452,7 +1452,7 @@ extern inline uint16_t gspwm_channel_output_enable(uint16_t index, uint16_t sub_
 //  AUXCONx - Register Flags
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-#if defined (_P33SMPS_UEAG_) || defined (_P33SMPS_UEAA_)
+#if defined (__P33SMPS_FJA__) || defined (__P33SMPS_FJC__)
 
 // Full 16 Bit Field Flags
 #define REG_HRPDIS_ON					0b1000000000000000
@@ -1525,7 +1525,7 @@ extern inline uint16_t gspwm_channel_output_enable(uint16_t index, uint16_t sub_
 #define CHOPLEN_ON					0b1
 #define CHOPLEN_OFF					0b0
 
-#elif defined (_P33SMPS_TLAL_)
+#elif defined (__P33SMPS_EP2__)
 
 // Full 16 Bit Field Flags
 #define REG_HRPDIS_ON					0b1000000000000000
@@ -1565,7 +1565,7 @@ extern inline uint16_t gspwm_channel_output_enable(uint16_t index, uint16_t sub_
 #define CHOPLEN_OFF					0b0
 
   
-#elif defined (_P33SMPS_TLAH_)
+#elif defined (__P33SMPS_EP5__)
 
 // Full 16 Bit Field Flags
 #define REG_HRPDIS_ON					0b1000000000000000
@@ -1622,7 +1622,7 @@ extern inline uint16_t gspwm_channel_output_enable(uint16_t index, uint16_t sub_
 #define CHOPLEN_ON					0b1
 #define CHOPLEN_OFF					0b0
 
-#elif defined (_P33SMPS_TLAY_)
+#elif defined (__P33SMPS_EP7__)
 
 // Full 16 Bit Field Flags
 #define REG_HRPDIS_ON					0b1000000000000000
@@ -1685,7 +1685,8 @@ extern inline uint16_t gspwm_channel_output_enable(uint16_t index, uint16_t sub_
 //  CHOP - Register Flags
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-#if defined (_P33SMPS_UEAA_) || defined (_P33SMPS_UEAG_) || defined (_P33SMPS_TLAL_) || (_P33SMPS_TLAH_) || (_P33SMPS_TLAY_)
+#if defined (__P33SMPS_FJC__) || defined (__P33SMPS_FJA__) || defined (__P33SMPS_EP2__) || \
+    defined (__P33SMPS_EP5__) || defined (__P33SMPS_EP7__)
 
 // Full 16 Bit Field Flags
 #define REG_CHPCLKEN_ON					0b1000000000000000

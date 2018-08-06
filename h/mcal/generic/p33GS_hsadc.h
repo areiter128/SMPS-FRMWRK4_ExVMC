@@ -65,7 +65,7 @@ extern int gsadc_init_adc_comp(uint16_t index, uint16_t input_no, uint16_t regAD
 
 // Device-specific Defines
 
-#if defined (_P33SMPS_TLAL2_)
+#if defined (__P33SMPS_EP2__)
 
      #define ADC_CORE_COUNT          3					// Number of ADC Cores available
     #define ADC_ANINPUT_COUNT       12                  // Number of analog inputs
@@ -90,7 +90,7 @@ extern int gsadc_init_adc_comp(uint16_t index, uint16_t input_no, uint16_t regAD
     #define REG_ADCMPxLO_OFFSET     4
     #define REG_ADCMPxHI_OFFSET     4
 
-#elif defined (_P33SMPS_TLAH2_)
+#elif defined (__P33SMPS_EP5__)
 
     #define ADC_CORE_COUNT          5					// Number of ADC Cores available
     #define ADC_ANINPUT_COUNT       12                  // Number of analog inputs
@@ -115,7 +115,7 @@ extern int gsadc_init_adc_comp(uint16_t index, uint16_t input_no, uint16_t regAD
     #define REG_ADCMPxLO_OFFSET     4
     #define REG_ADCMPxHI_OFFSET     4
 
-#elif defined (_P33SMPS_TLAH4_) 
+#elif defined (__P33SMPS_EP504__) 
 
     #define ADC_CORE_COUNT          5					// Number of ADC Cores available
     #define ADC_ANINPUT_COUNT       19                  // Number of analog inputs
@@ -140,7 +140,7 @@ extern int gsadc_init_adc_comp(uint16_t index, uint16_t input_no, uint16_t regAD
     #define REG_ADCMPxLO_OFFSET     4
     #define REG_ADCMPxHI_OFFSET     4
 
-#elif defined (_P33SMPS_TLAH5_) 
+#elif defined (__P33SMPS_EP505__) 
 
     #define ADC_CORE_COUNT          5					// Number of ADC Cores available
     #define ADC_ANINPUT_COUNT       19                  // Number of analog inputs
@@ -165,7 +165,7 @@ extern int gsadc_init_adc_comp(uint16_t index, uint16_t input_no, uint16_t regAD
     #define REG_ADCMPxLO_OFFSET     4
     #define REG_ADCMPxHI_OFFSET     4
 
-#elif defined (_P33SMPS_TLAH6_)
+#elif defined (__P33SMPS_EP506__)
 
     #define ADC_CORE_COUNT          5					// Number of ADC Cores available
     #define ADC_ANINPUT_COUNT       22                  // Number of analog inputs
@@ -191,7 +191,7 @@ extern int gsadc_init_adc_comp(uint16_t index, uint16_t input_no, uint16_t regAD
     #define REG_ADCMPxLO_OFFSET     4
     #define REG_ADCMPxHI_OFFSET     4
 
-#elif defined (_P33SMPS_TLAY2_)
+#elif defined (__P33SMPS_EP702__) || defined (__P33SMPS_EP802__)
 
     #define ADC_CORE_COUNT          5					// Number of ADC Cores available
     #define ADC_ANINPUT_COUNT       11                  // Number of analog inputs
@@ -216,7 +216,7 @@ extern int gsadc_init_adc_comp(uint16_t index, uint16_t input_no, uint16_t regAD
     #define REG_ADCMPxLO_OFFSET     4
     #define REG_ADCMPxHI_OFFSET     4
 
-#elif defined (_P33SMPS_TLAY4_) 
+#elif defined (__P33SMPS_EP704__) || defined (__P33SMPS_EP804__)
 
     #define ADC_CORE_COUNT          5					// Number of ADC Cores available
     #define ADC_ANINPUT_COUNT       17                  // Number of analog inputs
@@ -241,7 +241,7 @@ extern int gsadc_init_adc_comp(uint16_t index, uint16_t input_no, uint16_t regAD
     #define REG_ADCMPxLO_OFFSET     4
     #define REG_ADCMPxHI_OFFSET     4
 
-#elif defined (_P33SMPS_TLAY5_) 
+#elif defined (__P33SMPS_EP705__) || defined (__P33SMPS_EP805__)
 
     #define ADC_CORE_COUNT          5					// Number of ADC Cores available
     #define ADC_ANINPUT_COUNT       19                  // Number of analog inputs
@@ -266,7 +266,8 @@ extern int gsadc_init_adc_comp(uint16_t index, uint16_t input_no, uint16_t regAD
     #define REG_ADCMPxLO_OFFSET     4
     #define REG_ADCMPxHI_OFFSET     4
 
-#elif defined (_P33SMPS_TLAY6_)
+#elif defined (__P33SMPS_EP706__) || defined (__P33SMPS_EP806__) || \
+      defined (__P33SMPS_EP708__) || defined (__P33SMPS_EP808__)
 
     #define ADC_CORE_COUNT          5					// Number of ADC Cores available
     #define ADC_ANINPUT_COUNT       22                  // Number of analog inputs
@@ -291,6 +292,7 @@ extern int gsadc_init_adc_comp(uint16_t index, uint16_t input_no, uint16_t regAD
     #define REG_ADCMPxEN_REG_OFFSET 4
     #define REG_ADCMPxLO_OFFSET     4
     #define REG_ADCMPxHI_OFFSET     4
+
 
 #else
 

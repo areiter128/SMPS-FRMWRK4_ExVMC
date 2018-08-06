@@ -43,23 +43,23 @@ extern inline uint16_t gsdsp_init_dsp(uint16_t regCORCON);
 
 // Global Flags and bit-masks
 
-#if   defined (_P33SMPS_YGAR_) || defined (_P33SMPS_UEAG_) ||  defined (_P33SMPS_UEAA_)
+#if   defined (__P33SMPS_FJ__) || defined (__P33SMPS_FJA__) ||  defined (__P33SMPS_FJC__)
 
   #define REG_CORCON_UNUSED_MSK         0b1110000000000000
   #define REG_CORCON_WRITE_MSK			0b0001100011110111
 
-#elif defined (_P33SMPS_TLAL_) || defined (_P33SMPS_TLAH_) || defined (_P33SMPS_TLAY_)
+#elif defined (__P33SMPS_EP2__) || defined (__P33SMPS_EP5__) || defined (__P33SMPS_EP7__)
 
   #define REG_CORCON_UNUSED_MSK         0b0100000000000000
   #define REG_CORCON_WRITE_MSK			0b1011100011110011
 
-#elif defined (_P33SMPS_WACA_) || defined (_P33SMPS_WACS_)
+#elif defined (__P33SMPS_CH2__) || defined (__P33SMPS_CH5__)
 
 #endif
 
 // CORCON: CORE CONTROL REGISTER
 
-#if defined (_P33SMPS_TLAL_) || defined (_P33SMPS_TLAH_) || defined (_P33SMPS_TLAY_)
+#if defined (__P33SMPS_EP2__) || defined (__P33SMPS_EP5__) || defined (__P33SMPS_EP7__)
 
   #define REG_CORCON_VAR_VARIABLE       0b1000000000000000
   #define REG_CORCON_VAR_FIXED          0b0000000000000000
@@ -98,12 +98,12 @@ extern inline uint16_t gsdsp_init_dsp(uint16_t regCORCON);
 #define REG_CORCON_STAT_IPL3_GT7		0b0000000000001000
 #define REG_CORCON_STAT_IPL3_LT7		0b0000000000000000
 
-#if   defined (_P33SMPS_YGAR_) || defined (_P33SMPS_UEAG_) ||  defined (_P33SMPS_UEAA_)
+#if   defined (__P33SMPS_FJ__) || defined (__P33SMPS_FJA__) ||  defined (__P33SMPS_FJC__)
 
   #define REG_CORCON_PSV_ON				0b0000000000000100
   #define REG_CORCON_PSV_OFF			0b0000000000000000
 
-#elif defined (_P33SMPS_TLAL_) || defined (_P33SMPS_TLAH_) || defined (_P33SMPS_TLAY_)
+#elif defined (__P33SMPS_EP2__) || defined (__P33SMPS_EP5__) || defined (__P33SMPS_EP7__)
 
   #define REG_CORCON_SFA_ACTIVE			0b0000000000000100
   #define REG_CORCON_SFA_INACTIVE		0b0000000000000000

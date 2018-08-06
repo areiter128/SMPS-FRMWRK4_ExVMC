@@ -49,7 +49,7 @@ extern inline uint16_t gsirq_get_current_irq_priority_level(void);
 extern inline uint16_t gsirq_init_soft_traps(unsigned int accumulator_a_overflow_trap_enable, unsigned int accumulator_b_overflow_trap_enable, 
                     unsigned int accumulator_catastrophic_overflow_trap_enable);
 
-#if defined (_P33SMPS_TLAL_) || defined (_P33SMPS_TLAH_) || defined (_P33SMPS_TLAY_)
+#if defined (__P33SMPS_EP2__) || defined (__P33SMPS_EP5__) || defined (__P33SMPS_EP7__)
 
 // Defines for gsirq_init_soft_traps(...)
 #define ACCA_OVERFLOW_TRAP_ENABLE                   1

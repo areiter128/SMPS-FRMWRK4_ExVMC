@@ -38,7 +38,7 @@ uint16_t swdt_enable(SWDT_CONFIGURATION_t swdt_enable_state) {
 // If the program tries to disable the watch-dog timer in software while it's enabled in 
 // hardware (config bits) the function returns "non success"
 
-    #if defined (_P33SMPS_WACA_) || defined (_P33SMPS_WACS_)
+    #if defined (__P33SMPS_CH2__) || defined (__P33SMPS_CH5__)
 
     SWDT_CONFIGURATION_t swdt;
     
@@ -53,7 +53,7 @@ uint16_t swdt_enable(SWDT_CONFIGURATION_t swdt_enable_state) {
     WDTCONL = swdt;     // Write configuration into SFR
     
     
-    #elif defined (_P33SMPS_TLAL_) || defined (_P33SMPS_TLAH_) || defined (_P33SMPS_TLAY_)
+    #elif defined (__P33SMPS_EP2__) || defined (__P33SMPS_EP5__) || defined (__P33SMPS_EP7__)
 
     RCONbits.SWDTEN = swdt_enable_state;    // enable/disable WDT
 
@@ -66,9 +66,9 @@ uint16_t swdt_enable(SWDT_CONFIGURATION_t swdt_enable_state) {
 uint16_t swdt_reset(void)
 {
 
-    #if defined (_P33SMPS_WACA_) || defined (_P33SMPS_WACS_)
+    #if defined (__P33SMPS_CH2__) || defined (__P33SMPS_CH5__)
     WDTCONH = 0x5743;
-    #elif defined (_P33SMPS_TLAL_) || defined (_P33SMPS_TLAH_) || defined (_P33SMPS_TLAY_)
+    #elif defined (__P33SMPS_EP2__) || defined (__P33SMPS_EP5__) || defined (__P33SMPS_EP7__)
     WDT_RESET;
     #endif
 

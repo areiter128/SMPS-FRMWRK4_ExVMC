@@ -73,7 +73,7 @@ typedef enum
     OSC_DOZE_DIV_1128 = 0b111 	// FCY Clock Divider Setting 1:128
 }OSC_DOZE_DIV_e;
 
-#if defined (_P33SMPS_TLAL_) || defined (_P33SMPS_TLAH_) || defined (_P33SMPS_TLAY_) 
+#if defined (__P33SMPS_EP2__) || defined (__P33SMPS_EP5__) || defined (__P33SMPS_EP7__) 
 
 typedef enum
 {
@@ -118,7 +118,7 @@ typedef enum
     OSC_PLLDIV_N2_8 = 0b11,	// PLL Output Clock Divider Setting 1:8
 }OSC_PLL_POSTDIV1_N2_e;
 
-#elif defined (_P33SMPS_WACA_) || defined (_P33SMPS_WACS_) 
+#elif defined (__P33SMPS_CH2__) || defined (__P33SMPS_CH5__) 
 
 
 typedef enum
@@ -197,7 +197,7 @@ typedef struct
     volatile OSC_PLL_PREDIV_N1_e N1;
     volatile uint8_t M;
     volatile OSC_PLL_POSTDIV1_N2_e N2;
-    #if defined (_P33SMPS_WACA_) || defined (_P33SMPS_WACS_)
+    #if defined (__P33SMPS_CH2__) || defined (__P33SMPS_CH5__)
     volatile OSC_PLL_POSTDIV2_N3_e N3;
     volatile OSC_PLL_VCODIV_e VCODIV;
     #endif
@@ -212,8 +212,8 @@ typedef struct
 }AUXOSC_CONFIG_t;
 
 
-#if defined (_P33SMPS_TLAL_) || defined (_P33SMPS_TLAH_) || defined (_P33SMPS_TLAY_) || defined (_P33SMPS_WACA_) || \
-    defined (_P33SMPS_WACS_) || defined (_P33SMPS_UEAA_) || defined (_P33SMPS_UEAG_) || defined (_P33SMPS_YGAR_)
+#if defined (__P33SMPS_EP2__) || defined (__P33SMPS_EP5__) || defined (__P33SMPS_EP7__) || defined (__P33SMPS_CH2__) || \
+    defined (__P33SMPS_CH5__) || defined (__P33SMPS_FJC__) || defined (__P33SMPS_FJA__) || defined (__P33SMPS_FJ__)
   #define FRCTUN_MIN      -32     // maximum tuning value
   #define FRCTUN_MAX      31      // minimum tuning value
 #else
@@ -289,8 +289,8 @@ typedef enum
   				int8_t FrcTune              // Tuning Register Value for tuning the internal RC Clock
             );									
 
-#if defined (_P33SMPS_YGAR_) || defined (_P33SMPS_UEAG_) || defined (_P33SMPS_UEAA_) || \
-    defined (_P33SMPS_TLAL_) || defined (_P33SMPS_TLAH_) || defined (_P33SMPS_TLAY_)
+#if defined (__P33SMPS_FJ__) || defined (__P33SMPS_FJA__) || defined (__P33SMPS_FJC__) || \
+    defined (__P33SMPS_EP2__) || defined (__P33SMPS_EP5__) || defined (__P33SMPS_EP7__)
   
   extern uint16_t init_ACLK(
                 AUXOSC_CONFIG_t aux_clock_config // Auxiliary PLL Input Clock, e.g. OSC_AUX_CLOCK_PRI
@@ -304,7 +304,7 @@ typedef enum
   				OSC_REFCLK_SLEEP_CFG_e RunInSleep	// Enable/Disable RefClock in Sleep Mode
   			);
   
-#elif defined (_P33SMPS_WACA_) || defined (_P33SMPS_WACS_)
+#elif defined (__P33SMPS_CH2__) || defined (__P33SMPS_CH5__)
   
   
   
