@@ -287,7 +287,7 @@
 #define TCY					((float)(1.0/(float)(FCY)))
 
 // PWM Counter Frequency in Hertz (~960 MHz max.)
-#define F_ACLK				((unsigned long)(AUXOSCFREQUENCY * 16 * 8))
+#define F_ACLK				((unsigned long)(AUXOSCFREQUENCY * 16.0 * 8.0))
 
 // PWM Resolution in Seconds (~1.042 ns max.)
 #define T_ACLK				((float)(1.0/(float)(F_ACLK)))

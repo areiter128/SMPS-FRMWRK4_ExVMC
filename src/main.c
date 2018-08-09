@@ -55,8 +55,7 @@
 int main(void) {
 
     volatile uint16_t fres = 0;
-    
-#if __DEBUG
+#if (USE_TASK_MANAGER_TIMING_DEBUG_ARRAYS == 1)
     volatile uint16_t cnt=0;
 #endif
     
@@ -84,12 +83,12 @@ int main(void) {
             task_mgr.cpu_load.ticks++;
         }
 
-#if (USE_TASK_EXECUTION_CLOCKOUT_PIN==1)
-#ifdef CLKOUT_WR
+#if (USE_TASK_EXECUTION_CLOCKOUT_PIN == 1)
+    #ifdef CLKOUT_WR
         CLKOUT_WR = PINSTATE_HIGH;                  // Drive debug pin high
-#else
-    #error === Task-timing clock output pin is not defined. Task execution clock output is not available ===
-#endif
+    #else
+        #error === Task-timing clock output pin is not defined. Task execution clock output is not available ===
+    #endif
 #endif
         
         // CPU Meter Fault Trigger for CPU Load Lockout Check
@@ -113,28 +112,24 @@ int main(void) {
         *task_mgr.reg_task_timer_irq_flag ^= task_mgr.task_timer_irq_flag_mask; // Reset timer ISR flag bit
 
         
-#if (USE_TASK_EXECUTION_CLOCKOUT_PIN==1)
-#ifdef CLKOUT_WR
+#if ((USE_TASK_EXECUTION_CLOCKOUT_PIN == 1) && (USE_DETAILED_CLOCKOUT_PATTERN == 1))
+    #ifdef CLKOUT_WR
         CLKOUT_WR = PINSTATE_LOW;                  // Drive debug pin low
-        Nop();
-        Nop();
-        Nop();
+        Nop(); Nop(); Nop(); Nop(); Nop(); Nop(); Nop(); Nop(); Nop(); Nop();
         CLKOUT_WR = PINSTATE_HIGH;                 // Drive debug pin high
-#endif
+    #endif
 #endif
         
         // Call most recent task with execution time measurement
         fres = task_manager_tick();     // Step through pre-defined task lists
 
 
-#if (USE_TASK_EXECUTION_CLOCKOUT_PIN==1)
-#ifdef CLKOUT_WR
+#if ((USE_TASK_EXECUTION_CLOCKOUT_PIN == 1) && (USE_DETAILED_CLOCKOUT_PATTERN == 1))
+    #ifdef CLKOUT_WR
         CLKOUT_WR = PINSTATE_LOW;                  // Drive debug pin low
-        Nop();
-        Nop();
-        Nop();
+        Nop(); Nop(); Nop(); Nop(); Nop(); Nop(); Nop(); Nop(); Nop(); Nop();
         CLKOUT_WR = PINSTATE_HIGH;                 // Drive debug pin high
-#endif
+    #endif
 #endif
 
         
@@ -161,10 +156,10 @@ int main(void) {
         }
 
         
-#if (USE_TASK_EXECUTION_CLOCKOUT_PIN==1)
-#ifdef CLKOUT_WR
+#if (USE_TASK_EXECUTION_CLOCKOUT_PIN == 1)
+    #ifdef CLKOUT_WR
         CLKOUT_WR = PINSTATE_LOW;                  // Drive debug pin low
-#endif
+    #endif
 #endif
 
         

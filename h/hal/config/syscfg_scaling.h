@@ -92,8 +92,8 @@
 
 // System Settings
 #define SWITCHING_FREQUENCY		350000      // Nominal switching frequency per converter phase in [Hz]
-#define PWM_DEAD_TIME_LE		50          // Nominal dead time at the leading edge in [ns]
-#define PWM_DEAD_TIME_FE		70          // Nominal dead time at the falling edge in [ns]
+#define PWM_DEAD_TIME_RISING	50e-9       // Nominal dead time at the leading edge in [ns]
+#define PWM_DEAD_TIME_FALLING	70e-9       // Nominal dead time at the falling edge in [ns]
 #define LEB_PERIOD_LE			150e-9		// Leading Edge Blanking period in nanoseconds
 #define ADC_TRIG_OFFSET         100e-9      // ADC trigger offset compensating for propagat6ion delays
 
@@ -137,6 +137,10 @@
 
 // Macro calculating ADC offset period counter value based on time base frequency selection
 #define ADC_TRIGGER_OFFSET	((uint16_t)((uint16_t)(((float)(ADC_TRIG_OFFSET))/((float)(T_ACLK))) >> PWM_PCLKDIV_PRIMARY) & REG_LEB_PERIOD_MASK)
+
+// Macros calculating Dead Time Rising/Falling Edge period counter value based on time base frequency selection
+#define PWM_DEAD_TIME_LE	((uint16_t)((uint16_t)(((float)(PWM_DEAD_TIME_RISING))/((float)(T_ACLK))) >> PWM_PCLKDIV_PRIMARY) & REG_DTRx_VALID_BIT_MSK)
+#define PWM_DEAD_TIME_FE	((uint16_t)((uint16_t)(((float)(PWM_DEAD_TIME_FALLING))/((float)(T_ACLK))) >> PWM_PCLKDIV_PRIMARY) & REG_ALTDTRx_VALID_BIT_MSK)
 
 // Macro calculating Leading Edge Blanking period counter value based on time base frequency selection
 #define LEB_PERIOD			((uint16_t)((uint16_t)(((float)(LEB_PERIOD_LE))/((float)(T_ACLK))) >> PWM_PCLKDIV_PRIMARY) & REG_LEB_PERIOD_MASK)

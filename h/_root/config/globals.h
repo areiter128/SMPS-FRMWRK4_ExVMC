@@ -198,6 +198,9 @@ extern volatile uint16_t run_main_loop;
  * CLKOUT_WR
  * ***********************************************************************************************/
 #define USE_TASK_EXECUTION_CLOCKOUT_PIN     1
+#if (USE_TASK_EXECUTION_CLOCKOUT_PIN == 1)
+#define USE_DETAILED_CLOCKOUT_PATTERN       0
+#endif
 
 #if __DEBUG
 #define USE_TASK_MANAGER_TIMING_DEBUG_ARRAYS 1
