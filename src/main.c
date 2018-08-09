@@ -155,13 +155,11 @@ int main(void) {
 
         }
 
-        
 #if (USE_TASK_EXECUTION_CLOCKOUT_PIN == 1)
     #ifdef CLKOUT_WR
         CLKOUT_WR = PINSTATE_LOW;                  // Drive debug pin low
     #endif
 #endif
-
         
         
 #if (USE_TASK_MANAGER_TIMING_DEBUG_ARRAYS == 1)
@@ -184,6 +182,11 @@ int main(void) {
         
     }   // End of main loop
 
+    /* ************************************************************************************ 
+     * If this code is reached, the main loop has been terminated by a catastrophic 
+     * firmware failure or by an externally triggered MCU restart event.
+     * ************************************************************************************/
+    
     traplog.count++;  // increment the persistent soft-reset counter to stop restarting after certain number of restart attempts
     CPU_RESET;  // If the fault handler skips execution of the main loop, this line will reset the CPU  
     return(0);   // if this code line is ever reached, something really bad had happened...

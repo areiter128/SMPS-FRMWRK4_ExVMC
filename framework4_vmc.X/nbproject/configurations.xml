@@ -274,7 +274,7 @@
                   value="..\h;..\h\_root;..\h\_root\config;..\h\_root\generic;..\h\apl;..\h\apl\config;..\h\apl\tasks;..\h\hal;..\h\hal\config;..\h\hal\initialization;..\h\mcal;..\h\mcal\config;..\h\mcal\generic;..\h\sfl;..\h\sfl\asmlib;..\h\sfl\generic;..\h\sfl\libapi;..\src"/>
         <property key="isolate-each-function" value="false"/>
         <property key="keep-inline" value="false"/>
-        <property key="oXC16gcc-align-arr" value="false"/>
+        <property key="oXC16gcc-align-arr" value="true"/>
         <property key="oXC16gcc-cnsts-mauxflash" value="false"/>
         <property key="oXC16gcc-data-sects" value="false"/>
         <property key="oXC16gcc-errata" value=""/>
@@ -288,7 +288,7 @@
         <property key="oXC16gcc-sfr-warn" value="false"/>
         <property key="oXC16gcc-smar-io-lvl" value="1"/>
         <property key="oXC16gcc-smart-io-fmt" value=""/>
-        <property key="optimization-level" value="3"/>
+        <property key="optimization-level" value="s"/>
         <property key="post-instruction-scheduling" value="default"/>
         <property key="pre-instruction-scheduling" value="default"/>
         <property key="preprocessor-macros" value=""/>
