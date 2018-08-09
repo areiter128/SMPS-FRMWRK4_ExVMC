@@ -140,7 +140,7 @@ int main(void) {
         
         // call the fault handler to check all defined fault objects
         fres &= exec_FaultCheckAll();
-  
+        
         // Reset Watchdog Timer
         fres &= swdt_reset();
         
@@ -148,7 +148,8 @@ int main(void) {
         task_mgr.task_list_tick_index++;
 
         // if the list index is at/beyond the recent list boundary, roll-over and/or switch task list
-        if (task_mgr.task_list_tick_index > (task_mgr.task_list_ubound)) 
+        if ( (task_mgr.task_list_tick_index > (task_mgr.task_list_ubound)) ||
+             (task_mgr.pre_op_mode.mode != task_mgr.op_mode.mode) )
         // Check for list boundary
         {
             // at the roll-over point (one tick above the array size) the operation mode switch check

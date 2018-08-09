@@ -282,7 +282,8 @@ volatile uint16_t reg_offset=0;
  *
  * Parameters:
  *	index		= selects the register address range of the target PWM generator (1...n)
- *	period		= sets the compare value
+ *  sub_index   = 
+ *	duty_cycle  = sets the compare value of the duty cycle register
  *
  * Description:
  * Sets the duty cycle compare value of a specific PWM generator considering the different

@@ -1,5 +1,4 @@
-/*LICENSE ********************************************************************
- * Microchip Technology Inc. and its subsidiaries.  You may use this software 
+/* Microchip Technology Inc. and its subsidiaries.  You may use this software 
  * and any derivatives exclusively with Microchip products. 
  * 
  * THIS SOFTWARE IS SUPPLIED BY MICROCHIP "AS IS".  NO WARRANTIES, WHETHER 
@@ -18,35 +17,28 @@
  *
  * MICROCHIP PROVIDES THIS SOFTWARE CONDITIONALLY UPON YOUR ACCEPTANCE OF THESE 
  * TERMS. 
- * ***************************************************************************/
-/* @@apl.h
- * ****************************************************************************
- * File:   apl.h
- * Author: M91406
+ */
+
+/* 
+ * File:   
+ * Author: 
  * Comments:
  * Revision history: 
  */
 
 // This is a guard condition so that contents of this file are not included
 // more than once.  
-#ifndef APPLICATION_LAYER_H
-#define	APPLICATION_LAYER_H
+#ifndef __APPLICATION_LAYER_CONVERTER_STATE_CONTROL__
+#define	__APPLICATION_LAYER_CONVERTER_STATE_CONTROL__
 
 #include <xc.h> // include processor files - each processor file is guarded.  
 #include <stdint.h>
 
-#include "globals.h"
+#include "mcal.h"
+#include "sfl.h"
 
-#include "task_FaultHandler.h"
-#include "task_ConverterStateControl.h"
+extern volatile uint16_t cvrt_StartUp(void);
+extern volatile uint16_t cvrt_ShutDown(void);
 
-/* ***********************************************************************************************
- * PROTOTYPES
- * ***********************************************************************************************/
-
-extern uint16_t OS_Initialize(void);
-extern uint16_t SYSTEM_Initialize(void);
-
-
-#endif	/* APPLICATION_LAYER_H */
+#endif	/* __APPLICATION_LAYER_CONVERTER_STATE_CONTROL__ */
 

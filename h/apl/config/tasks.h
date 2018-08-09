@@ -106,41 +106,46 @@ extern volatile uint16_t(*Task_Table[])(void);
 typedef enum {
     
     // OS-level initialization
-    TASK_IDLE = 0, // Default task not performing any action but occupying a task time frame
+    TASK_IDLE, // Default task not performing any action but occupying a task time frame
         
     // Chip level initialization
-    TASK_INIT_GPIO = 1, // Task initializing the chip GPIOs
-    TASK_INIT_IRQ = 2, // Task initializing the interrupt controller
-    TASK_INIT_DSP = 3, // Task initializing the digital signal controller
+    TASK_INIT_GPIO, // Task initializing the chip GPIOs
+    TASK_INIT_IRQ, // Task initializing the interrupt controller
+    TASK_INIT_DSP, // Task initializing the digital signal controller
         
     // cross-function modules
-    TASK_INIT_FAULT_OBJECTS = 4, // Task initializing default and user defined fault objects
+    TASK_INIT_FAULT_OBJECTS, // Task initializing default and user defined fault objects
 
     // board level initialization
-    TASK_INIT_ON_BOARD_LED = 5, // Task initializing the on-board debug LED
-    TASK_INIT_SWITCH = 6, // Task initializing the expander board switch button
-    TASK_INIT_LED_RED = 7, // Task initializing the red expander board debug LED
-    TASK_INIT_LED_GREEN = 8, // Task initializing the green expander board debug LED
-    TASK_ON_BOARD_LED = 9, // Task controlling the on-board debug LED
-    TASK_READ_SWITCH = 10, // Task reading expander board switch button status
-    TASK_LED_RED = 11, // Task initializing the red expander board debug LED
-    TASK_LED_RED_ON = 12, // task forcing the red expander board LED into ON state
-    TASK_LED_RED_OFF = 13, // task forcing the red expander board LED into OFF state
-    TASK_LED_RED_TOGGLE = 14, // task forcing the red expander board LED to toggle state
-    TASK_LED_GREEN = 15, // Task initializing the green expander board debug LED
-    TASK_LED_GREEN_ON = 16, // task forcing the green expander board LED into ON state
-    TASK_LED_GREEN_OFF = 17, // task forcing the green expander board LED into OFF state
-    TASK_LED_GREEN_TOGGLE = 18, // task forcing the green expander board LED to toggle state
+    TASK_INIT_ON_BOARD_LED, // Task initializing the on-board debug LED
+    TASK_INIT_SWITCH, // Task initializing the expander board switch button
+    TASK_INIT_LED_RED, // Task initializing the red expander board debug LED
+    TASK_INIT_LED_GREEN, // Task initializing the green expander board debug LED
+    TASK_ON_BOARD_LED, // Task controlling the on-board debug LED
+    TASK_READ_SWITCH, // Task reading expander board switch button status
+    TASK_LED_RED, // Task initializing the red expander board debug LED
+    TASK_LED_RED_ON, // task forcing the red expander board LED into ON state
+    TASK_LED_RED_OFF, // task forcing the red expander board LED into OFF state
+    TASK_LED_RED_TOGGLE, // task forcing the red expander board LED to toggle state
+    TASK_LED_GREEN, // Task initializing the green expander board debug LED
+    TASK_LED_GREEN_ON, // task forcing the green expander board LED into ON state
+    TASK_LED_GREEN_OFF, // task forcing the green expander board LED into OFF state
+    TASK_LED_GREEN_TOGGLE, // task forcing the green expander board LED to toggle state
 
     // System function / Special function initialization
-    TASK_INIT_HSADC = 19, // Task initializing the high speed ADC module
-    TASK_LAUNCH_HSADC = 20, // Task launching the pre-configured high speed ADC module
-    TASK_INIT_HSPWM = 21, // Task initializing the high speed PWM module
-    TASK_LAUNCH_HSPWM = 22, // Task launching the pre-configured high speed PWM module
-    TASK_INIT_SOFT_START = 23, // Task soft-starting the pre-configured high speed PWM module (TEST CODE ONLY))
-    TASK_EXEC_SOFT_START = 24, // Task soft-starting the pre-configured high speed PWM module (TEST CODE ONLY))
+    TASK_INIT_HSADC, // Task initializing the high speed ADC module
+    TASK_LAUNCH_HSADC, // Task launching the pre-configured high speed ADC module
+    TASK_INIT_HSPWM, // Task initializing the high speed PWM module
+    TASK_LAUNCH_HSPWM, // Task launching the pre-configured high speed PWM module
+    TASK_INIT_SOFT_START, // Task initializing the soft-start procedure
+    TASK_EXEC_SOFT_START, // Task soft-starting the power converter
 
-    TASK_INIT_CNPNZ_VMC = 25 // task initializing the voltage mode controller object
+    #if (INCLUDE_SOFT_SHUT_DOWN == 1)
+    TASK_INIT_SOFT_SHUT_DOWN, // Task initializing the soft-shut down procedure
+    TASK_EXEC_SOFT_SHUT_DOWN, // Task soft-shutting down the power converter
+    #endif
+        
+    TASK_INIT_CNPNZ_VMC // task initializing the voltage mode controller object
 
 } task_id_no_e;
 
@@ -161,6 +166,11 @@ extern volatile uint16_t task_list_device_startup_size;
 
 extern volatile uint16_t task_list_system_startup[];
 extern volatile uint16_t task_list_system_startup_size;
+
+#if (INCLUDE_SOFT_SHUT_DOWN == 1)
+extern volatile uint16_t task_list_system_shut_down[];
+extern volatile uint16_t task_list_system_shut_down_size;
+#endif
 
 extern volatile uint16_t task_list_normal[];
 extern volatile uint16_t task_list_normal_size;

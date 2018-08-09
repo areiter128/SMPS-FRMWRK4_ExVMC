@@ -36,25 +36,30 @@
  * ***********************************************************************************************/
 
 typedef enum {
-    FLTOBJ_CPU_LOAD_OVERRUN = 0, // CPU load counter exceeds task period => not enough bandwidth
-    FLTOBJ_TASK_EXECUTION_FAILURE = 1, // Fault object Task Execution Failure
-    FLTOBJ_TASK_TIME_QUOTA_VIOLATION = 2, // Fault object Task Time Quota Violation
+    FLTOBJ_CPU_LOAD_OVERRUN, // CPU load counter exceeds task period => not enough bandwidth
+    FLTOBJ_TASK_EXECUTION_FAILURE, // Fault object Task Execution Failure
+    FLTOBJ_TASK_TIME_QUOTA_VIOLATION, // Fault object Task Time Quota Violation
         
-    FLTOBJ_SOFT_START = 3, // Fault object Soft-Start Failure
-
-    FLTOBJ_UVLO = 4, // Fault object Under Voltage Lock-Out
-    FLTOBJ_OVLO = 5, // Fault object Over Voltage Lock-Out
-    FLTOBJ_OVP  = 6, // Fault object Output Over Voltage Protection
-    FLTOBJ_OCP  = 7, // Fault object Over Current Protection
-    FLTOBJ_OTW  = 8, // Fault object Over Temperature Warning
-    FLTOBJ_OTP  = 9  // Fault object Over Temperature Protection
+    FLTOBJ_SOFT_START, // Fault object Soft-Start Failure
+    #if (INCLUDE_SOFT_SHUT_DOWN == 1)
+    FLTOBJ_SOFT_SHUT_DOWN, // Fault object Soft-Start Failure
+    #endif
+        
+    FLTOBJ_UVLO, // Fault object Under Voltage Lock-Out
+    FLTOBJ_OVLO, // Fault object Over Voltage Lock-Out
+    FLTOBJ_OVP, // Fault object Output Over Voltage Protection
+    FLTOBJ_OCP, // Fault object Over Current Protection
+    FLTOBJ_OTW, // Fault object Over Temperature Warning
+    FLTOBJ_OTP  // Fault object Over Temperature Protection
 }fault_object_index_e;
 
+
+/*
 typedef enum
 {
-    ERR_CPU_LOAD_OVERRUN = 0b0000000000000001, // CPU load counter exceeds task period => not enough bandwidth
-    ERR_TASK_EXECUTION_FAILURE    = 0b0000000000000010, // Fault object Task Execution Failure
-    ERR_TASK_TIME_QUOTA_VIOLATION = 0b0000000000000100, // Fault object Task Time Quota Violation
+    ERR_CPU_LOAD_OVERRUN, // CPU load counter exceeds task period => not enough bandwidth
+    ERR_TASK_EXECUTION_FAILURE, // Fault object Task Execution Failure
+    ERR_TASK_TIME_QUOTA_VIOLATION, // Fault object Task Time Quota Violation
 
     ERR_UVLO = 0b0000000000001000, // Fault object Under Voltage Lock-Out
     ERR_OVLO = 0b0000000000010000, // Fault object Over Voltage Lock-Out
@@ -63,6 +68,7 @@ typedef enum
     ERR_OTW  = 0b0000000010000000, // Fault object Over Temperature Warning
     ERR_OTP  = 0b0000000100000000  // Fault object Over Temperature Protection
 }FAULT_OBJECT_ERROR_CODE_e;
+*/
 
 /* PROTOTYPES */
 extern volatile uint16_t init_FaultObjects();

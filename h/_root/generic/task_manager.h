@@ -51,12 +51,12 @@
 /* Data structures */
 
 typedef enum {
-    OP_MODE_BOOT           = 0b0000000000000001, // Operation mode during device start-up and peripheral configuration
-    OP_MODE_DEVICE_STARTUP = 0b0000000000000010, // On-chip peripherals start-up period (self-check, soft-start, etc.)
-    OP_MODE_SYSTEM_STARTUP = 0b0000000000000100, // Power converter start-up period (self-check, soft-start, etc.)
-    OP_MODE_NORMAL         = 0b0000000000001000, // Normal operation mode
-    OP_MODE_FAULT          = 0b0000000000010000, // Fault mode will be entered when a critical fault condition has been detected
-    OP_MODE_STANDBY        = 0b0000000000100000  // During standby mode the converter is disabled
+    OP_MODE_BOOT           = 1, // Operation mode during device start-up and peripheral configuration
+    OP_MODE_DEVICE_STARTUP = 2, // On-chip peripherals start-up period (self-check, soft-start, etc.)
+    OP_MODE_SYSTEM_STARTUP = 3, // Power converter start-up period (self-check, soft-start, etc.)
+    OP_MODE_NORMAL         = 4, // Normal operation mode
+    OP_MODE_FAULT          = 5, // Fault mode will be entered when a critical fault condition has been detected
+    OP_MODE_STANDBY        = 6  // During standby mode the converter is disabled
 } SYSTEM_OPERATION_MODE_e;
 
 typedef struct {
@@ -98,6 +98,7 @@ typedef union {
 typedef struct {
 
     /* System operation mode (selects the active task flow list) */
+    volatile system_operation_mode_t pre_op_mode; // ID of previous operating mode (=op_mode after switch-over)
     volatile system_operation_mode_t op_mode; // ID of current operating mode
     volatile task_manager_process_code_t proc_code;   // in case an execution error occurred, this code contains task ID
                                     // and list ID which caused the error 

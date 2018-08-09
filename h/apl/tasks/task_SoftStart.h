@@ -76,17 +76,56 @@ typedef union
 typedef struct
 {
     volatile SOFT_START_OBJECT_STATUS_t status;
-    volatile SOFT_START_STEP_e startup_phase;
-    volatile uint16_t startup_counter;
+    volatile SOFT_START_STEP_e phase;
+    volatile uint16_t counter;
     volatile uint16_t power_on_delay;
     volatile uint16_t ramp_up_period;
     volatile uint16_t power_good_delay;
+    volatile uint16_t output_tracking_filter;
+    volatile uint16_t ref_increment;
 }SOFT_START_OBJECT_t;
 
+/* soft-start object prototypes */
 extern volatile SOFT_START_OBJECT_t soft_start;
 
+/* soft-start function prototypes */
 extern volatile uint16_t init_soft_start(void);
 extern volatile uint16_t exec_soft_start(void);
+
+
+#if (INCLUDE_SOFT_SHUT_DOWN == 1)
+
+
+typedef enum
+{
+    SOFT_SHUT_DOWN_STEP_INIT = 0,
+    SOFT_SHUT_DOWN_STEP_POWER_OFF_DELAY = 1,
+    SOFT_SHUT_DOWN_STEP_RAMP_DOWN = 2,
+    SOFT_SHUT_DOWN_STEP_COMPLETE = 3
+}SOFT_SHUT_DOWN_STEP_e;
+
+typedef struct
+{
+    volatile SOFT_START_OBJECT_STATUS_t status;
+    volatile SOFT_SHUT_DOWN_STEP_e phase;
+    volatile uint16_t counter;
+    volatile uint16_t power_off_delay;
+    volatile uint16_t ramp_down_period;
+    volatile uint16_t output_tracking_filter;
+    volatile uint16_t ref_decrement;
+}SOFT_SHUT_DOWN_OBJECT_t;
+
+/* soft-shut down object prototypes */
+
+extern volatile SOFT_SHUT_DOWN_OBJECT_t soft_shutdwn;
+
+/* soft-shut down function prototypes */
+
+extern volatile uint16_t init_soft_shut_down(void);
+extern volatile uint16_t exec_soft_shut_down(void);
+
+#endif
+
 
 #endif	/* _SFL_SOFT_START_DRIVER_H_ */
 

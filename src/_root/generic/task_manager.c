@@ -57,7 +57,7 @@
 
 // Task Manager
 volatile task_manager_settings_t task_mgr; // Declare a data structure holding the settings of the task manager
-volatile system_operation_mode_t pre_op_mode; // Private flag variable pre-op-mode used by task_CheckOperationModeStatus to identify changes in op_mode
+//volatile system_operation_mode_t pre_op_mode; // Private flag variable pre-op-mode used by task_CheckOperationModeStatus to identify changes in op_mode
 
 //------------------------------------------------------------------------------
 // execute task manager scheduler
@@ -76,8 +76,8 @@ uint16_t task_manager_tick(void) {
     task_mgr.exec_task_id = task_mgr.task_list[task_mgr.task_list_tick_index]; // Pick next task from list
 
     // Determine error code for the upcoming task
-    task_mgr.proc_code.segments.op_mode = (task_mgr.op_mode.mode);    // log operation mode
-    task_mgr.proc_code.segments.task_id = (task_mgr.exec_task_id);   // log upcoming task-ID
+    task_mgr.proc_code.segments.op_mode = (uint8_t)(task_mgr.op_mode.mode);    // log operation mode
+    task_mgr.proc_code.segments.task_id = (uint8_t)(task_mgr.exec_task_id);   // log upcoming task-ID
 
     // Capture task start time for time quota monitoring
     task_mgr.task_time_buffer = *task_mgr.reg_task_timer_counter; // Capture timer counter before task execution
@@ -120,19 +120,22 @@ uint16_t task_manager_tick(void) {
 uint16_t task_CheckOperationModeStatus(void) {
 
     // Short Fix if MCC Configuration is used
-    if ((pre_op_mode.mode == OP_MODE_BOOT) && (task_mgr.op_mode.mode == OP_MODE_BOOT)) 
+    if ((task_mgr.pre_op_mode.mode == OP_MODE_BOOT) && (task_mgr.op_mode.mode == OP_MODE_BOOT)) 
      // Boot-up task list is only run once
     {
         task_mgr.op_mode.mode = OP_MODE_DEVICE_STARTUP;
     } 
-    else if ((pre_op_mode.mode == OP_MODE_DEVICE_STARTUP) && (task_mgr.op_mode.mode == OP_MODE_DEVICE_STARTUP)) 
-    // device resources start-up task list is only run once
+    else if ((task_mgr.pre_op_mode.mode == OP_MODE_DEVICE_STARTUP) && (task_mgr.op_mode.mode == OP_MODE_DEVICE_STARTUP)) 
+    // device resources start-up task list is only run once before ending in FAULT mode.
+    // only when all fault flags have been cleared the system will be able to enter startup-mode
+    // to enter normal operation.
     { 
-        task_mgr.op_mode.mode = OP_MODE_SYSTEM_STARTUP;
+        // task_mgr.op_mode.mode = OP_MODE_SYSTEM_STARTUP;
+        task_mgr.op_mode.mode = OP_MODE_FAULT;
     }
 
     // Skip execution if operation mode has not changed
-    if (pre_op_mode.mode != task_mgr.op_mode.mode) {
+    if (task_mgr.pre_op_mode.mode != task_mgr.op_mode.mode) {
 
         // If a change was detected, set the task flow list and reset settings and flags
         switch (task_mgr.op_mode.mode) {
@@ -192,7 +195,7 @@ uint16_t task_CheckOperationModeStatus(void) {
 
         }
 
-        pre_op_mode.mode = task_mgr.op_mode.mode; // Sync OpMode Flags
+        task_mgr.pre_op_mode.mode = task_mgr.op_mode.mode; // Sync OpMode Flags
 
     }
 
@@ -209,7 +212,7 @@ uint16_t init_TaskManager(void) {
     uint16_t fres = 1;
 
     // initialize private flag variable pre-op-mode used by task_CheckOperationModeStatus to identify changes in op_mode
-    pre_op_mode.mode = OP_MODE_BOOT;
+    task_mgr.pre_op_mode.mode = OP_MODE_BOOT;
 
     // Initialize basic Task Manager Status
     task_mgr.op_mode.mode = OP_MODE_BOOT; // Set operation mode to STANDBY

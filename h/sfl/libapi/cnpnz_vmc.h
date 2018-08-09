@@ -1,5 +1,5 @@
 /* ***************************************************************************************
- * Digital Control Loop Designer Version 0.9.0.25.
+ * Digital Control Loop Designer Version 0.9.0.26.
  * ***************************************************************************************
  * 3p3z compensation filter coefficients derived for following operating conditions:
  * ***************************************************************************************
@@ -7,7 +7,7 @@
  * 	Controller Type:	3P3Z - Basic Voltage Mode Compensator
  * 	Sampling Frequency:	350000 Hz 
  * 	Fixed Point Format:	15
- * 	Scaling Mode:		3 - Dual Bit-Shift Scaling
+ * 	Scaling Mode:		4 - Fast Floating Point Coefficient Scaling
  * 	Input Gain:			1
  * 
  * ***************************************************************************************/
@@ -36,8 +36,8 @@
 
 	typedef struct
 	{
-		volatile fractional ACoefficients[3]; // A-Coefficients
-		volatile fractional BCoefficients[4]; // B-Coefficients
+		volatile int32_t ACoefficients[3]; // A-Coefficients
+		volatile int32_t BCoefficients[4]; // B-Coefficients
 	} __attribute__((packed))CNPNZ_VMC_CONTROL_LOOP_COEFFICIENTS_t;
 
 	typedef struct

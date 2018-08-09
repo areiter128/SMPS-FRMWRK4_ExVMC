@@ -94,7 +94,7 @@
 #define SWITCHING_FREQUENCY		350000      // Nominal switching frequency per converter phase in [Hz]
 #define PWM_DEAD_TIME_LE		50          // Nominal dead time at the leading edge in [ns]
 #define PWM_DEAD_TIME_FE		70          // Nominal dead time at the falling edge in [ns]
-#define LEB_PERIOD_LE			100e-9		// Leading Edge Blanking period in nanoseconds
+#define LEB_PERIOD_LE			150e-9		// Leading Edge Blanking period in nanoseconds
 #define ADC_TRIG_OFFSET         100e-9      // ADC trigger offset compensating for propagat6ion delays
 
 /*@@PWM-related Timing Settings

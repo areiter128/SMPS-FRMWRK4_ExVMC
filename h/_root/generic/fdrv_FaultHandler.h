@@ -81,7 +81,7 @@ typedef union
  *       to be monitored and reset if adequate. Tasks depending on this condition need to poll 
  *       on the related flag bit and take their own action.
  * 
- *     - FLT_CLASS_NOTICE
+ *     - FLT_CLASS_NOTIFY
  *       The GLOBAL_FAULT_FLAG_BIT will be set but no further action will be taken. 
  * 
  *     - FLT_CLASS_WARNING
@@ -114,7 +114,7 @@ typedef union
 
 typedef enum {
     FLT_CLASS_NONE         = 0b0000000000000000,    // no fault classification =< user handling required
-    FLT_CLASS_NOTICE       = 0b0000000000000001,    // uncritical fault condition has been detected (notice only)
+    FLT_CLASS_NOTIFY       = 0b0000000000000001,    // uncritical fault condition has been detected (notice only)
     FLT_CLASS_WARNING      = 0b0000000000000010,    // warning level (approaching critical level)
     FLT_CLASS_CRITICAL     = 0b0000000000000100,    // critical level 
     FLT_CLASS_CATASTROPHIC = 0b0000000000001000,    // catastrophic level 
@@ -160,16 +160,16 @@ typedef union
 
 typedef enum
 {
-    FAULT_LEVEL_RATIO_GREATER_THAN = 0b0000000000000000, // Flag to perform "greater than" comparison
-    FAULT_LEVEL_RATIO_LESS_THAN    = 0b1111111111111111, // Flag to perform "less than" comparison
-    FAULT_LEVEL_RATIO_EQUAL        = 0b0000000011111111, // Flag to perform "is equal" comparison
-    FAULT_LEVEL_RATIO_NOT_EQUAL    = 0b1111111100000000  // Flag to perform "is not equal than" comparison
-}FAULT_OBJECT_CONDITION_RATIO_e;
+    FAULT_LEVEL_GREATER_THAN = 0b0000000000000000, // Flag to perform "greater than" comparison
+    FAULT_LEVEL_LESS_THAN    = 0b1111111111111111, // Flag to perform "less than" comparison
+    FAULT_LEVEL_EQUAL        = 0b0000000011111111, // Flag to perform "is equal" comparison
+    FAULT_LEVEL_NOT_EQUAL    = 0b1111111100000000  // Flag to perform "is not equal than" comparison
+}FAULT_OBJECT_CONDITION_LEVEL_e;
     
 typedef struct
 {
     volatile uint16_t counter; // Fault hit counter
-    volatile FAULT_OBJECT_CONDITION_RATIO_e fault_ratio; // flag to identify if a trip point is greater or less than the value it is compared with
+    volatile FAULT_OBJECT_CONDITION_LEVEL_e fault_ratio; // flag to identify if a trip point is greater or less than the value it is compared with
     volatile uint16_t reset_level; // Input signal fault reset level/fault reset point
     volatile uint16_t reset_cnt_threshold; // Fault counter threshold resetting fault exception
     volatile uint16_t trip_level; // Input signal fault trip level/fault trip point
@@ -191,7 +191,7 @@ typedef struct
     volatile FAULT_OBJECT_STATUS_t status; // status bit field
     volatile FAULT_OBJECT_CLASS_t classes; // fault class bit field
     volatile FAULT_CONDITION_SETTINGS_t criteria; // Fault check settings of the  fault object
-    volatile uint16_t error_code; // error code helping to identify source module, system level and importance
+    volatile uint32_t error_code; // error code helping to identify source module, system level and importance
     volatile uint16_t id; // identifier of this fault object
     volatile uint16_t* object; // pointer to an object (e.g. variable or SFR) to be monitored
     volatile uint16_t object_bit_mask; // bit mask filter to monitor specific bits within OBJECT

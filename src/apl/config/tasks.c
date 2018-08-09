@@ -101,6 +101,11 @@ volatile uint16_t (*Task_Table[])(void) = {
     init_soft_start,  // task initializing the soft-start configuration object
     exec_soft_start,  // task soft-starting the converter
 
+    #if (INCLUDE_SOFT_SHUT_DOWN == 1)
+    init_soft_shut_down, // Task initializing the soft-shut down procedure
+    exec_soft_shut_down,  // Task soft-shutting down the power converter
+    #endif
+    
     init_VMC_Controller     // task initializing the voltage mode controller object
         
 };
@@ -147,6 +152,16 @@ volatile uint16_t task_list_system_startup[] = {
     TASK_EXEC_SOFT_START // Step #3
 };
 volatile uint16_t task_list_system_startup_size = (sizeof(task_list_system_startup)/sizeof(task_list_system_startup[0]));
+
+#if (INCLUDE_SOFT_SHUT_DOWN == 1)
+
+volatile uint16_t task_list_system_shut_down[] = {
+    TASK_IDLE, // Step #0
+    TASK_LED_RED_ON, // Step #2
+    TASK_EXEC_SOFT_SHUT_DOWN // Step #3
+};
+volatile uint16_t task_list_system_shut_down_size = (sizeof(task_list_system_shut_down)/sizeof(task_list_system_shut_down[0]));
+#endif
 
 volatile uint16_t task_list_normal[] = {
     TASK_IDLE, // Step #0

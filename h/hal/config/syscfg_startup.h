@@ -37,6 +37,7 @@
 #include "task_manager_config.h"
 #include "tasks.h"
 
+// Soft-Start Timing
 #define POWER_ON_DELAY   100.0e-3  // Power On Delay in [sec]
 #define RAMP_UP_PERIOD   50.0e-3  // Voltage Ramp-Up Period in [sec]
 #define POWER_GOOD_DELAY 100.0e-3  // Power Good Delay in [sec]
@@ -44,6 +45,20 @@
 #define POWER_ON_DELAY_TICKS    (uint16_t)(((float)POWER_ON_DELAY / (float)TASK_MGR_TIME_STEP)/ ((float)(task_list_system_startup_size)))
 #define RAMP_UP_PERIOD_TICKS    (uint16_t)(((float)RAMP_UP_PERIOD / (float)TASK_MGR_TIME_STEP) / ((float)(task_list_system_startup_size)))
 #define POWER_GOOD_DELAY_TICKS  (uint16_t)(((float)POWER_GOOD_DELAY / (float)TASK_MGR_TIME_STEP) / ((float)(task_list_system_startup_size)))
+
+#define INCLUDE_SOFT_SHUT_DOWN  0
+
+
+#if (INCLUDE_SOFT_SHUT_DOWN == 1)
+
+  // Soft-Shut-Down Timing
+  #define POWER_OFF_DELAY  50.0e-3  // Power Off Delay in [sec]
+  #define RAMP_DOWN_PERIOD   50.0e-3  // Voltage Ramp-Up Period in [sec]
+
+  #define POWER_OFF_DELAY_TICKS   (uint16_t)(((float)POWER_OFF_DELAY / (float)TASK_MGR_TIME_STEP)/ ((float)(task_list_system_shut_down_size)))
+  #define RAMP_DOWN_PERIOD_TICKS  (uint16_t)(((float)RAMP_DOWN_PERIOD / (float)TASK_MGR_TIME_STEP) / ((float)(task_list_system_shut_down_size)))
+
+#endif
 
 #endif	/* _HARDWARE_ABSTRACTION_LAYER_SYSTEM_STARTUP_H_ */
 

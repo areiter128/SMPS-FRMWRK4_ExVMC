@@ -28,6 +28,7 @@
           <itemPath>../h/apl/tasks/task_Switch.h</itemPath>
           <itemPath>../h/apl/tasks/task_OnPIM_LED.h</itemPath>
           <itemPath>../h/apl/tasks/task_SoftStart.h</itemPath>
+          <itemPath>../h/apl/tasks/task_ConverterStateControl.h</itemPath>
         </logicalFolder>
         <itemPath>../h/apl/apl.h</itemPath>
       </logicalFolder>
@@ -125,6 +126,7 @@
           <itemPath>../src/apl/tasks/task_Switch.c</itemPath>
           <itemPath>../src/apl/tasks/task_OnPIM_LED.c</itemPath>
           <itemPath>../src/apl/tasks/task_SoftStart.c</itemPath>
+          <itemPath>../src/apl/tasks/task_ConverterStateControl.c</itemPath>
         </logicalFolder>
         <itemPath>../src/apl/apl.c</itemPath>
       </logicalFolder>

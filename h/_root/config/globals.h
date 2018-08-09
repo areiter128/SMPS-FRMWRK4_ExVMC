@@ -136,7 +136,7 @@ typedef struct{
 	volatile unsigned :1;	// Bit #9:  Reserved
 	volatile unsigned :1;	// Bit #10: Reserved
 	volatile unsigned :1;	// Bit #11: Reserved
-	volatile unsigned global_usrflt:1;	// Bit #12: flag bit indicating the presence of a user defined fault event
+	volatile unsigned :1;	// Bit #12: Reserved
 	volatile unsigned global_notice:1;	// Bit #13: flag bit indicating the presence of notify events
 	volatile unsigned global_warning:1;	// Bit #14: flag bit indicating the presence of warning events
 	volatile unsigned global_fault:1;	// Bit #15: flag bit indicating the presence of fault events
