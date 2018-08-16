@@ -144,6 +144,7 @@ uint16_t task_CheckOperationModeStatus(void) {
                 task_mgr.exec_task_id = TASK_IDLE; // Set task ID to DEFAULT (IDle Task))
                 task_mgr.task_list_tick_index = 0; // Reset task list pointer
                 task_mgr.task_time = 0; // Reset maximum task time meter result
+                task_mgr.task_time_maximum = 0; // Reset max task time gauge
                 task_mgr.task_list = task_list_boot; // Set task flow list INIT
                 task_mgr.task_list_ubound = (task_list_boot_size-1);
                 break;
@@ -153,6 +154,7 @@ uint16_t task_CheckOperationModeStatus(void) {
                 task_mgr.exec_task_id = TASK_IDLE; // Set task ID to DEFAULT (IDle Task))
                 task_mgr.task_list_tick_index = 0; // Reset task list pointer
                 task_mgr.task_time = 0; // Reset maximum task time meter result
+                task_mgr.task_time_maximum = 0; // Reset max task time gauge
                 task_mgr.task_list = task_list_device_startup; // Set task flow list DEVICE_STARTUP
                 task_mgr.task_list_ubound = (task_list_device_startup_size-1);
                 break;
@@ -162,6 +164,7 @@ uint16_t task_CheckOperationModeStatus(void) {
                 task_mgr.exec_task_id = TASK_IDLE; // Set task ID to DEFAULT (IDle Task))
                 task_mgr.task_list_tick_index = 0; // Reset task list pointer
                 task_mgr.task_time = 0; // Reset maximum task time meter result
+                task_mgr.task_time_maximum = 0; // Reset max task time gauge
                 task_mgr.task_list = task_list_system_startup; // Set task flow list SYSTEM_STARTUP
                 task_mgr.task_list_ubound = (task_list_system_startup_size-1);
                 break;
@@ -171,6 +174,7 @@ uint16_t task_CheckOperationModeStatus(void) {
                 task_mgr.exec_task_id = TASK_IDLE; // Set task ID to DEFAULT (IDle Task))
                 task_mgr.task_list_tick_index = 0; // Reset task list pointer
                 task_mgr.task_time = 0; // Reset maximum task time meter result
+                task_mgr.task_time_maximum = 0; // Reset max task time gauge
                 task_mgr.task_list = task_list_normal; // Set task flow list NORMAL
                 task_mgr.task_list_ubound = (task_list_normal_size-1);
                 break;
@@ -180,6 +184,7 @@ uint16_t task_CheckOperationModeStatus(void) {
                 task_mgr.exec_task_id = TASK_IDLE; // Set task ID to DEFAULT (IDle Task))
                 task_mgr.task_list_tick_index = 0; // Reset task list pointer
                 task_mgr.task_time = 0; // Reset maximum task time meter result
+                task_mgr.task_time_maximum = 0; // Reset max task time gauge
                 task_mgr.task_list = task_list_fault; // Set task flow list FAULT
                 task_mgr.task_list_ubound = (task_list_fault_size-1);
                 break;
@@ -189,6 +194,7 @@ uint16_t task_CheckOperationModeStatus(void) {
                 task_mgr.exec_task_id = TASK_IDLE; // Set task ID to DEFAULT (IDle Task))
                 task_mgr.task_list_tick_index = 0; // Reset task list pointer
                 task_mgr.task_time = 0; // Reset maximum task time meter result
+                task_mgr.task_time_maximum = 0; // Reset max task time gauge
                 task_mgr.task_list = task_list_standby; // Set task flow list STANDBY
                 task_mgr.task_list_ubound = (task_list_standby_size-1);
                 break;

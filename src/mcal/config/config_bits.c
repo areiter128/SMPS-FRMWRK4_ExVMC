@@ -49,7 +49,7 @@
 #pragma config AIVTDIS = OFF            // Alternate Interrupt Vector Table bit (Disabled AIVT)
 
 // FBSLIM
-//#pragma config BSLIM = BSLIM            // Boot Segment Flash Page Address Limit bits (Boot Segment Flash page address  limit)
+#pragma config BSLIM = 8191             // Boot Segment Flash Page Address Limit bits->
 
 // FOSCSEL
 #pragma config FNOSC = FRCPLL           // Oscillator Source Selection (Fast RC Oscillator with divide-by-N with PLL module (FRCPLL) )
@@ -57,15 +57,15 @@
 
 // FOSC
 #pragma config POSCMD = NONE            // Primary Oscillator Mode Select bits (Primary Oscillator disabled)
-#pragma config OSCIOFNC = ON           // OSC2 Pin Function bit (OSC2 is clock output)
-#pragma config IOL1WAY = OFF             // Peripheral pin select configuration bit (Allow only one reconfiguration)
-#pragma config FCKSM = CSECMD           // Clock Switching Mode bits (Clock switching is enabled,Fail-safe Clock Monitor is disabled)
-#pragma config PLLKEN = OFF             // PLL Lock Enable Bit (Clock switch will not wait for the PLL lock signal)
+#pragma config OSCIOFNC = ON            // OSC2 Pin Function bit (OSC2 is clock output)
+#pragma config IOL1WAY = OFF            // Peripheral pin select configuration bit (Allow only one reconfiguration)
+#pragma config FCKSM = CSECME           // Clock Switching Mode bits (Clock switching is enabled,Fail-safe Clock Monitor is disabled)
+#pragma config PLLKEN = ON              // PLL Lock Enable Bit (Clock switch will not wait for the PLL lock signal)
 
 // FWDT
 #pragma config WDTPOST = PS1            // Watchdog Timer Postscaler bits (1:1)
 #pragma config WDTPRE = PR32            // Watchdog Timer Prescaler bit (1:32)
-#pragma config WDTEN = SWDTEN           // Watchdog Timer Enable bits (WDT and SWDTEN disabled)
+#pragma config WDTEN = OFF        // Watchdog Timer Enable bits (WDT and SWDTEN enabled)
 #pragma config WINDIS = OFF             // Watchdog Timer Window Enable bit (Watchdog Timer in Non-Window mode)
 #pragma config WDTWIN = WIN75           // Watchdog Timer Window Select bits (WDT Windo is 75% of WDT period)
 
@@ -77,7 +77,7 @@
 #pragma config PWMLOCK = OFF            // PWMx Lock Enable bit (PWM registers may be written without key sequence)
 
 // FALTREG
-#pragma config CTXT1 = OFF				// Specifies Interrupt Priority Level (IPL) Associated to Alternate Working Register 1 bits (Not Assigned)
+#pragma config CTXT1 = IPL5				// Specifies Interrupt Priority Level (IPL) Associated to Alternate Working Register 1 bits (Not Assigned)
 #pragma config CTXT2 = OFF              // Specifies Interrupt Priority Level (IPL) Associated to Alternate Working Register 2 bits (Not Assigned)
 
 
@@ -105,10 +105,10 @@
 
 // FOSC
 #pragma config POSCMD = NONE            // Primary Oscillator Mode Select bits (Primary Oscillator disabled)
-#pragma config OSCIOFNC = ON           // OSC2 Pin Function bit (OSC2 is clock output)
-#pragma config IOL1WAY = OFF             // Peripheral pin select configuration bit (Allow only one reconfiguration)
+#pragma config OSCIOFNC = ON            // OSC2 Pin Function bit (OSC2 is clock output)
+#pragma config IOL1WAY = OFF            // Peripheral pin select configuration bit (Allow only one reconfiguration)
 #pragma config FCKSM = CSECMD           // Clock Switching Mode bits (Clock switching is enabled,Fail-safe Clock Monitor is disabled)
-#pragma config PLLKEN = OFF             // PLL Lock Enable Bit (Clock switch will not wait for the PLL lock signal)
+#pragma config PLLKEN = ON              // PLL Lock Enable Bit (Clock switch will not wait for the PLL lock signal)
 
 // FWDT
 #pragma config WDTPOST = PS1            // Watchdog Timer Postscaler bits (1:1)
@@ -140,35 +140,35 @@
 // DSPIC33EPxxGS502 Configuration Bit Settings
 //------------------------------------------------------------------------------
 // FSEC
-#pragma config BWRP = OFF               // Boot Segment Write-Protect bit (Boot Segment may be written)
-#pragma config BSS = DISABLED           // Boot Segment Code-Protect Level bits (No Protection (other than BWRP))
-#pragma config BSEN = OFF               // Boot Segment Control bit (No Boot Segment)
-#pragma config GWRP = OFF               // General Segment Write-Protect bit (General Segment may be written)
-#pragma config GSS = DISABLED           // General Segment Code-Protect Level bits (No Protection (other than GWRP))
-#pragma config CWRP = OFF               // Configuration Segment Write-Protect bit (Configuration Segment may be written)
-#pragma config CSS = DISABLED           // Configuration Segment Code-Protect Level bits (No Protection (other than CWRP))
-#pragma config AIVTDIS = OFF            // Alternate Interrupt Vector Table bit (Disabled AIVT)
+#pragma config BWRP = OFF    // Boot Segment Write-Protect bit->Boot Segment may be written
+#pragma config BSS = DISABLED    // Boot Segment Code-Protect Level bits->No Protection (other than BWRP)
+#pragma config BSEN = OFF    // Boot Segment Control bit->No Boot Segment
+#pragma config GWRP = OFF    // General Segment Write-Protect bit->General Segment may be written
+#pragma config GSS = DISABLED    // General Segment Code-Protect Level bits->No Protection (other than GWRP)
+#pragma config CWRP = OFF    // Configuration Segment Write-Protect bit->Configuration Segment may be written
+#pragma config CSS = DISABLED    // Configuration Segment Code-Protect Level bits->No Protection (other than CWRP)
+#pragma config AIVTDIS = OFF    // Alternate Interrupt Vector Table bit->Disabled AIVT
 
 // FBSLIM
-//#pragma config BSLIM = BSLIM            // Boot Segment Flash Page Address Limit bits (Boot Segment Flash page address  limit)
+#pragma config BSLIM = 8191    // Boot Segment Flash Page Address Limit bits->
 
 // FOSCSEL
 #pragma config FNOSC = FRCPLL           // Oscillator Source Selection (Fast RC Oscillator with divide-by-N with PLL module (FRCPLL) )
 #pragma config IESO = OFF               // Two-speed Oscillator Start-up Enable bit (Start up device with FRC, then switch to user-selected oscillator source)
 
 // FOSC
-#pragma config POSCMD = NONE            // Primary Oscillator Mode Select bits (Primary Oscillator disabled)
-#pragma config OSCIOFNC = ON            // OSC2 Pin Function bit (OSC2 is clock output)
-#pragma config IOL1WAY = OFF            // Peripheral pin select configuration bit (Allow only one reconfiguration)
-#pragma config FCKSM = CSECME           // Clock Switching Mode bits (Clock switching is enabled,Fail-safe Clock Monitor is disabled)
-//#pragma config PLLKEN = OFF           // PLL Lock Enable Bit (Clock switch will not wait for the PLL lock signal)
+#pragma config POSCMD = NONE    // Primary Oscillator Mode Select bits->Primary Oscillator disabled
+#pragma config OSCIOFNC = ON    // OSC2 Pin Function bit->OSC2 is general purpose digital I/O pin
+#pragma config IOL1WAY = OFF    // Peripheral pin select configuration bit->Allow multiple reconfigurations
+#pragma config FCKSM = CSECME    // Clock Switching Mode bits->Both Clock switching and Fail-safe Clock Monitor are enabled
+#pragma config PLLKEN = ON_PLL    // PLL Lock Enable Bit->Clock switch to PLL source will wait until the PLL lock signal is valid
 
 // FWDT
-#pragma config WDTPOST = PS1            // Watchdog Timer Postscaler bits->1:1
-#pragma config WDTPRE = PR128           // Watchdog Timer Prescaler bit->1:128
-#pragma config WDTEN = OFF           // Watchdog Timer Enable bits->WDT Enabled/Disabled (controlled using SWDTEN bit)
-#pragma config WINDIS = OFF             // Watchdog Timer Window Enable bit->Watchdog Timer in Non-Window mode
-#pragma config WDTWIN = WIN50           // Watchdog Timer Window Select bits->WDT Window is 50% of WDT period
+#pragma config WDTPOST = PS32768    // Watchdog Timer Postscaler bits->1:32768
+#pragma config WDTPRE = PR128    // Watchdog Timer Prescaler bit->1:128
+#pragma config WDTEN = SWDTEN    // Watchdog Timer Enable bits->WDT Enabled/Disabled (controlled using SWDTEN bit)
+#pragma config WINDIS = OFF    // Watchdog Timer Window Enable bit->Watchdog Timer in Non-Window mode
+#pragma config WDTWIN = WIN25    // Watchdog Timer Window Select bits->WDT Window is 25% of WDT period
 
 // FICD
 #pragma config ICS = PGD1               // ICD Communication Channel Select bits (Communicate on PGEC3 and PGED3)

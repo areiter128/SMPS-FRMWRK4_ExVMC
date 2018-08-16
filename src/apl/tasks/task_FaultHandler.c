@@ -111,11 +111,14 @@ FAULT_OBJECT_t *fault_object_list[] = {
     #endif
     
     &fltobj_UnderVoltageLockOut,
-    &fltobj_OverVoltageLockOut,
+    &fltobj_OverVoltageLockOut
+
+/*
     &fltobj_OverVoltageProtection,
     &fltobj_OverCurrentProtection,
     &fltobj_OverTemperatureWarning,
     &fltobj_OverTemperatureProtection
+*/
 };
 uint16_t fltobj_list_size = (sizeof(fault_object_list)/sizeof(fault_object_list[0]));
 
@@ -163,7 +166,7 @@ volatile uint16_t init_FaultObjects(void)
 inline uint16_t init_CPULoadOverrunFaultObject(void)
 {
     // Configuring the CPU Load Overrun fault object
-    
+
     // specify the target value/register to be monitored
     fltobj_CPULoadOverrun.object = &task_mgr.cpu_load.load_max_buffer; // monitoring the CPU meter result
     fltobj_CPULoadOverrun.object_bit_mask = FAULT_OBJECT_BIT_MASK_DEFAULT;
@@ -212,7 +215,7 @@ inline uint16_t init_CPULoadOverrunFaultObject(void)
 inline uint16_t init_TaskExecutionFaultObject(void)
 {
     // Configuring the Task Execution Failure fault object
-    
+
     // specify the target value/register to be monitored
     fltobj_TaskExecutionFailure.object = &task_mgr.proc_code.segments.retval;
     fltobj_TaskExecutionFailure.object_bit_mask = FAULT_OBJECT_BIT_MASK_DEFAULT;
@@ -246,7 +249,7 @@ inline uint16_t init_TaskExecutionFaultObject(void)
     fltobj_TaskExecutionFailure.status.flags.fltactive = 1; // Set/reset fault condition as present/active
     fltobj_TaskExecutionFailure.status.flags.fltchken = 1; // Enable/disable fault check
 
-   return(1);
+    return(1);
     
 }
 
@@ -293,7 +296,7 @@ inline uint16_t init_TaskTimeQuotaViolationFaultObject(void)
     fltobj_TaskTimeQuotaViolation.status.flags.fltstat = 1; // Set/ret fault condition as present/active
     fltobj_TaskTimeQuotaViolation.status.flags.fltactive = 1; // Set/reset fault condition as present/active
     fltobj_TaskTimeQuotaViolation.status.flags.fltchken = 1; // Enable/disable fault check
-    
+
     return(1);
 }
 
@@ -402,7 +405,7 @@ inline uint16_t init_SoftShutDownFailureFaultObject(void)
 inline uint16_t init_InputUnderVoltageFaultObject(void)
 {
     // Configuring the Task Time Quota Violation fault object
-    fltobj_UnderVoltageLockOut.object = &ADC_VIN_ADCBUF;
+    fltobj_UnderVoltageLockOut.object = &VIN_FB_ADCBUF;
     fltobj_UnderVoltageLockOut.object_bit_mask = FAULT_OBJECT_BIT_MASK_DEFAULT;
     fltobj_UnderVoltageLockOut.error_code = (uint32_t)FLTOBJ_UVLO;
     fltobj_UnderVoltageLockOut.id = (uint16_t)FLTOBJ_UVLO;
@@ -451,7 +454,7 @@ inline uint16_t init_InputUnderVoltageFaultObject(void)
 inline uint16_t init_InputOverVoltageFaultObject(void)
 {
     // Configuring the Task Time Quota Violation fault object
-    fltobj_OverVoltageLockOut.object = &ADC_VIN_ADCBUF;
+    fltobj_OverVoltageLockOut.object = &VIN_FB_ADCBUF;
     fltobj_OverVoltageLockOut.object_bit_mask = FAULT_OBJECT_BIT_MASK_DEFAULT;
     fltobj_OverVoltageLockOut.error_code = (uint32_t)FLTOBJ_OVLO;
     fltobj_OverVoltageLockOut.id = (uint16_t)FLTOBJ_OVLO;

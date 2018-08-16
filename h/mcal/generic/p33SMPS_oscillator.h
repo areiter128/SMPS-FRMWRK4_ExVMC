@@ -298,11 +298,14 @@ typedef enum
                                                  // Enable/Disable 16x Auxiliary PLL
   			);
 
+  #ifdef REFOCON
+
   extern void init_RefClockOutput(
   				OSC_REFCLK_SOURCE_e RefClkSource,	// Reference Clock Output Source, e.g. OSC_REFCLK_SRC_FOSC
   				OSC_REFCLK_DIVIDER_e RefClkDivider, // Reference Clock Post-Scaler Value
   				OSC_REFCLK_SLEEP_CFG_e RunInSleep	// Enable/Disable RefClock in Sleep Mode
   			);
+  #endif
   
 #elif defined (__P33SMPS_CH__) || defined (__P33SMPS_CK__)
   

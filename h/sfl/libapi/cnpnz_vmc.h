@@ -1,11 +1,11 @@
 /* ***************************************************************************************
- * Digital Control Loop Designer Version 0.9.0.26.
+ * z-Domain Control Loop Designer Version 0.9.0.31.
  * ***************************************************************************************
- * 3p3z compensation filter coefficients derived for following operating conditions:
+ * 4p4z compensation filter coefficients derived for following operating conditions:
  * ***************************************************************************************
  *
- * 	Controller Type:	3P3Z - Basic Voltage Mode Compensator
- * 	Sampling Frequency:	350000 Hz 
+ * 	Controller Type:	4P4Z - Advanced High-Q Compensator
+ * 	Sampling Frequency:	400000 Hz 
  * 	Fixed Point Format:	15
  * 	Scaling Mode:		4 - Fast Floating Point Coefficient Scaling
  * 	Input Gain:			1
@@ -36,14 +36,14 @@
 
 	typedef struct
 	{
-		volatile int32_t ACoefficients[3]; // A-Coefficients
-		volatile int32_t BCoefficients[4]; // B-Coefficients
+		volatile int32_t ACoefficients[4]; // A-Coefficients
+		volatile int32_t BCoefficients[5]; // B-Coefficients
 	} __attribute__((packed))CNPNZ_VMC_CONTROL_LOOP_COEFFICIENTS_t;
 
 	typedef struct
 	{
-		volatile fractional ControlHistory[3];  // Control History
-		volatile fractional ErrorHistory[4];    // Error History
+		volatile fractional ControlHistory[4];  // Control History
+		volatile fractional ErrorHistory[5];    // Error History
 	} __attribute__((packed))CNPNZ_VMC_CONTROL_LOOP_HISTORIES_t;
 
 
@@ -53,19 +53,19 @@
 
 // Function call prototypes for initialization routines and control loops
 
-extern inline uint16_t cnpnz_vmc_Init(void); // Loads default coefficients into 3P3Z controller and resets histories to zero
+extern inline uint16_t cnpnz_vmc_Init(void); // Loads default coefficients into 4P4Z controller and resets histories to zero
 
-extern inline void cnpnz_vmc_Reset( // Resets the 3P3Z controller histories
+extern inline void cnpnz_vmc_Reset( // Resets the 4P4Z controller histories
 	volatile cNPNZ16b_t* controller // Pointer to nPnZ data structure
 	);
 
-extern inline void cnpnz_vmc_Precharge( // Pre-charges histories of the 3P3Z with defined steady-state data
+extern inline void cnpnz_vmc_Precharge( // Pre-charges histories of the 4P4Z with defined steady-state data
 	volatile cNPNZ16b_t* controller, // Pointer to nPnZ data structure
 	volatile uint16_t ctrl_input, // user-defined, constant error history value
 	volatile uint16_t ctrl_output // user-defined, constant control output history value
 	);
 
-extern inline void cnpnz_vmc_Update( // Calls the 3P3Z controller
+extern inline void cnpnz_vmc_Update( // Calls the 4P4Z controller
 	volatile cNPNZ16b_t* controller // Pointer to nPnZ data structure
 	);
 

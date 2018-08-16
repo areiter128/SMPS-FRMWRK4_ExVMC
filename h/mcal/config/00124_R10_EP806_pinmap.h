@@ -89,27 +89,41 @@
 #define	TP07_WR     LATBbits.LATB3
 #define	TP07_RD     PORTBbits.RB3
 
-#define	TP08_TRIS   TRISCbits.TRISC2
-#define	TP08_WR     LATCbits.LATC2
-#define	TP08_RD     PORTCbits.LATC2
+#define	TP08_TRIS       TRISCbits.TRISC2
+#define	TP08_WR         LATCbits.LATC2
+#define	TP08_RD         PORTCbits.LATC2
 
-#define	TP09_TRIS   TRISCbits.TRISC9
-#define	TP09_WR     LATCbits.LATC9
-#define	TP09_RD     PORTCbits.RC9
+#define	TP09_TRIS       TRISCbits.TRISC9
+#define	TP09_WR         LATCbits.LATC9
+#define	TP09_RD         PORTCbits.RC9
 
-#define TP10_ADC_IN 3
-#define	TP10_TRIS   TRISBbits.TRISB3
-#define	TP10_WR     LATBbits.LATB3
-#define	TP10_RD     PORTBbits.RB3
+#define TP10_ADC_IN     3
+#define TP10_ADC_CORE   3
+#define TP10_ADC_BUFFER ADCBUF3
+#define TP10_ANSEL      ANSELBbits.ANSB3
+#define TP10_IF         _ADCAN3IF
+#define TP10_IE         _ADCAN3IE
+#define TP10_IP         _ADCAN3IP
 
-#define	TP11_TRIS   TRISDbits.TRISD2
-#define	TP11_WR     LATDbits.LATD2
-#define	TP11_RD     PORTDbits.RD2
+#define	TP10_TRIS       TRISBbits.TRISB3
+#define	TP10_WR         LATBbits.LATB3
+#define	TP10_RD         PORTBbits.RB3
 
-#define TP12_ADC_IN 0
-#define	TP12_TRIS   TRISAbits.TRISA0
-#define	TP12_WR     LATAbits.LATA0
-#define	TP12_RD     PORTAbits.RA0
+#define	TP11_TRIS       TRISDbits.TRISD2
+#define	TP11_WR         LATDbits.LATD2
+#define	TP11_RD         PORTDbits.RD2
+
+#define TP12_ADC_IN     0
+#define TP12_ADC_CORE   0
+#define TP12_ADC_BUFFER ADCBUF0
+#define TP12_ANSEL      ANSELAbits.ANSA0
+#define TP12_IF         _ADCAN0IF
+#define TP12_IE         _ADCAN0IE
+#define TP12_IP         _ADCAN0IP
+
+#define	TP12_TRIS       TRISAbits.TRISA0
+#define	TP12_WR         LATAbits.LATA0
+#define	TP12_RD         PORTAbits.RA0
 
 /* not connected 
 #define	TP13_TRIS   
@@ -120,6 +134,11 @@
 #define TP14_ADC_IN     1
 #define TP14_ADC_CORE   1
 #define TP14_ADC_BUFFER ADCBUF1
+#define TP14_ANSEL      ANSELAbits.ANSA1
+#define TP14_IF         _ADCAN1IF
+#define TP14_IE         _ADCAN1IE
+#define TP14_IP         _ADCAN1IP
+
 #define	TP14_TRIS       TRISAbits.TRISA1
 #define	TP14_WR         LATAbits.LATA1
 #define	TP14_RD         PORTAbits.RA1
@@ -138,9 +157,19 @@
 #define	TP17_WR
 #define	TP17_RD
 
-#define	TP18_TRIS
-#define	TP18_WR
-#define	TP18_RD
+#define TP18_ADC_IN     4
+#define TP18_ADC_CORE   4
+#define TP18_ADC_BUFFER ADCBUF4
+#define TP18_ANSEL      ANSELBbits.ANSB9
+#define TP18_IF         _ADCAN4IF
+#define TP18_IE         _ADCAN4IE
+#define TP18_IP         _ADCAN4IP
+
+#define TP18_CMPxIN     
+
+#define	TP18_TRIS       TRISBbits.TRISB9
+#define	TP18_WR         LATBbits.LATB9
+#define	TP18_RD         PORTBbits.RB9
 
 /* not connected 
 #define	TP19_TRIS
@@ -148,7 +177,7 @@
 #define	TP19_RD
    not connected */
 
-#define	TP20_TRIS
+#define	TP20_TRIS       
 #define	TP20_WR
 #define	TP20_RD
 

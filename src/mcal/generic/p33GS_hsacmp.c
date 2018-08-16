@@ -60,8 +60,8 @@
 uint16_t gscmp_init(uint16_t index, uint16_t regCMPCON, uint16_t regDAC)
 {
 
-volatile uint16_t *regptr;
-volatile uint16_t reg_offset=0;
+    volatile uint16_t *regptr;
+    volatile uint16_t reg_offset=0;
 
 	if ((index > GSCMP_DEVICE_COUNT) || (GSCMP_DEVICE_COUNT == 0)) return(0);
 
@@ -97,7 +97,7 @@ uint16_t gscmp_module_power_up(void)
     #endif
     
     _CMPMD = 0;     // Turn on power to entire comparator module
-    return(1);
+    return(1-_CMPMD);
 }
 
 /*@@gscmp_module_power_down()
@@ -116,7 +116,7 @@ uint16_t gscmp_module_power_up(void)
 uint16_t gscmp_module_power_down(void)
 {
     _CMPMD = 1;     // Turn off power to entire comparator module
-    return(1);
+    return(_CMPMD);
 }
 
 /*@@gscmp_channel_power_up()
@@ -135,35 +135,40 @@ uint16_t gscmp_module_power_down(void)
 uint16_t gscmp_channel_power_up(uint16_t index)
 {
 
+    volatile uint16_t fres = 0;
+    
 	if ((index > GSCMP_DEVICE_COUNT) || (GSCMP_DEVICE_COUNT == 0)) return(0);
     
     switch (index){
     #if (GSCMP_DEVICE_COUNT >= 1)
     case 1:
         _CMP1MD = 0;    // Turn on power to specific comparator
+        fres = (1-_CMP1MD);
         break;
     #endif
     #if (GSCMP_DEVICE_COUNT >= 2)
     case 2:
         _CMP2MD = 0;    // Turn on power to specific comparator
+        fres = (1-_CMP2MD);
         break;
     #endif
     #if (GSCMP_DEVICE_COUNT >= 3)
     case 3:
         _CMP3MD = 0;    // Turn on power to specific comparator
+        fres = (1-_CMP3MD);
         break;
     #endif
     #if (GSCMP_DEVICE_COUNT >= 4)
     case 4:
         _CMP4MD = 0;    // Turn on power to specific comparator
+        fres = (1-_CMP4MD);
         break;
     #endif
     default:
-        return(0);
         break;
     }
 
-	return(1);
+	return(fres);
 
 }
 
@@ -183,35 +188,40 @@ uint16_t gscmp_channel_power_up(uint16_t index)
 uint16_t gscmp_channel_power_down(uint16_t index)
 {
 
+    volatile uint16_t fres = 0;
+
 	if ((index > GSCMP_DEVICE_COUNT) || (GSCMP_DEVICE_COUNT == 0)) return(0);
     
     switch (index){
     #if (GSCMP_DEVICE_COUNT >= 1)
     case 1:
         _CMP1MD = 1;    // Turn off power to specific comparator
+        fres = _CMP1MD;
         break;
     #endif
     #if (GSCMP_DEVICE_COUNT >= 2)
     case 2:
         _CMP2MD = 1;    // Turn off power to specific comparator
+        fres = _CMP2MD;
         break;
     #endif
     #if (GSCMP_DEVICE_COUNT >= 3)
     case 3:
         _CMP3MD = 1;    // Turn off power to specific comparator
+        fres = _CMP3MD;
         break;
     #endif
     #if (GSCMP_DEVICE_COUNT >= 4)
     case 4:
         _CMP4MD = 1;    // Turn off power to specific comparator
+        fres = _CMP4MD;
         break;
     #endif
     default:
-        return(0);
         break;
     }
 
-	return(1);
+	return(fres);
 
 }
 
@@ -232,8 +242,8 @@ uint16_t gscmp_channel_power_down(uint16_t index)
 uint16_t gscmp_enable(uint16_t index)
 {
 
-volatile uint16_t *regptr;
-volatile uint16_t reg_offset=0;
+    volatile uint16_t *regptr;
+    volatile uint16_t reg_offset=0;
 
 	if ((index > GSCMP_DEVICE_COUNT) || (GSCMP_DEVICE_COUNT == 0)) return(0);
 
@@ -262,8 +272,8 @@ volatile uint16_t reg_offset=0;
 uint16_t gscmp_disable(uint16_t index)
 {
 
-volatile uint16_t *regptr;
-volatile uint16_t reg_offset=0;
+    volatile uint16_t *regptr;
+    volatile uint16_t reg_offset=0;
 
 	if ((index > GSCMP_DEVICE_COUNT) || (GSCMP_DEVICE_COUNT == 0)) return(0);
 
@@ -292,9 +302,9 @@ volatile uint16_t reg_offset=0;
 uint16_t gscmp_select_input(uint16_t index, uint16_t reg_cmp_input)
 {
 
-volatile uint16_t *regptr;
-volatile uint16_t reg_offset=0;
-volatile uint16_t reg_buf=0;
+    volatile uint16_t *regptr;
+    volatile uint16_t reg_offset=0;
+    volatile uint16_t reg_buf=0;
 
 	if ((index > GSCMP_DEVICE_COUNT) || (GSCMP_DEVICE_COUNT == 0)) return(0);
 
@@ -326,8 +336,8 @@ volatile uint16_t reg_buf=0;
 uint16_t gscmp_set_threshold(uint16_t index, uint16_t threshold_value)
 {
 
-volatile uint16_t *regptr;
-volatile uint16_t reg_offset=0;
+    volatile uint16_t *regptr;
+    volatile uint16_t reg_offset=0;
 
 	if ((index > GSCMP_DEVICE_COUNT) || (GSCMP_DEVICE_COUNT == 0)) return(0);
 

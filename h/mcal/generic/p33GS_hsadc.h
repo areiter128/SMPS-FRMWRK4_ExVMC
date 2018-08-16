@@ -27,47 +27,49 @@
 #include <stdint.h>
 #include "p33SMPS_devices.h"
 
+#include "syscfg_scaling.h"
+
 /*@@p33FGS_adc.h
  * ************************************************************************************************
  * Summary:
  * Header file with additional defines for the dsPIC33FxxGS-ADC SFRs
  *
  * Description:
- * The SMPS ADC module offes a number of registers and configuration options. This additional
+ * The SMPS ADC module offers a number of registers and configuration options. This additional
  * header file contains defines for all required bit-settings. This additional
  * header file contains defines for all required bit-settings of all related registers.
  * This file is an additional header file on top of the generic device header file.
  * ***********************************************************************************************/
 
 // Prototypes
-extern int gsadc_module_power_up(void);
-extern int gsadc_module_power_down(void);
+extern inline uint16_t gsadc_module_power_up(void);
+extern inline uint16_t gsadc_module_power_down(void);
 
-extern int gsadc_init_adc(
+extern inline uint16_t gsadc_init_adc(
                    uint16_t regADCON1L, uint16_t regADCON1H, uint16_t regADCON2L, 
                    uint16_t regADCON2H, uint16_t regADCON3L, uint16_t regADCON3H, 
                    uint16_t regADCON4L, uint16_t regADCON4H, uint16_t regADCON5L, 
                    uint16_t regADCON5H);
 
-extern int gsadc_init_adc_core(uint16_t index, uint16_t regADCORExL, uint16_t regADCORExH);
+extern inline uint16_t gsadc_init_adc_core(uint16_t index, uint16_t regADCORExL, uint16_t regADCORExH);
 
-extern int gsadc_module_enable(void);
-extern int gsadc_module_disable(void);
-extern int gsadc_reset(void);
+extern inline uint16_t gsadc_module_enable(void);
+extern inline uint16_t gsadc_module_disable(void);
+extern inline uint16_t gsadc_reset(void);
 
-extern int gsadc_calibrate_adc_core(uint16_t index, uint16_t calib_mode);
-extern int gsadc_power_on_adc_core(uint16_t index);
+extern inline uint16_t gsadc_calibrate_adc_core(uint16_t index, uint16_t calib_mode);
+extern inline uint16_t gsadc_power_on_adc_core(uint16_t index);
 
-extern int gsadc_set_adc_input_trigger_source(uint16_t index, uint16_t interrupt_trigger);
-extern int gsadc_set_adc_core_interrupt(uint16_t index, uint16_t interrupt_enable, uint16_t early_interrupt_enable);
+extern inline uint16_t gsadc_set_adc_input_trigger_source(uint16_t index, uint16_t interrupt_trigger);
+extern inline uint16_t gsadc_set_adc_core_interrupt(uint16_t index, uint16_t interrupt_enable, uint16_t early_interrupt_enable);
 
-extern int gsadc_init_adc_comp(uint16_t index, uint16_t input_no, uint16_t regADCMPxCON, uint16_t regADCMPxLO, uint16_t regADCMPxHI);
+extern inline uint16_t gsadc_init_adc_comp(uint16_t index, uint16_t input_no, uint16_t regADCMPxCON, uint16_t regADCMPxLO, uint16_t regADCMPxHI);
 
 // Device-specific Defines
 
 #if defined (__P33SMPS_EP2__)
 
-     #define ADC_CORE_COUNT          3					// Number of ADC Cores available
+    #define ADC_CORE_COUNT          3					// Number of ADC Cores available
     #define ADC_ANINPUT_COUNT       12                  // Number of analog inputs
     #define ADC_SHARED_CORE_INDEX   (ADC_CORE_COUNT - 1)    // Arteficially assigned index for shared ADC core
     
@@ -78,6 +80,7 @@ extern int gsadc_init_adc_comp(uint16_t index, uint16_t input_no, uint16_t regAD
     #define ADC_ADMODL_REG_OFFSET   2
     #define ADC_ADCONH_REG_OFFSET   2
     #define ADC_ADCAL_REG_OFFSET    1
+    #define ADC_ADCBUF_REG_OFFSET   1
 
     #define ADC_ADTRIG_REG_OFFSET   1   
     
@@ -307,8 +310,8 @@ extern int gsadc_init_adc_comp(uint16_t index, uint16_t input_no, uint16_t regAD
 
 // Device-specific Defines
 #define ADC_VREF        DEVICE_VDD     // ADC reference voltage in [V]
-#define ADC_RES_BIT     12    // ADC resolution in integer
-#define ADC_RES         (pow(2, ADC_RES_BIT)-1)    // ADC resolution in integer
+#define ADC_RES_BIT     12.0    // ADC resolution in integer
+#define ADC_RES         (uint16_t)(pow(2, ADC_RES_BIT)-1)    // ADC resolution in integer
 #define ADC_SCALER      (float)(((float)(ADC_RES))/((float)(ADC_VREF))) // ADC Scaling in ticks/V
 
 #define ADC_ANx_INTERRUPT_ENABLE        1       // Bit setting for enabled interrupts of a dedicated analog input
@@ -354,6 +357,9 @@ extern int gsadc_init_adc_comp(uint16_t index, uint16_t input_no, uint16_t regAD
 #define REG_ADCON2L_RESET               0b0000000000000000      // Reset ADCON 2 Low Register
 #define REG_ADCON2L_VALID_DATA_MSK		0b1101011101111111		// Bit mask used to set unimplemented bits to zero
 
+#define REG_ADCON2L_SHRADC_CFG_MASK     0b0001011101111111      // Bit-Mask eliminating all bits not concerning the shared ADC core configuration
+#define REG_ADCON2L_REF_CFG_MASK        0b1100000000000000      // Bit-Mask eliminating all bits not concerning the bandgap reference configuration
+
 #define REG_ADCON2L_REFCIE_ON           0b1000000000000000      // Interrupt on Band Gap & Reference Voltage Ready
 #define REG_ADCON2L_REFCIE_OFF          0b0000000000000000      // No Interrupt on Band Gap & Reference Voltage Ready
 
@@ -380,6 +386,10 @@ extern int gsadc_init_adc_comp(uint16_t index, uint16_t input_no, uint16_t regAD
 #define REG_ADCON2H_RESET               0b0000000000000000      // Reset ADCON 2 High Register
 #define REG_ADCON2H_VALID_DATA_MSK		0b1100001111111111		// Bit mask used to set unimplemented bits to zero
 
+#define REG_ADCON2H_SHRADC_CFG_MASK     0b0000001111111111      // Bit-Mask eliminating all bits not concerning the shared ADC core configuration
+#define REG_ADCON2H_REF_CFG_MASK        0b1100000000000000      // Bit-Mask eliminating all bits not concerning the bandgap reference configuration
+
+#define REG_ADCON2H_REF_STAT_READ_MASK  0b1100000000000000      // Bit-Mask for reading the bandgap reference status bits
 #define REG_ADCON2H_SHRSAMC_MSK         0b0000001111111111      // Bit-Mask to filter on clock periods value bits
 #define REG_ADCON2H_SHRSAMC(x)          ((x-2) & REG_ADCON2H_SHRSAMC_MSK) 		// Shared ADC Core Sample Time Selection bits
 

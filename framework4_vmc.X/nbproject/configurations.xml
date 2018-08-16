@@ -66,6 +66,7 @@
           <itemPath>../h/mcal/config/devcfg_irq.h</itemPath>
           <itemPath>../h/mcal/config/00124_R10_EP806_pinmap.h</itemPath>
           <itemPath>../h/mcal/config/devcfg_dsp.h</itemPath>
+          <itemPath>../h/mcal/config/devcfg_hsacmp.h</itemPath>
         </logicalFolder>
         <logicalFolder name="generic" displayName="generic" projectFiles="true">
           <itemPath>../h/mcal/generic/p33GS_hsacmp.h</itemPath>
@@ -145,6 +146,7 @@
           <itemPath>../src/hal/initialization/init_swdt.c</itemPath>
           <itemPath>../src/hal/initialization/init_timer.c</itemPath>
           <itemPath>../src/hal/initialization/init_irq.c</itemPath>
+          <itemPath>../src/hal/initialization/init_hsacmp.c</itemPath>
         </logicalFolder>
         <itemPath>../src/hal/hal.c</itemPath>
       </logicalFolder>
@@ -418,6 +420,7 @@
         <property key="ToolFirmwareOption.UseLatestFirmware" value="true"/>
         <property key="UART 1" value="true"/>
         <property key="UART 2" value="true"/>
+        <property key="W0237_ADC_UNKNOWN_DATASHEET" value="report"/>
         <property key="debugoptions.useswbreakpoints" value="false"/>
         <property key="hwtoolclock.frcindebug" value="false"/>
         <property key="memories.aux" value="false"/>

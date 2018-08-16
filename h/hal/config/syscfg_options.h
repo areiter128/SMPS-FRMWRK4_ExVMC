@@ -41,11 +41,21 @@
 
 #define USE_SPREAD_SPECTRUM_MODULATION 0       // This option will enable/disable spread spectrum modulation
 
-#define CS_TYPE_CT          0       // Current sensor is a current sense transformer
-#define CS_TYPE_SHUNT_AMP   1       // Current sensor is a shunt amplifier
 
-#define CS_TYPE             CS_TYPE_CT  // Set current sense type used
+#define CURRENT_SENSE_TRANSFORMER  1 // Current sensor is a current sense transformer
+#define CURRENT_SENSE_AMPLIFIER    2 // Current sensor is a shunt amplifier
 
+#define CS_TYPE             CURRENT_SENSE_TRANSFORMER  // Set current sense type used
+#if (CS_TYPE == CURRENT_SENSE_TRANSFORMER)
+  #define __CS_TYPE_CT__
+#elif (CS_TYPE == CURRENT_SENSE_AMPLIFIER)    
+  #define __CS_TYPE_SHUNT_AMP__
+#else
+  #warning === Current Sense Device Type not specified ===
+#endif
+    
+    
+    
 #define TRG_OPTION_ADC      0       // Control loops are executed in ADC interrupt service routine
 #define TRG_OPTION_PWM      1       // Control loops are executed in PWM interrupt service routines
 

@@ -51,6 +51,10 @@ extern "C" {
 /* generic drivers */
 #include "p33SMPS_devices.h"
 
+#ifdef __00126_R10_EP202_BITCOIN__
+// dsPIC33EP16GS202 BITCOIN Converter, Version 1.0
+  #include "00126_R10_EP202_BITCOIN.h"
+#endif
 #ifdef __00124_R02_EP806__
 // dsPIC33EP128GS806 Digital Power Plug-In Module, Version 0.2
   #include "00124_R02_EP806_pinmap.h"
@@ -84,6 +88,7 @@ extern "C" {
 #include "p33SMPS_timer.h"
 
 /* specific drivers */
+#include "p33GS_hsacmp.h"
 #include "p33GS_hsadc.h"
 #include "p33GS_hspwm.h"
     
@@ -92,6 +97,7 @@ extern "C" {
 #include "devcfg_clock.h"
 #include "devcfg_hspwm.h"
 #include "devcfg_hsadc.h"
+#include "devcfg_hsacmp.h"
 
     
 /* ***********************************************************************************************

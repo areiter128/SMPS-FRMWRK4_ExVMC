@@ -36,27 +36,19 @@
 #include "syscfg_scaling.h"
 
 // Converter input and output voltage and current levels
-#define IOUT_MAX            8.000       // maximum output current in [A]
 
-/* *************************************************************************************************
- * PLEU0049.R2 input voltage range is limited by a reverse bias protection diode at the input of the 
- * auxiliary power supply. The minimum voltage level supported at the power supply input will be
- * ~500mV above the threshold given here. The UVLO level is set at the point where the +5V output 
- * of the auxiliary power supply starts to drop.
- * ************************************************************************************************/
-
-#define VIN_MINIMUM         5.500       // input voltage minimum (Under-Voltage-Lockout-Level)
-#define VIN_MINIMUM_HYST    1.000       // input voltage minimum (Under-Voltage-Lockout Hysteresis Level)
-#define VIN_UVLO_TRIP       (int16_t)(VIN_MINIMUM * VIN_DIVIDER_RATIO * ADC_SCALER) // Input voltage sense ADC ticks
-#define VIN_UVLO_RELEASE    (int16_t)((VIN_MINIMUM + VIN_MINIMUM_HYST) * VIN_DIVIDER_RATIO * ADC_SCALER) // Input voltage sense ADC ticks
+#define VIN_MINIMUM         6.000       // input voltage minimum (Under-Voltage-Lockout-Level)
+#define VIN_MINIMUM_HYST    0.500       // input voltage minimum (Under-Voltage-Lockout Hysteresis Level)
+#define VIN_UVLO_TRIP       (uint16_t)(VIN_MINIMUM * VIN_DIVIDER_RATIO * ADC_SCALER) // Input voltage sense ADC ticks
+#define VIN_UVLO_RELEASE    (uint16_t)((VIN_MINIMUM + VIN_MINIMUM_HYST) * VIN_DIVIDER_RATIO * ADC_SCALER) // Input voltage sense ADC ticks
 
 #define VIN_NOMINAL         12.000       // Nominal input voltage in [V]
 #define VIN_FB_REF_ADC      (uint16_t)((float)VIN_DIVIDER_RATIO * (float)VIN_NOMINAL * ADC_SCALER)   // Input voltage feedback in ADC ticks
 
-#define VIN_MAXIMUM         18.000      // input voltage maximum (Under-Voltage-Lockout-Level)
-#define VIN_MAXIMUM_HYST    1.000       // input voltage maximum (Under-Voltage-Lockout Hysteresis Level)
-#define VIN_OVLO_TRIP       (int16_t)((float)VIN_MAXIMUM * (float)VIN_DIVIDER_RATIO * (float)ADC_SCALER) // Input voltage sense ADC ticks
-#define VIN_OVLO_RELEASE    (int16_t)(((float)VIN_MAXIMUM - (float)VIN_MAXIMUM_HYST) * (float)VIN_DIVIDER_RATIO * (float)ADC_SCALER) // Input voltage sense ADC ticks
+#define VIN_MAXIMUM         16.000      // input voltage maximum (Under-Voltage-Lockout-Level)
+#define VIN_MAXIMUM_HYST    0.500       // input voltage maximum (Under-Voltage-Lockout Hysteresis Level)
+#define VIN_OVLO_TRIP       (uint16_t)((float)VIN_MAXIMUM * (float)VIN_DIVIDER_RATIO * (float)ADC_SCALER) // Input voltage sense ADC ticks
+#define VIN_OVLO_RELEASE    (uint16_t)(((float)VIN_MAXIMUM - (float)VIN_MAXIMUM_HYST) * (float)VIN_DIVIDER_RATIO * (float)ADC_SCALER) // Input voltage sense ADC ticks
 
 
 #define VOUT_NOMINAL         3.300       // Nominal output voltage in [V]
@@ -64,14 +56,17 @@
 
 #define VOUT_MAXIMUM         6.000       // Output voltage minimum (Output Over-Voltage-Protection-Level)
 #define VOUT_MAXIMUM_HYST    0.300       // Output voltage maximum (Output Over-Voltage-Protection Hysteresis Level)
-#define VOUT_OVP_TRIP       (int16_t)((float)VOUT_MAXIMUM * (float)VOUT_DIVIDER_RATIO * (float)ADC_SCALER) // Output voltage sense ADC ticks
-#define VOUT_OVP_RELEASE    (int16_t)(((float)VOUT_MAXIMUM - (float)VOUT_MAXIMUM_HYST) * (float)VOUT_DIVIDER_RATIO * (float)ADC_SCALER) // Output voltage sense ADC ticks
+#define VOUT_OVP_TRIP       (uint16_t)((float)VOUT_MAXIMUM * (float)VOUT_DIVIDER_RATIO * (float)ADC_SCALER) // Output voltage sense ADC ticks
+#define VOUT_OVP_RELEASE    (uint16_t)(((float)VOUT_MAXIMUM - (float)VOUT_MAXIMUM_HYST) * (float)VOUT_DIVIDER_RATIO * (float)ADC_SCALER) // Output voltage sense ADC ticks
 
+
+#define IL_MAXIMUM          8.000
+#define IL_OCP_TRIP         (uint16_t)((((float)IL_MAXIMUM * (float)IFB_SCALER_RATIO_VI) + ((float)IFB_SCALER_OFFSET_V)) * (float)DAC_SCALER) // Output voltage sense ADC ticks
 
 #define DUTY_RATIO_MIN      0.02    // Minimum duty ration 
-#define DUTY_RATIO_MAX      0.90    // Maximum duty ratio
-#define DUTY_RATIO_MIN_REG (int16_t)((float)DUTY_RATIO_MIN * (float)SWITCHING_PERIOD)
-#define DUTY_RATIO_MAX_REG (int16_t)((float)DUTY_RATIO_MAX * (float)SWITCHING_PERIOD)
+#define DUTY_RATIO_MAX      0.90    // maximum duty ratio
+#define DUTY_RATIO_MIN_REG (uint16_t)((float)DUTY_RATIO_MIN * (float)SWITCHING_PERIOD)
+#define DUTY_RATIO_MAX_REG (uint16_t)((float)DUTY_RATIO_MAX * (float)SWITCHING_PERIOD)
 
 #endif	/* __SYSTEM_DESIGN_LIMITS_H__ */
 

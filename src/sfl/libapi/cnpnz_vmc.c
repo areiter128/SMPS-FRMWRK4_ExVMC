@@ -1,11 +1,11 @@
 /* ***************************************************************************************
- * Digital Control Loop Designer Version 0.9.0.26.
+ * z-Domain Control Loop Designer Version 0.9.0.31.
  * ***************************************************************************************
- * 3p3z compensation filter coefficients derived for following operating conditions:
+ * 4p4z compensation filter coefficients derived for following operating conditions:
  * ***************************************************************************************
  *
- * 	Controller Type:	3P3Z - Basic Voltage Mode Compensator
- * 	Sampling Frequency:	350000 Hz 
+ * 	Controller Type:	4P4Z - Advanced High-Q Compensator
+ * 	Sampling Frequency:	400000 Hz 
  * 	Fixed Point Format:	15
  * 	Scaling Mode:		4 - Fast Floating Point Coefficient Scaling
  * 	Input Gain:			1
@@ -34,29 +34,33 @@
  * 	Pole&Zero Placement:
  * ***************************************************************************************
  *
- * 	fP0:	100 Hz 
+ * 	fP0:	110 Hz 
  * 	fP1:	100000 Hz 
- * 	fZ1:	4000 Hz 
- * 	fP2:	175000 Hz 
+ * 	fZ1:	2000 Hz 
+ * 	fP2:	200000 Hz 
  * 	fZ2:	5900 Hz 
+ * 	fP3:	200000 Hz 
+ * 	fZ3:	40000 Hz 
  *
  * ***************************************************************************************
  * 	Filter Coefficients and Parameters:
  * ***************************************************************************************/
 
-	volatile int32_t cnpnz_vmc_ACoefficients [3] = 
+	volatile int32_t cnpnz_vmc_ACoefficients [4] = 
 	{
-		0x6A7D0000,	// Coefficient A1 will be multiplied with controller output u(n-1)
-		0x5C300002,	// Coefficient A2 will be multiplied with controller output u(n-2)
-		0x9DD90006	// Coefficient A3 will be multiplied with controller output u(n-3)
+		0x568C0000,	// Coefficient A1 will be multiplied with controller output u(n-1)
+		0x53F40001,	// Coefficient A2 will be multiplied with controller output u(n-2)
+		0x79190009,	// Coefficient A3 will be multiplied with controller output u(n-3)
+		0x9EEB0007	// Coefficient A4 will be multiplied with controller output u(n-4)
 	};
 
-	volatile int32_t cnpnz_vmc_BCoefficients [4] = 
+	volatile int32_t cnpnz_vmc_BCoefficients [5] = 
 	{
-		0x4C330002,	// Coefficient B0 will be multiplied with error input e(n)
-		0x81800003,	// Coefficient B1 will be multiplied with error input e(n-1)
-		0xB4560002,	// Coefficient B2 will be multiplied with error input e(n-2)
-		0x7F910003	// Coefficient B3 will be multiplied with error input e(n-3)
+		0x6EED0000,	// Coefficient B0 will be multiplied with error input e(n)
+		0xB239FFFF,	// Coefficient B1 will be multiplied with error input e(n-1)
+		0x88B40001,	// Coefficient B2 will be multiplied with error input e(n-2)
+		0x4DDBFFFF,	// Coefficient B3 will be multiplied with error input e(n-3)
+		0x99BE0001	// Coefficient B4 will be multiplied with error input e(n-4)
 	};
 
 
@@ -103,7 +107,7 @@ uint16_t cnpnz_vmc_Init(void)
 		cnpnz_vmc_coefficients.BCoefficients[i] = cnpnz_vmc_BCoefficients[i];
 	}
 
-	// Clear error and control histories of the 3P3Z controller
+	// Clear error and control histories of the 4P4Z controller
 	cnpnz_vmc_Reset(&cnpnz_vmc);
 
 	return(1);

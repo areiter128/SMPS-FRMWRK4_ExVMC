@@ -21,11 +21,13 @@
  *
  * ***********************************************************************************************/
 
-#ifndef _P33EGS_HSACMP_H_
-#define _P33EGS_HSACMP_H_
+#ifndef __P33EGS_HSACMP_H__
+#define __P33EGS_HSACMP_H__
 
 #include <stdint.h>
 #include "p33SMPS_devices.h"
+
+#include "syscfg_scaling.h"
 
 /*@@p33GS_hsacmp.h
  * ************************************************************************************************
@@ -40,103 +42,68 @@
  * ***********************************************************************************************/
 
 /* Prototypes */
-extern uint16_t gscmp_init(uint16_t index, uint16_t regCMPCON, uint16_t regDAC);
-extern uint16_t gscmp_enable(uint16_t index);
-extern uint16_t gscmp_disable(uint16_t index);
-extern uint16_t gscmp_select_input(uint16_t index, uint16_t reg_cmp_input);
-extern uint16_t gscmp_set_threshold(uint16_t index, uint16_t threshold_value);
+extern inline uint16_t gscmp_init(uint16_t index, uint16_t regCMPCON, uint16_t regDAC);
+extern inline uint16_t gscmp_enable(uint16_t index);
+extern inline uint16_t gscmp_disable(uint16_t index);
+extern inline uint16_t gscmp_select_input(uint16_t index, uint16_t reg_cmp_input);
+extern inline uint16_t gscmp_set_threshold(uint16_t index, uint16_t threshold_value);
 
-extern uint16_t gscmp_module_power_up(void);
-extern uint16_t gscmp_module_power_down(void);
-extern uint16_t gscmp_channel_power_up(uint16_t index);
-extern uint16_t gscmp_channel_power_down(uint16_t index);
+extern inline uint16_t gscmp_module_power_up(void);
+extern inline uint16_t gscmp_module_power_down(void);
+extern inline uint16_t gscmp_channel_power_up(uint16_t index);
+extern inline uint16_t gscmp_channel_power_down(uint16_t index);
+
+
+#define DAC_VREF        DEVICE_VDD     // DAC reference voltage in [V]
+#define DAC_RES_BIT     12    // DAC resolution in integer
+#define DAC_RES         (pow(2, DAC_RES_BIT)-1)    // DAC resolution in integer
+#define DAC_SCALER      (float)(((float)(DAC_RES))/((float)(DAC_VREF))) // DAC Scaling in ticks/V
+
 
 /* Device-specific Defines */
 
-#if defined (__dsPIC33EP16GS202__)
-	#define GSCMP_DEVICE_COUNT		2
-	#define GSCMP_DEVICE_REG_OFFSET	0x0002
-#elif defined (__dsPIC33EP32GS202__)
+#if defined (__P33SMPS_EP202__)
 	#define GSCMP_DEVICE_COUNT		2
 	#define GSCMP_DEVICE_REG_OFFSET	0x0002
 
-#elif defined (__dsPIC33EP16GS502__)
+#elif defined (__P33SMPS_EP502__)
 	#define GSCMP_DEVICE_COUNT		4
 	#define GSCMP_DEVICE_REG_OFFSET	0x0002
-#elif defined (__dsPIC33EP32GS502__)
+#elif defined (__P33SMPS_EP504__)
 	#define GSCMP_DEVICE_COUNT		4
 	#define GSCMP_DEVICE_REG_OFFSET	0x0002
-#elif defined (__dsPIC33EP64GS502__)
+#elif defined (__P33SMPS_EP505__)
 	#define GSCMP_DEVICE_COUNT		4
 	#define GSCMP_DEVICE_REG_OFFSET	0x0002
-#elif defined (__dsPIC33EP16GS504__)
-	#define GSCMP_DEVICE_COUNT		4
-	#define GSCMP_DEVICE_REG_OFFSET	0x0002
-#elif defined (__dsPIC33EP32GS504__)
-	#define GSCMP_DEVICE_COUNT		4
-	#define GSCMP_DEVICE_REG_OFFSET	0x0002
-#elif defined (__dsPIC33EP64GS504__)
-	#define GSCMP_DEVICE_COUNT		4
-	#define GSCMP_DEVICE_REG_OFFSET	0x0002
-#elif defined (__dsPIC33EP16GS505__)
-	#define GSCMP_DEVICE_COUNT		4
-	#define GSCMP_DEVICE_REG_OFFSET	0x0002
-#elif defined (__dsPIC33EP32GS505__)
-	#define GSCMP_DEVICE_COUNT		4
-	#define GSCMP_DEVICE_REG_OFFSET	0x0002
-#elif defined (__dsPIC33EP64GS505__)
-	#define GSCMP_DEVICE_COUNT		4
-	#define GSCMP_DEVICE_REG_OFFSET	0x0002
-#elif defined (__dsPIC33EP16GS506__)
-	#define GSCMP_DEVICE_COUNT		4
-	#define GSCMP_DEVICE_REG_OFFSET	0x0002
-#elif defined (__dsPIC33EP32GS506__)
-	#define GSCMP_DEVICE_COUNT		4
-	#define GSCMP_DEVICE_REG_OFFSET	0x0002
-#elif defined (__dsPIC33EP64GS506__)
+#elif defined (__P33SMPS_EP506__)
 	#define GSCMP_DEVICE_COUNT		4
 	#define GSCMP_DEVICE_REG_OFFSET	0x0002
 
-#elif defined (__dsPIC33EP128GS702__)
+#elif defined (__P33SMPS_EP702__)
 	#define GSCMP_DEVICE_COUNT		4
 	#define GSCMP_DEVICE_REG_OFFSET	0x0002
-#elif defined (__dsPIC33EP128GS704__)
+#elif defined (__P33SMPS_EP704__)
 	#define GSCMP_DEVICE_COUNT		4
 	#define GSCMP_DEVICE_REG_OFFSET	0x0002
-#elif defined (__dsPIC33EP128GS705__)
+#elif defined (__P33SMPS_EP705__)
 	#define GSCMP_DEVICE_COUNT		4
 	#define GSCMP_DEVICE_REG_OFFSET	0x0002
-#elif defined (__dsPIC33EP128GS706__)
+#elif defined (__P33SMPS_EP706__)
 	#define GSCMP_DEVICE_COUNT		4
 	#define GSCMP_DEVICE_REG_OFFSET	0x0002
-#elif defined (__dsPIC33EP64GS708__)
+#elif defined (__P33SMPS_EP708__)
 	#define GSCMP_DEVICE_COUNT		4
 	#define GSCMP_DEVICE_REG_OFFSET	0x0002
-#elif defined (__dsPIC33EP128GS708__)
+#elif defined (__P33SMPS_EP804__)
 	#define GSCMP_DEVICE_COUNT		4
 	#define GSCMP_DEVICE_REG_OFFSET	0x0002
-#elif defined (__dsPIC33EP64GS804__)
+#elif defined (__P33SMPS_EP805__)
 	#define GSCMP_DEVICE_COUNT		4
 	#define GSCMP_DEVICE_REG_OFFSET	0x0002
-#elif defined (__dsPIC33EP128GS804__)
+#elif defined (__P33SMPS_EP806__)
 	#define GSCMP_DEVICE_COUNT		4
 	#define GSCMP_DEVICE_REG_OFFSET	0x0002
-#elif defined (__dsPIC33EP64GS805__)
-	#define GSCMP_DEVICE_COUNT		4
-	#define GSCMP_DEVICE_REG_OFFSET	0x0002
-#elif defined (__dsPIC33EP128GS805__)
-	#define GSCMP_DEVICE_COUNT		4
-	#define GSCMP_DEVICE_REG_OFFSET	0x0002
-#elif defined (__dsPIC33EP64GS806__)
-	#define GSCMP_DEVICE_COUNT		4
-	#define GSCMP_DEVICE_REG_OFFSET	0x0002
-#elif defined (__dsPIC33EP128GS806__)
-	#define GSCMP_DEVICE_COUNT		4
-	#define GSCMP_DEVICE_REG_OFFSET	0x0002
-#elif defined (__dsPIC33EP64GS808__)
-	#define GSCMP_DEVICE_COUNT		4
-	#define GSCMP_DEVICE_REG_OFFSET	0x0002
-#elif defined (__dsPIC33EP128GS808__)
+#elif defined (__P33SMPS_EP808__)
 	#define GSCMP_DEVICE_COUNT		4
 	#define GSCMP_DEVICE_REG_OFFSET	0x0002
 
@@ -165,7 +132,7 @@ extern uint16_t gscmp_channel_power_down(uint16_t index);
  *    e.g. CMPDAC1bits.CMPON = CMPON_ON;
  * 
  * -----------------------------------------------------------------------------------------------*/
-#if defined (__P33SMPS_EP2__) || defined (__P33SMPS_EP5__) || defined (__P33SMPS_EP7__)
+#if defined (__P33SMPS_EP__)
 
     #define CMPCON_ORIGIN               CMP1CON     // first comparator configuration register location
     #define CMPDAC_ORIGIN               CMP1DAC     // first comparator DAC register location
@@ -225,7 +192,7 @@ extern uint16_t gscmp_channel_power_down(uint16_t index);
 #define REG_CMPPOL_INVERTED				0b0000000000000010		// Bit 1
 #define REG_CMPPOL_NON_INVERTED			0b0000000000000000
 
-#if defined (__P33SMPS_EP5__) || defined (__P33SMPS_EP7__)
+#if defined (__P33SMPS_EP5__) || defined (__P33SMPS_EP7__) || defined (__P33SMPS_EP8__)
 
 	#define REG_RANGE_HIGH				0b0000000000000001		// Bit0
 
@@ -275,10 +242,10 @@ extern uint16_t gscmp_channel_power_down(uint16_t index);
 #define CMPPOL_INVERTED					0b1						// Bit 1
 #define CMPPOL_NON_INVERTED				0b0
 
-#if defined (__P33SMPS_EP5__) || defined (__P33SMPS_EP7__)
+#if defined (__P33SMPS_EP5__) || defined (__P33SMPS_EP7__) || defined (__P33SMPS_EP8__)
 
 	#define RANGE_HIGH					0b1						// Bit 0
 
 #endif
 
-#endif  // EOF _P33EGS_HSACMP_H_
+#endif  // EOF __P33EGS_HSACMP_H__

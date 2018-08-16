@@ -1,10 +1,10 @@
 ;LICENSE / DISCLAIMER
 ; **********************************************************************************
-;  SDK Version: Digital Control Loop Designer v0.9.0.26
+;  SDK Version: z-Domain Control Loop Designer v0.9.0.31
 ;  Author:      M91406
-;  Date/Time:   08/09/18 05:32:25 PM
+;  Date/Time:   08/17/18 12:31:49 AM
 ; **********************************************************************************
-;  3P3Z Control Library File (Fast Floating Point Coefficient Scaling Mode)
+;  4P4Z Control Library File (Fast Floating Point Coefficient Scaling Mode)
 ; **********************************************************************************
 	
 ;------------------------------------------------------------------------------
@@ -56,9 +56,6 @@
 	
 	.global _cnpnz_vmc_Update
 _cnpnz_vmc_Update:    ; provide global scope to routine
-	
-;------------------------------------------------------------------------------
-; Save working registers
 	push w12    ; save working register used for status flag tracking
 	
 ;------------------------------------------------------------------------------
@@ -66,9 +63,6 @@ _cnpnz_vmc_Update:    ; provide global scope to routine
 	mov [w0 + #offStatus], w12
 	btss w12, #NPMZ16_STATUS_ENABLE
 	bra CNPNZ_VMC_BYPASS_LOOP
-	
-;------------------------------------------------------------------------------
-; Save working registers
 	
 ;------------------------------------------------------------------------------
 ; Setup pointers to A-Term data arrays
@@ -86,6 +80,10 @@ _cnpnz_vmc_Update:    ; provide global scope to routine
 	sftac a, w5
 	add b
 	mov [w8 - #6], w5    ; multiply control output (n-1) from the delay line with coefficient X1
+	mpy w4*w6, a, [w8]+=4, w4, [w10]+=2, w6
+	sftac a, w5
+	add b
+	mov [w8 - #6], w5    ; multiply control output (n-2) from the delay line with coefficient X2
 	mpy w4*w6, a, [w8]+=4, w4, [w10]+=2, w6
 	sftac a, w5
 	add b
@@ -113,6 +111,8 @@ _cnpnz_vmc_Update:    ; provide global scope to routine
 	
 ;------------------------------------------------------------------------------
 ; Update error history (move error one tick along the delay line)
+	mov [w10 + #6], w6    ; move entry (n-4) into buffer
+	mov w6, [w10 + #8]    ; move buffered value one tick down the delay line
 	mov [w10 + #4], w6    ; move entry (n-3) into buffer
 	mov w6, [w10 + #6]    ; move buffered value one tick down the delay line
 	mov [w10 + #2], w6    ; move entry (n-2) into buffer
@@ -133,6 +133,10 @@ _cnpnz_vmc_Update:    ; provide global scope to routine
 	sftac a, w5
 	add b
 	mov [w8 - #6], w5    ; multiply control output (n-1) from the delay line with coefficient X1
+	mpy w4*w6, a, [w8]+=4, w4, [w10]+=2, w6
+	sftac a, w5
+	add b
+	mov [w8 - #6], w5    ; multiply control output (n-2) from the delay line with coefficient X2
 	mpy w4*w6, a, [w8]+=4, w4, [w10]+=2, w6
 	sftac a, w5
 	add b
@@ -178,6 +182,8 @@ _cnpnz_vmc_Update:    ; provide global scope to routine
 	
 ;------------------------------------------------------------------------------
 ; Update control output history
+	mov [w10 + #4], w6    ; move entry (n-3) one tick down the delay line
+	mov w6, [w10 + #6]
 	mov [w10 + #2], w6    ; move entry (n-2) one tick down the delay line
 	mov w6, [w10 + #4]
 	mov [w10 + #0], w6    ; move entry (n-1) one tick down the delay line
@@ -189,14 +195,8 @@ _cnpnz_vmc_Update:    ; provide global scope to routine
 	mov w12, [w0 + #offStatus]
 	
 ;------------------------------------------------------------------------------
-; Restore working registers
-	
-;------------------------------------------------------------------------------
 ; Enable/Disable bypass branch target
 	CNPNZ_VMC_BYPASS_LOOP:
-	
-;------------------------------------------------------------------------------
-; Restore working registers
 	pop w12    ; restore working register used for status flag tracking
 	
 ;------------------------------------------------------------------------------
@@ -218,6 +218,7 @@ _cnpnz_vmc_Reset:
 	mov  [w0 + #offControlHistory], w0
 	clr [w0++]    ; Clear next address of control history array
 	clr [w0++]    ; Clear next address of control history array
+	clr [w0++]    ; Clear next address of control history array
 	clr [w0]    ; Clear last address of control history array
 	pop w0
 	
@@ -225,6 +226,7 @@ _cnpnz_vmc_Reset:
 ; Clear error history array
 	push w0    ; Set pointer to the base address of error history array
 	mov [w0 + #offErrorHistory], w0
+	clr [w0++]    ; Clear next address of error history array
 	clr [w0++]    ; Clear next address of error history array
 	clr [w0++]    ; Clear next address of error history array
 	clr [w0++]    ; Clear next address of error history array
@@ -252,6 +254,7 @@ _cnpnz_vmc_Precharge:
 	mov w1, [w0++]    ; Load user value into next address of error history array
 	mov w1, [w0++]    ; Load user value into next address of error history array
 	mov w1, [w0++]    ; Load user value into next address of error history array
+	mov w1, [w0++]    ; Load user value into next address of error history array
 	mov w1, [w0]    ; Load user value into last address of error history array
 	pop w1
 	pop w0
@@ -261,6 +264,7 @@ _cnpnz_vmc_Precharge:
 	push w0    ; Set pointer to the base address of control history array
 	push w2
 	mov  [w0 + #offControlHistory], w0
+	mov w2, [w0++]    ; Load user value into next address of control history array
 	mov w2, [w0++]    ; Load user value into next address of control history array
 	mov w2, [w0++]    ; Load user value into next address of control history array
 	mov w2, [w0]    ; Load user value into last address of control history array

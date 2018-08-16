@@ -96,6 +96,8 @@ volatile uint16_t (*Task_Table[])(void) = {
     // System function / Special function initialization
     init_hsadc,             // task initializing the high-speed ADC module
     exec_launch_hsadc,      // task launching the pre-configured high-speed ADC module
+    init_hsacmp,            // task initializing the high-speed analog comparator module
+    exec_launch_hsacmp,     // task launching the pre-configured high-speed analog comparator module
     init_hspwm,             // task initializing the high-speed PWM module
     exec_launch_hspwm,      // task launching the pre-configured high-speed PWM module
     init_soft_start,  // task initializing the soft-start configuration object
@@ -139,10 +141,15 @@ volatile uint16_t task_list_device_startup[] = {
     TASK_LED_GREEN_ON, // Step #2
     TASK_INIT_CNPNZ_VMC, // Step #3
     TASK_INIT_HSADC, // Step #4
+    TASK_INIT_HSACMP, // Step #4
     TASK_INIT_HSPWM, // Step #5
     TASK_INIT_SOFT_START, // Step #6
-    TASK_LAUNCH_HSPWM, // Step #7
-    TASK_LAUNCH_HSADC // Step #8
+    TASK_LAUNCH_HSADC, // Step #7
+    TASK_IDLE, // Step #8
+    TASK_LAUNCH_HSACMP, // Step #9
+    TASK_IDLE, // Step #10
+    TASK_LAUNCH_HSPWM, // Step #11
+    TASK_IDLE // Step #12
 };
 volatile uint16_t task_list_device_startup_size = (sizeof(task_list_device_startup)/sizeof(task_list_device_startup[0]));
 

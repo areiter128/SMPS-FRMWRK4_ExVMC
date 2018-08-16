@@ -48,10 +48,10 @@ volatile uint16_t init_VMC_Controller(void)
     ctrl_v_reference  = (uint16_t)VOUT_FB_REF_ADC;
     
     cnpnz_vmc.ptrControlReference = &ctrl_v_reference;
-    cnpnz_vmc.ptrSource = &ADC_VOUT_ADCBUF;
+    cnpnz_vmc.ptrSource = &VOUT_FB_ADCBUF;
     cnpnz_vmc.ptrTarget = &CVRT_PH1_PDC;
     cnpnz_vmc.ptrADCTriggerRegister = &ADC_VOUT_TRIG;
-    cnpnz_vmc.ADCTriggerOffset = ADC_TRIGGER_OFFSET;
+    cnpnz_vmc.ADCTriggerOffset = (ADC_TRIGGER_OFFSET + (SWITCHING_PERIOD_NOM >> 1));
     cnpnz_vmc.MinOutput = DUTY_RATIO_MIN_REG;
     cnpnz_vmc.MaxOutput = DUTY_RATIO_MAX_REG;
     

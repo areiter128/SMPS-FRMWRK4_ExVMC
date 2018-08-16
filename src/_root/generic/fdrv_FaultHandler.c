@@ -245,7 +245,8 @@ inline uint16_t SetFaultCondition(volatile FAULT_OBJECT_t* fltobj)
  * ***********************************************************************************************/
 inline uint16_t CheckCPUResetRootCause(void)
 {
-    volatile uint16_t fres = 0;
+    volatile uint16_t fres = 1;
+/*
     
     // TODO: return value needs to be properly defined and made accessible and fault handling 
     // routines need to be installed
@@ -253,27 +254,27 @@ inline uint16_t CheckCPUResetRootCause(void)
     traplog.rcon_reg.reg_block = RCON; // Copy contents of CPU RESET register into monitoring buffer
     
     if (traplog.rcon_reg.reg_block & FLT_CPU_RESET_CLASS_CRITICAL) {
-        /* TODO: handle exceptions after restart */
+        // TODO: handle exceptions after restart 
         Nop();    
         Nop();   
         
         fres = 0;
     }
     else if (traplog.rcon_reg.reg_block & FLT_CPU_RESET_CLASS_WARNING) {
-        /* TODO: handle exceptions after restart */
+        // TODO: handle exceptions after restart 
         Nop();    
         Nop();    
 
         fres = 2;
     }
     else {
-        /* TODO: handle exceptions after restart */
+        // TODO: handle exceptions after restart 
         Nop();    
         Nop();    
 
         fres = 1;
     }
-
+*/
     return(fres);
 }
 
@@ -459,6 +460,7 @@ uint16_t exec_FaultCheckAll(void)
 
     for (i=0; i<fltobj_list_size; i++)
     {
+        
         if(fault_object_list[i]->status.flags.fltchken)
         {
             fres &= CheckFaultCondition(fault_object_list[i]);
@@ -498,6 +500,7 @@ uint16_t exec_FaultCheckAll(void)
  * Any fault action triggered by any of the fault objects, will be executed immediately after every 
  * individual fault object check.
  * ***********************************************************************************************/
+/*
 uint16_t exec_FaultCheckSequential(void)
 {
     volatile uint16_t fres = 0;
@@ -512,4 +515,5 @@ uint16_t exec_FaultCheckSequential(void)
     return(fres);
 
 }
+*/
 /*************************************************************************************************/

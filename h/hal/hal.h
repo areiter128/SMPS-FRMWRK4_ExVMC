@@ -39,6 +39,7 @@
 #include "syscfg_limits.h"
 #include "syscfg_options.h"
 #include "syscfg_scaling.h"
+#include "syscfg_startup.h"
 
 #include "init_gpio.h"
 #include "init_irq.h"
@@ -46,6 +47,7 @@
 #include "init_timer.h"
 #include "init_fosc.h"
 #include "init_swdt.h"
+#include "init_hsacmp.h"
 #include "init_hsadc.h"
 #include "init_hspwm.h"
 #include "init_control.h"

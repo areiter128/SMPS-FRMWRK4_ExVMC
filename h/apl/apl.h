@@ -35,10 +35,14 @@
 #include <xc.h> // include processor files - each processor file is guarded.  
 #include <stdint.h>
 
-#include "globals.h"
-
-#include "task_FaultHandler.h"
 #include "task_ConverterStateControl.h"
+#include "task_FaultHandler.h"
+#include "task_Idle.h"
+#include "task_LED_Green.h"
+#include "task_LED_Red.h"
+#include "task_OnPIM_LED.h"
+#include "task_SoftStart.h"
+#include "task_Switch.h"
 
 /* ***********************************************************************************************
  * PROTOTYPES

@@ -56,14 +56,6 @@
  * ***********************************************************************************************/
 #include "apl.h"
 
-#include "task_FaultHandler.h"
-
-#include "task_Idle.h"
-#include "task_OnPIM_LED.h"
-#include "task_LED_Green.h"
-#include "task_LED_Red.h"
-#include "task_Switch.h"
-
 /* *****************************************************************************************************
  * Prototypes of external function used in task lists
  * *****************************************************************************************************
@@ -135,6 +127,8 @@ typedef enum {
     // System function / Special function initialization
     TASK_INIT_HSADC, // Task initializing the high speed ADC module
     TASK_LAUNCH_HSADC, // Task launching the pre-configured high speed ADC module
+    TASK_INIT_HSACMP, // Task initializing the high speed analog comparator module
+    TASK_LAUNCH_HSACMP, // Task launching the pre-configured high speed analog comparator module
     TASK_INIT_HSPWM, // Task initializing the high speed PWM module
     TASK_LAUNCH_HSPWM, // Task launching the pre-configured high speed PWM module
     TASK_INIT_SOFT_START, // Task initializing the soft-start procedure

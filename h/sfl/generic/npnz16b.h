@@ -1,5 +1,5 @@
 /* ***************************************************************************************
- * Digital Control Loop Designer Version 0.9.0.26.
+ * z-Domain Control Loop Designer Version 0.9.0.31.
  * ***************************************************************************************
  * Generic library header for z-domain compensation filter assembly functions
  * ***************************************************************************************/

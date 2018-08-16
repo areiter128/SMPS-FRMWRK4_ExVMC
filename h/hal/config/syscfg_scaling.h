@@ -33,6 +33,7 @@
 #include <dsp.h>
 #include <math.h>
 
+#include "syscfg_options.h"
 #include "mcal.h"
 
 // DSC bias voltage
@@ -45,7 +46,8 @@
 
 #define VIN_DIVIDER_R1          15400       // Resitance of upper voltage divider resistor in Ohm
 #define VIN_DIVIDER_R2          2200        // Resitance of lower voltage divider resistor in Ohm
-#define VIN_DIVIDER_RATIO   (float)(((float)VIN_DIVIDER_R2) / ((float)(VIN_DIVIDER_R1 + VIN_DIVIDER_R2)))
+#define VIN_DIVIDER_RATIO   (float)((float)VIN_AMP_GAIN * ((float)VIN_DIVIDER_R2) / ((float)(VIN_DIVIDER_R1 + VIN_DIVIDER_R2)))
+#define VIN_AMP_GAIN            1.0         // Gain factor or additional op-amp (set to 1.0 if none is used)
 #define VIN_DIVIDER_RATIO_INV  (float)( 1.0 / VIN_DIVIDER_RATIO)
 
 #define VIN_SENSE_OFFSET       0.000        // Input voltage sense offset
@@ -53,7 +55,8 @@
 
 #define VOUT_DIVIDER_R1         4700        // Resitance of upper voltage divider resistor in Ohm
 #define VOUT_DIVIDER_R2         4700        // Resitance of lower voltage divider resistor in Ohm
-#define VOUT_DIVIDER_RATIO  (float)(((float)VOUT_DIVIDER_R2) / ((float)(VOUT_DIVIDER_R1 + VOUT_DIVIDER_R2)))
+#define VOUT_AMP_GAIN           1.0         // Gain factor or additional op-amp (set to 1.0 if none is used)
+#define VOUT_DIVIDER_RATIO  (float)((float)VOUT_AMP_GAIN * ((float)VOUT_DIVIDER_R2) / ((float)(VOUT_DIVIDER_R1 + VOUT_DIVIDER_R2)))
 #define VOUT_DIVIDER_RATIO_INV  (float)( 1.0 / VOUT_DIVIDER_RATIO)
 
 #define VOUT_SENSE_OFFSET       0.000       // Output voltage sense offset
@@ -63,35 +66,40 @@
 #define VIN2VOUT_NORMALIZATION  0x7fff  //(int16_t)(ceiling(log(VOUT_DIVIDER_RATIO/VIN_DIVIDER_RATIO)))
 #define VIN2VOUT_NORM_BSFT      2
 
-#if (CS_TYPE == CS_TYPE_CT)
+#if defined ( __CS_TYPE_CT__ )
+
 // Defines for Current Sense Transformer feedback
-#define CT_WINDING_RATIO        100.0       // CT winding ratio 1:xxx
-#define CT_BURDEN_RESISTANCE     20.0       // Current Sense Transformer burden resistance in Ohm
-#define CS_BI_DIRECTIONAL         0         // Current sens in uni-directional
-#define CS_OFFSET                 0.000     // Current Sense zero offset 
+  #define CT_WINDING_RATIO        100.0       // CT winding ratio 1:xxx
+  #define CT_BURDEN_RESISTANCE     20.0       // Current Sense Transformer burden resistance in Ohm
+  #define CS_BI_DIRECTIONAL         0         // Current sens in uni-directional
+  #define CS_OFFSET                 0.000     // Current Sense zero offset 
 
-#define IFB_SCALER_RATIO_VI     (float)(((float)(CT_BURDEN_RESISTANCE))/((float)(CT_WINDING_RATIO))) // Current feeback ratio in [V/A]
-#define IFB_SCALER_RATIO_IV     (float)(1.0/((float)(IFB_SCALER_RATIO_VI))  // Current feeback ratio in [A/V]
-#define IFB_SCALER_RATIO_TICKS  (float)(IFB_SCALER_RATIO_VI * ADC_SCALER)   // Current feeback ratio in [Ticks/A]
-#define IFB_SCALER_OFFSET       (uint16_t)(CS_OFFSET * ADC_SCALER)          // Current sense offset ADC ticks
+  #define IFB_SCALER_RATIO_VI     (float)(((float)(CT_BURDEN_RESISTANCE))/((float)(CT_WINDING_RATIO))) // Current feeback ratio in [V/A]
+  #define IFB_SCALER_RATIO_IV     (float)(1.0/((float)(IFB_SCALER_RATIO_VI))  // Current feeback ratio in [A/V]
+  #define IFB_SCALER_RATIO_TICKS  (float)(IFB_SCALER_RATIO_VI * ADC_SCALER)   // Current feeback ratio in [Ticks/A]
 
-#elif (CS_TYPE == CS_TYPE_SHUNT_AMP)
+  #define IFB_SCALER_OFFSET_V     (float)(CS_OFFSET)          // Current sense offset in [V]
+  #define IFB_SCALER_OFFSET_TICKS (uint16_t)((float)CS_OFFSET * (float)ADC_SCALER)          // Current sense offset in ADC ticks
+  
+#elif defined ( __CS_TYPE_SHUNT_AMP__ )
 
-#define CS_GAIN                 20          // Current sense gain
-#define CS_SHUNT_RESISTANCE     1e-3        // Current sense resistor value
-#define CS_BI_DIRECTIONAL       1           // Current sens in uni-directional
-#define CS_OFFSET               1.650       // Current sense zero offset 
+  #define CS_AMP_GAIN             20.000      // Current sense amplifier gain in [V/V]
+  #define CS_SHUNT_RESISTANCE     10e-3       // Current sense resistor value in [Ohm]
+  #define CS_BI_DIRECTIONAL       0           // Current sens is (0=uni-directional, 1=bi-directional)
+  #define CS_OFFSET               1.650       // Current sense zero offset 
 
-#define IFB_SCALER_RATIO_VI     (float)(((float)(CS_SHUNT_RESISTANCE))*((float)(CS_GAIN))) // Current feeback ratio in [V/A]
-#define IFB_SCALER_RATIO_IV     (float)(1.0/((float)(IFB_SCALER_RATIO_VI))  // Current feeback ratio in [A/V]
-#define IFB_SCALER_RATIO_TICKS  (float)(IFB_SCALER_RATIO_VI * ADC_SCALER)   // Current feeback ratio in [Ticks/A]
-#define IFB_SCALER_OFFSET       (uint16_t)(CS_OFFSET * ADC_SCALER)          // Current sense offset ADC ticks
+  #define IFB_SCALER_RATIO_VI     (float)((float)CS_SHUNT_RESISTANCE * (float)CS_AMP_GAIN) // Current feeback ratio in [V/A]
+  #define IFB_SCALER_RATIO_IV     (float)(1.0/((float)IFB_SCALER_RATIO_VI))  // Current feeback ratio in [A/V]
+  #define IFB_SCALER_RATIO_TICKS  (float)((float)IFB_SCALER_RATIO_VI * (float)ADC_SCALER)   // Current feeback ratio in [Ticks/A]
+
+  #define IFB_SCALER_OFFSET_V     (float)((float)CS_OFFSET) // Current sense offset in [V]]
+  #define IFB_SCALER_OFFSET_TICKS (uint16_t)((float)CS_OFFSET * (float)ADC_SCALER)          // Current sense offset ADC ticks
 
 #endif
 
 
 // System Settings
-#define SWITCHING_FREQUENCY		350000      // Nominal switching frequency per converter phase in [Hz]
+#define SWITCHING_FREQUENCY		400000      // Nominal switching frequency per converter phase in [Hz]
 #define PWM_DEAD_TIME_RISING	50e-9       // Nominal dead time at the leading edge in [ns]
 #define PWM_DEAD_TIME_FALLING	70e-9       // Nominal dead time at the falling edge in [ns]
 #define LEB_PERIOD_LE			150e-9		// Leading Edge Blanking period in nanoseconds

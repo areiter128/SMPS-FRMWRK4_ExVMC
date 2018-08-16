@@ -33,6 +33,8 @@
 
 #include "globals.h"
 
+volatile uint16_t gain = 1;
+
 #ifdef _PSEMIF
 /***************************************************************************
 ISR: 		PWM Special Event Match Interrupt
@@ -41,9 +43,17 @@ Description:
 void __attribute__((__interrupt__,no_auto_psv, context)) _PWMSpEventMatchInterrupt(void)
 {	
 
+//    volatile uint16_t adc_read = 0;
+//    volatile int16_t  error = 0;
+//    
+//    adc_read = VOUT_FB_ADCBUF;
+//    error = (ctrl_v_reference - adc_read);
+//    PDC1 = gain * error;
+    
 #if(TRIGGER_OPTION == TRG_OPTION_PWM)
     Nop();
     cnpnz_vmc_Update(&cnpnz_vmc);   // Call voltage control loop controller
+
 #endif
     
 	IFS3bits.PSEMIF = 0; // clear interrupt flag

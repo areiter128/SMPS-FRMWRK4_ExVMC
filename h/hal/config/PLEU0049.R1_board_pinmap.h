@@ -96,9 +96,43 @@
 #define PWML_INIT       {PWML_WR = 0; PWML_TRIS = 0;}
 
 #define VOUT_FB_PIN     TP14_ADC_IN
+#define VOUT_FB_ADCORE  TP14_ADC_CORE
+#define VOUT_FB_ADCBUF  TP14_ADC_BUFFER
+#define VOUT_FB_ANSEL   TP14_ANSEL
+#define VOUT_FB_IF      TP14_IF
+#define VOUT_FB_IE      TP14_IE
+#define VOUT_FB_IP      TP14_IP
+//#define VOUT_FB_ADCMPxIF TP14_ADCMPxIF
+//#define VOUT_FB_ADCMPxIE TP14_ADCMPxIF
+//#define VOUT_FB_ADCMPxIP TP14_ADCMPxIF
+
 #define VIN_FB_PIN      TP10_ADC_IN
+#define VIN_FB_ADCORE   TP10_ADC_CORE
+#define VIN_FB_ADCBUF   TP10_ADC_BUFFER
+#define VIN_FB_ANSEL    TP10_ANSEL
+#define VIN_FB_IF       TP10_IF
+#define VIN_FB_IE       TP10_IE
+#define VIN_FB_IP       TP10_IP
+//#define VIN_FB_ADCMPxIF TP10_ADCMPxIF
+//#define VIN_FB_ADCMPxIE TP10_ADCMPxIF
+//#define VIN_FB_ADCMPxIP TP10_ADCMPxIF
+
 #define IL_FB_PIN       TP12_ADC_IN
+#define IL_FB_ADCORE    TP12_ADC_CORE
+#define IL_FB_ADCBUF    TP12_ADC_BUFFER
+#define IL_FB_ANSEL     TP12_ANSEL
+#define IL_FB_IF        TP12_IF
+#define IL_FB_IE        TP12_IE
+#define IL_FB_IP        TP12_IP
     
+#define TEMP_FB_PIN     TP18_ADC_IN
+#define TEMP_FB_ADCORE  TP18_ADC_CORE
+#define TEMP_FB_ADCBUF  TP18_ADC_BUFFER
+#define TEMP_FB_ANSEL   TP18_ANSEL
+#define TEMP_FB_IF      TP18_IF
+#define TEMP_FB_IE      TP18_IE
+#define TEMP_FB_IP      TP18_IP
+
 #endif	/* HAL_BOARD_PINMAP_H */
 
 // EOF

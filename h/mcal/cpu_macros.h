@@ -41,7 +41,10 @@
 #define PWRSAV_IDLE		asm volatile ("PWRSAV #1\n")
 #define PWRSAV_SLEEP	asm volatile ("PWRSAV #0\n")
 #define CPU_RESET		asm volatile ("RESET\n")
-//#define ALTWREG_SWAP(x)    asm volatile ( "PUSH.W W0 \n CTXTSWP #" + x + "POP.W W0 \n")
+
+#ifdef (CTXTSTAT)
+  #define ALTWREG_SWAP(x)    asm volatile ( "PUSH.W W0 \n CTXTSWP #" + x + "POP.W W0 \n")
+#endif
 
 #endif  /* _APPLICATION_LAYER_DEFINES_H_ */
 

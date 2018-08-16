@@ -32,12 +32,14 @@
 
 #include <xc.h>
 #include <stdint.h>
-    
+
+#include "globals.h"
+
 /* ***********************************************************************************************
  * PROTOTYPES
  * ***********************************************************************************************/
-extern uint16_t init_hsacmp(void);
-extern uint16_t launch_hsacmp(void);
+extern volatile uint16_t init_hsacmp(void);
+extern volatile uint16_t exec_launch_hsacmp(void);
 
 #endif	/* _HARDWARE_ABSTRACTION_LAYER_INITIALIZE_HIGH_SPEED_ANALOG_COMPARATOR_H_ */
 

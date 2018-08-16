@@ -50,13 +50,13 @@
  * 
  * *****************************************************************************************************/
 
-int gsadc_module_power_up(void)
+uint16_t gsadc_module_power_up(void)
 {
         #if defined (_ABGMD)
         _ABGMD = 0;         // Turn on power to analog bandgap reference
         #endif
         _ADCMD = 0; 		// Turn on power to ADC module
-        return(1);
+        return(1 - _ADCMD);
 
 } 
 
@@ -72,10 +72,10 @@ int gsadc_module_power_up(void)
  * 
  * *****************************************************************************************************/
 
-int gsadc_module_power_down(void)
+uint16_t gsadc_module_power_down(void)
 {
         _ADCMD = 1; 		// Turn on power to PWM channel #1
-        return(1);
+        return(_ADCMD);
 
 } 
 
@@ -104,11 +104,12 @@ int gsadc_module_power_down(void)
  * are set here.
  * ***********************************************************************************************/
 
-int gsadc_init_adc(uint16_t regADCON1L, uint16_t regADCON1H, uint16_t regADCON2L, 
-                   uint16_t regADCON2H, uint16_t regADCON3L, uint16_t regADCON3H, 
-                   uint16_t regADCON4L, uint16_t regADCON4H, uint16_t regADCON5L, 
-                   uint16_t regADCON5H)
+uint16_t gsadc_init_adc(uint16_t regADCON1L, uint16_t regADCON1H, uint16_t regADCON2L, 
+                        uint16_t regADCON2H, uint16_t regADCON3L, uint16_t regADCON3H, 
+                        uint16_t regADCON4L, uint16_t regADCON4H, uint16_t regADCON5L, 
+                        uint16_t regADCON5H)
 {
+    volatile uint16_t fres = 1;
     
 	// Reset all ADC configuration registers to defaults
 
@@ -139,7 +140,7 @@ int gsadc_init_adc(uint16_t regADCON1L, uint16_t regADCON1H, uint16_t regADCON2L
     ADCON5H = (regADCON5H & REG_ADCON5H_VALID_DATA_MSK);
 
     // Return 1=success, 0=failure
-	return(1);
+	return(fres);
 
 }
 
@@ -157,21 +158,54 @@ int gsadc_init_adc(uint16_t regADCON1L, uint16_t regADCON1H, uint16_t regADCON2L
  * dividers are set here.
  * ***********************************************************************************************/
 
-int gsadc_init_adc_core(uint16_t index, uint16_t regADCORExL, uint16_t regADCORExH)
+uint16_t gsadc_init_adc_core(uint16_t index, uint16_t regADCORExL, uint16_t regADCORExH)
 {
 
 volatile uint16_t *regptr;
 volatile uint16_t reg_offset=0;
+volatile uint16_t reg_buf=0;
 
 	if (index >= ADC_CORE_COUNT) return(0);
 
-    reg_offset = ( index * ADC_ADCORE_REG_OFFSET );
-    regptr = (volatile uint16_t *)&ADCORE0L + reg_offset;
-    *regptr = (regADCORExL & REG_ADCORExL_VALID_DATA_MSK);
+    if(index != ADC_SHARED_CORE_INDEX)
+    {
+        // dedicated cores haver their individual configuration 
+        // registers ADCORExL and ADCORExH
 
-    reg_offset = ( index * ADC_ADCORE_REG_OFFSET );
-    regptr = (volatile uint16_t *)&ADCORE0H + reg_offset;
-    *regptr = (regADCORExH & REG_ADCORExH_VALID_DATA_MSK);
+        reg_offset = ( index * ADC_ADCORE_REG_OFFSET );
+        regptr = (volatile uint16_t *)&ADCORE0L + reg_offset;
+        reg_buf = (regADCORExL & REG_ADCORExL_VALID_DATA_MSK);
+        if((*regptr & REG_ADCORExL_VALID_DATA_MSK) != reg_buf)
+        { *regptr = reg_buf; }
+
+        regptr = (volatile uint16_t *)&ADCORE0H + reg_offset;
+        reg_buf = (regADCORExH & REG_ADCORExH_VALID_DATA_MSK);
+        if((*regptr & REG_ADCORExH_VALID_DATA_MSK) != reg_buf)
+        { *regptr = reg_buf; }
+
+    }
+    else
+    {
+    
+        // the configuration of the shared core is incorporated into 
+        // the generic registers ADCON2L and ADCON2H
+        // Unfortunately register assignments of xxxH and xxxL are reversed
+        // for shared and dedicated cores....
+        
+        regptr = (volatile uint16_t *)&ADCON2L;
+        reg_buf = (*regptr & REG_ADCON2L_REF_CFG_MASK);  // Read bandgap reference register bits
+        reg_buf |= (regADCORExH & REG_ADCON2L_SHRADC_CFG_MASK);
+        if((*regptr & REG_ADCON2L_SHRADC_CFG_MASK) != (reg_buf & REG_ADCON2L_SHRADC_CFG_MASK))
+        { *regptr = reg_buf; }
+
+        
+        regptr = (volatile uint16_t *)&ADCON2H;
+        reg_buf = (*regptr & REG_ADCON2H_REF_CFG_MASK);  // Read bandgap reference register bits
+        reg_buf |= (regADCORExL & REG_ADCON2H_SHRADC_CFG_MASK);
+        if((*regptr & REG_ADCON2H_SHRADC_CFG_MASK) != (reg_buf & REG_ADCON2H_SHRADC_CFG_MASK))
+        { *regptr = reg_buf; }
+    
+    }
 
     return(1);
     
@@ -189,11 +223,25 @@ volatile uint16_t reg_offset=0;
  * enable-instruction is followed by a short delay loop.
  * ***********************************************************************************************/
 
-int gsadc_module_enable(void)
+uint16_t gsadc_module_enable(void)
 {
-
+/*
+    volatile uint16_t dummy = 0, i = 0;
+    volatile uint16_t *regptr;
+    volatile uint16_t reg_offset=0;
+    
+    for (i=0; i<ADC_ANINPUT_COUNT; i++)
+    {
+        reg_offset = (i * ADC_ADCBUF_REG_OFFSET);   // Select register based on index
+        regptr = (volatile uint16_t *)&ADCBUF0 + reg_offset;
+        dummy = *regptr;
+    }
+*/    
 	ADCON1Lbits.ADON	= ADC_ON; 	// Enable ADC module
-
+    Nop();
+    Nop();
+    Nop();
+    
 	return(ADCON1Lbits.ADON);
 	 
 }
@@ -210,12 +258,12 @@ int gsadc_module_enable(void)
  * at certain pins will be lost as every pin will be re-configured as GPIO.
  * ***********************************************************************************************/
 
-int gsadc_module_disable(void)
+uint16_t gsadc_module_disable(void)
 {
 
 	ADCON1Lbits.ADON = ADC_OFF;			// Disable ADC module 
 
-	return(1);
+	return(1 - ADCON1Lbits.ADON);
 
 }
 
@@ -231,7 +279,7 @@ int gsadc_module_disable(void)
  * become GPIOs.
  * ***********************************************************************************************/
 
-int gsadc_reset(void)
+uint16_t gsadc_reset(void)
 {
 	// Reset all ADC configuration registers to defaults
 
@@ -265,7 +313,7 @@ int gsadc_reset(void)
  * calibration of the given ADC core.
  * ***********************************************************************************************/
 
-int gsadc_calibrate_adc_core(uint16_t index, uint16_t calib_mode)
+uint16_t gsadc_calibrate_adc_core(uint16_t index, uint16_t calib_mode)
 {
 	volatile uint16_t timeout=0;
     volatile uint16_t *regptr;
@@ -279,49 +327,56 @@ int gsadc_calibrate_adc_core(uint16_t index, uint16_t calib_mode)
     // differentiate between odd and even indices due to shared registers
     if (index == ADC_SHARED_CORE_INDEX) {
 
-        regptr = (volatile uint16_t *)&ADCAL1H + reg_offset;
+        regptr = (volatile uint16_t *)&ADCAL1H;
 
-        *regptr |= REG_ADCALx_HB_CALxEN_SET_MSK;  // Enable calibration
-        *regptr &= REG_ADCALx_HB_CALxSKIP_CLR_MSK;  // Initiate calibration
-        *regptr &= ((calib_mode << 8) | REG_ADCALx_HB_CALxDIFF_CLR_MSK);  // Set calibration mode (differential or single ended))
-        *regptr |= REG_ADCALx_HB_CALxRUN_SET_MSK;  // Initiate calibration
+        if ((*regptr & REG_ADCALx_HB_CALxRDY_SET_MSK) == 0)
+        {
+            *regptr |= REG_ADCALx_HB_CALxEN_SET_MSK;  // Enable calibration
+            *regptr &= REG_ADCALx_HB_CALxSKIP_CLR_MSK;  // Initiate calibration
+            *regptr &= ((calib_mode << 8) | REG_ADCALx_HB_CALxDIFF_CLR_MSK);  // Set calibration mode (differential or single ended))
+            *regptr |= REG_ADCALx_HB_CALxRUN_SET_MSK;  // Initiate calibration
 
-        // Wait until ADC core calibration has completed
-        while( ((*regptr & REG_ADCALx_HB_CALxRDY_SET_MSK) == 0) && (timeout++<5000));
-        if((*regptr & REG_ADCALx_HB_CALxRDY_SET_MSK) == 0) return(0);  // If core doesn't enter READY state, return failure
-        
-        *regptr &= REG_ADCALx_HB_CALxEN_CLR_MSK;  // Disable calibration
+            // Wait until ADC core calibration has completed
+            while( ((*regptr & REG_ADCALx_HB_CALxRDY_SET_MSK) == 0) && (timeout++<5000));
+            if((*regptr & REG_ADCALx_HB_CALxRDY_SET_MSK) == 0) return(0);  // If core doesn't enter READY state, return failure
+
+            *regptr &= REG_ADCALx_HB_CALxEN_CLR_MSK;  // Disable calibration
+        }
         
     }
     else if(index & 0x0001) {
         // Odd index (1, 3, 5, ...) and shared ADC bits are located in the high-byte of the register word
         
-        *regptr |= REG_ADCALx_HB_CALxEN_SET_MSK;  // Enable calibration
-        *regptr &= REG_ADCALx_HB_CALxSKIP_CLR_MSK;  // Initiate calibration
-        *regptr &= ((calib_mode << 8) | REG_ADCALx_HB_CALxDIFF_CLR_MSK);  // Set calibration mode (differential or single ended))
-        *regptr |= REG_ADCALx_HB_CALxRUN_SET_MSK;  // Initiate calibration
+        if ((*regptr & REG_ADCALx_HB_CALxRDY_SET_MSK) == 0)
+        {
+            *regptr |= REG_ADCALx_HB_CALxEN_SET_MSK;  // Enable calibration
+            *regptr &= REG_ADCALx_HB_CALxSKIP_CLR_MSK;  // Initiate calibration
+            *regptr &= ((calib_mode << 8) | REG_ADCALx_HB_CALxDIFF_CLR_MSK);  // Set calibration mode (differential or single ended))
+            *regptr |= REG_ADCALx_HB_CALxRUN_SET_MSK;  // Initiate calibration
 
-        // Wait until ADC core calibration has completed
-        while( ((*regptr & REG_ADCALx_HB_CALxRDY_SET_MSK) == 0) && (timeout++<5000));
-        if((*regptr & REG_ADCALx_HB_CALxRDY_SET_MSK) == 0) return(0);  // If core doesn't enter READY state, return failure
-        
-        *regptr &= REG_ADCALx_HB_CALxEN_CLR_MSK;  // Disable calibration
+            // Wait until ADC core calibration has completed
+            while( ((*regptr & REG_ADCALx_HB_CALxRDY_SET_MSK) == 0) && (timeout++<5000));
+            if((*regptr & REG_ADCALx_HB_CALxRDY_SET_MSK) == 0) return(0);  // If core doesn't enter READY state, return failure
 
+            *regptr &= REG_ADCALx_HB_CALxEN_CLR_MSK;  // Disable calibration
+        }
     }
     else{
         // Even index (0, 2, 4, ...) bits are located in the low-byte of the register word
         
-        *regptr |= REG_ADCALx_LB_CALxEN_SET_MSK;  // Enable calibration
-        *regptr &= REG_ADCALx_LB_CALxSKIP_CLR_MSK;  // Initiate calibration
-        *regptr &= (calib_mode | REG_ADCALx_LB_CALxDIFF_CLR_MSK);  // Set calibration mode (differential or single ended))
-        *regptr |= REG_ADCALx_LB_CALxRUN_SET_MSK;  // Initiate calibration
+        if ((*regptr & REG_ADCALx_LB_CALxRDY_SET_MSK) == 0)
+        {
+            *regptr |= REG_ADCALx_LB_CALxEN_SET_MSK;  // Enable calibration
+            *regptr &= REG_ADCALx_LB_CALxSKIP_CLR_MSK;  // Initiate calibration
+            *regptr &= (calib_mode | REG_ADCALx_LB_CALxDIFF_CLR_MSK);  // Set calibration mode (differential or single ended))
+            *regptr |= REG_ADCALx_LB_CALxRUN_SET_MSK;  // Initiate calibration
 
-        // Wait until ADC core calibration has completed
-        while( ((*regptr & REG_ADCALx_LB_CALxRDY_SET_MSK) == 0) && (timeout++<5000));
-        if((*regptr & REG_ADCALx_LB_CALxRDY_SET_MSK) == 0) return(0);  // If core doesn't enter READY state, return failure
-        
-        *regptr &= REG_ADCALx_LB_CALxEN_CLR_MSK;  // Disable calibration
+            // Wait until ADC core calibration has completed
+            while( ((*regptr & REG_ADCALx_LB_CALxRDY_SET_MSK) == 0) && (timeout++<5000));
+            if((*regptr & REG_ADCALx_LB_CALxRDY_SET_MSK) == 0) return(0);  // If core doesn't enter READY state, return failure
 
+            *regptr &= REG_ADCALx_LB_CALxEN_CLR_MSK;  // Disable calibration
+        }
     }
 	
 	return(1);
@@ -341,7 +396,7 @@ int gsadc_calibrate_adc_core(uint16_t index, uint16_t calib_mode)
  * calibration of the given ADC core.
  * ***********************************************************************************************/
 
-int gsadc_power_on_adc_core(uint16_t index)
+uint16_t gsadc_power_on_adc_core(uint16_t index)
 {
 	volatile uint16_t timeout=0;
     volatile uint16_t *regptr;
@@ -353,17 +408,19 @@ int gsadc_power_on_adc_core(uint16_t index)
     
     // Power on ADC core x 
     if(index == ADC_SHARED_CORE_INDEX) { 
-      // Shared CorePower Setting is located in Bit #7, while all 
+      // Shared Core Power Setting is located in Bit #7, while all 
       // others are enumerated on Bits #0, #1, etc
         reg_buf  = (REG_ADCON5L_SHRPWR_ON & REG_ADCON5L_VALID_DATA_MSK);
-        *regptr |= reg_buf;
         
     }
     else {
       // Dedicated core power on enable bits are set based on the index/bit position 
         reg_buf  = ((0x0001 << index) & REG_ADCON5L_VALID_DATA_MSK);
-        *regptr |= reg_buf;
     }
+
+    if(!(*regptr & reg_buf))   // if bit hasn't been set yet...
+    { *regptr |= reg_buf; } // write to register
+
     
     reg_buf <<= 8;   // Shift selected bit up into the high-word of ADCON5L for the status check
     
@@ -380,13 +437,15 @@ int gsadc_power_on_adc_core(uint16_t index)
       // Shared CorePower Setting is located in Bit #7, while all 
       // others are enumerated on Bits #0, #1, etc
         reg_buf  = (REG_ADCON3H_SHREN_ON & REG_ADCON3H_VALID_DATA_MSK);
-        *regptr |= reg_buf;
         
     }
     else {
       // Dedicated core power on enable bits are set based on the index/bit position 
-        *regptr |= ((0x0001 << index) & REG_ADCON3H_VALID_DATA_MSK);
+        reg_buf  = ((0x0001 << index) & REG_ADCON3H_VALID_DATA_MSK);
     }
+
+    if(!(*regptr & reg_buf))   // if bit hasn't been set yet...
+    { *regptr |= reg_buf; } // write to register
     
 	return(1);
 	
@@ -403,7 +462,7 @@ int gsadc_power_on_adc_core(uint16_t index)
  * 
  * ***********************************************************************************************/
 
-int gsadc_set_adc_input_trigger_source(uint16_t index, uint16_t trigger_source)
+uint16_t gsadc_set_adc_input_trigger_source(uint16_t index, uint16_t trigger_source)
 {
 
     volatile uint16_t *regptr;
@@ -442,7 +501,7 @@ int gsadc_set_adc_input_trigger_source(uint16_t index, uint16_t trigger_source)
  * Those interrupts can be "pulled-in" to compensate the interrupt latency of the controller
  * ***********************************************************************************************/
 
-int gsadc_set_adc_core_interrupt(uint16_t index, uint16_t interrupt_enable, uint16_t early_interrupt_enable)
+uint16_t gsadc_set_adc_core_interrupt(uint16_t index, uint16_t interrupt_enable, uint16_t early_interrupt_enable)
 {
     volatile uint16_t *regptr;
     
@@ -497,7 +556,7 @@ int gsadc_set_adc_core_interrupt(uint16_t index, uint16_t interrupt_enable, uint
  * This routine allows configuration of the comparator, the input source and its thresholds.
  * ***********************************************************************************************/
 
-int gsadc_init_adc_comp(uint16_t index, uint16_t input_no, uint16_t regADCMPxCON, uint16_t regADCMPxLO, uint16_t regADCMPxHI)
+uint16_t gsadc_init_adc_comp(uint16_t index, uint16_t input_no, uint16_t regADCMPxCON, uint16_t regADCMPxLO, uint16_t regADCMPxHI)
 {
 
 volatile uint16_t *regptr;

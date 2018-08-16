@@ -39,7 +39,7 @@ uint16_t init_oscillator(void) {
 uint16_t init_aux_oscillator(void) {
 
     volatile uint16_t fres = 0;
-    AUXOSC_CONFIG_t auxosc;
+    volatile AUXOSC_CONFIG_t auxosc;
     
     #if defined (__P33SMPS_CH2__) || defined (__P33SMPS_CH5__)
     auxosc.clock_source = OSC_AUX_CLOCK_FRC;
