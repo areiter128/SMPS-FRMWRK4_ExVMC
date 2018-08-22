@@ -42,7 +42,7 @@
 // Comparator #1 used for over current protection
 
 #define CVRT_OCP_CMP_IDX		1					// Analog inductor current comparator
-#define CVRT_OCP_CMP_INPUT      REG_INSEL_CMPxB		// Analog comparator input selection1
+#define CVRT_OCP_CMP_INPUT      REG_INSEL_CMPxA		// Analog comparator input selection1
 #define CVRT_OCP_CMPDAC         CMP1DAC         	// D/A converter of the analog comparator
 #define CVRT_OCP_CMPDAC_IDX     1                	// D/A converter index of the analog comparator
 #define CVRT_OCP_CMP_MIN        0x0000              // Minimum value of the 12-bit DAC

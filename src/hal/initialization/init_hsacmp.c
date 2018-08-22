@@ -64,12 +64,14 @@ volatile uint16_t init_hsacmp(void)
 	/* Initialize comparators for phase #1 and #2   */
 	fres &= gscmp_init(CVRT_OCP_CMP_IDX, CVRT_OCP_CMP_CFG, CVRT_OCP_CMP_MAX);
 	fres &= gscmp_select_input(CVRT_OCP_CMP_IDX, CVRT_OCP_CMP_INPUT);			// Index of the comparator input used
-	fres &= gscmp_set_threshold(CVRT_OCP_CMP_IDX, CVRT_OCP_CMP_MAX);          // DAC threshold
+	fres &= gscmp_set_threshold(CVRT_OCP_CMP_IDX, CVRT_OCP_CMP_NOM);          // DAC threshold
 
+    /*
 	fres &= gscmp_init(CVRT_OVP_CMP_IDX, CVRT_OVP_CMP_CFG, CVRT_OVP_CMP_MAX);
 	fres &= gscmp_select_input(CVRT_OVP_CMP_IDX, CVRT_OVP_CMP_INPUT);			// Index of the comparator input used
 	fres &= gscmp_set_threshold(CVRT_OVP_CMP_IDX, CVRT_OVP_CMP_MAX);          // DAC threshold
-
+    */
+    
 	return(fres);
 
 }

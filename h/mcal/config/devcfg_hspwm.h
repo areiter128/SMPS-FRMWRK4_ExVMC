@@ -33,6 +33,8 @@
 #include <xc.h> // include processor files - each processor file is guarded.  
 #include <stdint.h>
 
+#include "mcal.h"
+
 // Basic PWM Settings
 #define SWITCHING_FRQ_TIME_BASE		1		// Nominal switching frequency driving converter stage
 
@@ -44,7 +46,6 @@
 
 // DC/DC Converter PWM Outputs
 #define CVRT_PH1_PWM_IDX			1		// Index of the PWM channel #1 used to drive the bus converter
-
 #define PWM_MPH_PHASE_COUNT         1       // Number of phases in a multiphase-architecture
 
 // DC/DC Converter PWM Interrupts
@@ -102,9 +103,9 @@
 #define CVRT_PH1_PWML_RD		PORTAbits.RA3		// Port register for direct control of output PWM1L (read mode)
 
 #define CVRT_PH1_FCLCONx_CFG   (REG_IFLTMOD_NORMAL | \
-                                REG_CLSRC_NONE | \
+                                REG_CLSRC_ACMP1 | \
                                 REG_CLPOL_ACTIVE_HIGH | \
-                                REG_CLMOD_OFF | \
+                                REG_CLMOD_ON | \
                                 REG_FLTSRC_NONE | \
                                 REG_FLTPOL_ACTIVE_HIGH | \
                                 REG_FLTMOD_DISABLED \
