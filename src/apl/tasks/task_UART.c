@@ -19,45 +19,55 @@
  * MICROCHIP PROVIDES THIS SOFTWARE CONDITIONALLY UPON YOUR ACCEPTANCE OF THESE 
  * TERMS. 
  * ***************************************************************************/
-/* @@hal.h
- * *************************************************************************** 
- * File:   hal.h
+/*@@task_Switch.h
+ * ***************************************************************************
+ * File:   task_Switch.h
  * Author: M91406
- *
- * Created on July 28, 2017, 11:04 AM
+ * 
+ * Summary:
+ * Source file of switch button task
+ * 
+ * Description:
+ * This source file is used to register a global data structure allowing to edit
+ * parameters of the task. It is also used to publish global function calls.
+ * the main task routine is polling on the switch button of the DSP expander
+ * board. When a switch event has been triggered, a global switch event flag 
+ * is set in the task_Switch data structure for other tasks to respond to.
+ * 
+ * History:
+ * 05/03/2018	File created
  * ***************************************************************************/
 
-#ifndef HARDWARE_ABSTRACTION_LAYER_H
-#define	HARDWARE_ABSTRACTION_LAYER_H
 
-#include <xc.h>
-#include <stdint.h>
+#include "xc.h"
+#include "task_Switch.h"
+#include "hal.h"
 
-#include "PLEU0049.R1_board_pinmap.h"
+volatile TASK_SWITCH_BUTTON_CONFIG_t taskSWITCH_config;
 
-#include "syscfg_cvrt.h"
-#include "syscfg_limits.h"
-#include "syscfg_options.h"
-#include "syscfg_scaling.h"
-#include "syscfg_startup.h"
+volatile uint16_t task_SwitchButton(void) 
+{
 
-#include "init_gpio.h"
-#include "init_irq.h"
-#include "init_dsp.h"
-#include "init_timer.h"
-#include "init_fosc.h"
-#include "init_swdt.h"
-#include "init_hsacmp.h"
-#include "init_hsadc.h"
-#include "init_hspwm.h"
-#include "init_uart.h"
-#include "init_control.h"
+    if(taskSWITCH_config.enable)
+    {
+        taskSWITCH_config.status = SWITCH_RD;   // Read the switch status
+    }
+    else
+    {
+        taskSWITCH_config.status = 0;           // Set the switch status to zero
+    }
 
+    return(1);
+}
 
-
-/* ***********************************************************************************************
- * PROTOTYPES
- * ***********************************************************************************************/
-
-#endif	/* HARDWARE_ABSTRACTION_LAYER_H */
-
+volatile uint16_t init_TaskSwitchButton(void)
+{
+    // Setting up the port pin
+    SWITCH_WR = 1;
+    SWITCH_TRIS = 1;
+    
+    taskSWITCH_config.status = SWITCH_RD;   // Read the switch status
+    taskSWITCH_config.enable = 1;           // Enable the switch task
+    
+    return(1);
+}

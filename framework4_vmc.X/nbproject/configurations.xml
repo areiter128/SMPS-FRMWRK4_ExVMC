@@ -54,6 +54,7 @@
           <itemPath>../h/hal/initialization/init_swdt.h</itemPath>
           <itemPath>../h/hal/initialization/init_timer.h</itemPath>
           <itemPath>../h/hal/initialization/init_irq.h</itemPath>
+          <itemPath>../h/hal/initialization/init_uart.h</itemPath>
         </logicalFolder>
         <itemPath>../h/hal/hal.h</itemPath>
       </logicalFolder>
@@ -67,6 +68,7 @@
           <itemPath>../h/mcal/config/00124_R10_EP806_pinmap.h</itemPath>
           <itemPath>../h/mcal/config/devcfg_dsp.h</itemPath>
           <itemPath>../h/mcal/config/devcfg_hsacmp.h</itemPath>
+          <itemPath>../h/mcal/config/devcfg_uart.h</itemPath>
         </logicalFolder>
         <logicalFolder name="generic" displayName="generic" projectFiles="true">
           <itemPath>../h/mcal/generic/p33GS_hsacmp.h</itemPath>
@@ -80,6 +82,7 @@
           <itemPath>../h/mcal/generic/p33SMPS_timer.h</itemPath>
           <itemPath>../h/mcal/generic/p33SMPS_dsp.h</itemPath>
           <itemPath>../h/mcal/generic/p33SMPS_irq.h</itemPath>
+          <itemPath>../h/mcal/generic/p33SMPS_uart.h</itemPath>
         </logicalFolder>
         <itemPath>../h/mcal/cpu_macros.h</itemPath>
         <itemPath>../h/mcal/mcal.h</itemPath>
@@ -147,6 +150,7 @@
           <itemPath>../src/hal/initialization/init_timer.c</itemPath>
           <itemPath>../src/hal/initialization/init_irq.c</itemPath>
           <itemPath>../src/hal/initialization/init_hsacmp.c</itemPath>
+          <itemPath>../src/hal/initialization/init_uart.c</itemPath>
         </logicalFolder>
         <itemPath>../src/hal/hal.c</itemPath>
       </logicalFolder>
@@ -165,6 +169,7 @@
           <itemPath>../src/mcal/generic/p33SMPS_timer.c</itemPath>
           <itemPath>../src/mcal/generic/p33SMPS_dsp.c</itemPath>
           <itemPath>../src/mcal/generic/p33SMPS_irq.c</itemPath>
+          <itemPath>../src/mcal/generic/p33SMPS_uart.c</itemPath>
         </logicalFolder>
         <itemPath>../src/mcal/mcal.c</itemPath>
       </logicalFolder>
@@ -181,6 +186,7 @@
           <itemPath>../src/sfl/isr/isr_gpio.c</itemPath>
           <itemPath>../src/sfl/isr/isr_pwm.c</itemPath>
           <itemPath>../src/sfl/isr/isr_timer.c</itemPath>
+          <itemPath>../src/sfl/isr/isr_uart.c</itemPath>
         </logicalFolder>
         <logicalFolder name="libapi" displayName="libapi" projectFiles="true">
           <itemPath>../src/sfl/libapi/cnpnz_vmc.c</itemPath>
@@ -231,7 +237,7 @@
         <platform>3</platform>
       </toolsSet>
       <packs>
-        <pack name="dsPIC33E-GS_DFP" vendor="Microchip" version="0.1.16"/>
+        <pack name="dsPIC33E-GS_DFP" vendor="Microchip" version="1.0.19"/>
       </packs>
       <compileType>
         <linkerTool>
@@ -290,7 +296,7 @@
         <property key="oXC16gcc-sfr-warn" value="false"/>
         <property key="oXC16gcc-smar-io-lvl" value="1"/>
         <property key="oXC16gcc-smart-io-fmt" value=""/>
-        <property key="optimization-level" value="s"/>
+        <property key="optimization-level" value="3"/>
         <property key="post-instruction-scheduling" value="default"/>
         <property key="pre-instruction-scheduling" value="default"/>
         <property key="preprocessor-macros" value=""/>
@@ -417,10 +423,10 @@
         <property key="TIMER5" value="true"/>
         <property key="ToolFirmwareFilePath"
                   value="Press to browse for a specific firmware version"/>
-        <property key="ToolFirmwareOption.UseLatestFirmware" value="true"/>
+        <property key="ToolFirmwareOption.UpdateOptions"
+                  value="ToolFirmwareOption.UseLatest"/>
         <property key="UART 1" value="true"/>
         <property key="UART 2" value="true"/>
-        <property key="W0237_ADC_UNKNOWN_DATASHEET" value="report"/>
         <property key="debugoptions.useswbreakpoints" value="false"/>
         <property key="hwtoolclock.frcindebug" value="false"/>
         <property key="memories.aux" value="false"/>
@@ -625,6 +631,7 @@
         <property key="codecoverage.enabled" value="Disable"/>
         <property key="codecoverage.enableoutputtofile" value="false"/>
         <property key="codecoverage.outputfile" value=""/>
+        <property key="codecoverage.report" value=""/>
         <property key="oscillator.auxfrequency" value="120"/>
         <property key="oscillator.auxfrequencyunit" value="Mega"/>
         <property key="oscillator.frequency" value="70"/>

@@ -19,45 +19,54 @@
  * MICROCHIP PROVIDES THIS SOFTWARE CONDITIONALLY UPON YOUR ACCEPTANCE OF THESE 
  * TERMS. 
  * ***************************************************************************/
-/* @@hal.h
- * *************************************************************************** 
- * File:   hal.h
+/*@@task_Switch.h
+ * ***************************************************************************
+ * File:   task_Switch.h
  * Author: M91406
- *
- * Created on July 28, 2017, 11:04 AM
+ * 
+ * Summary:
+ * Header of switch button task
+ * 
+ * Description:
+ * This header is used to register a global data structure allowing to edit
+ * parameters of the task. It is also used to publish global function calls.
+ * the main task routine is polling on the switch button of the DSP expander
+ * board. When a switch event has been triggered, a global switch event flag 
+ * is set in the task_Switch data structure for other tasks to respond to.
+ * 
+ * History:
+ * 05/03/2018	File created
  * ***************************************************************************/
 
-#ifndef HARDWARE_ABSTRACTION_LAYER_H
-#define	HARDWARE_ABSTRACTION_LAYER_H
+// This is a guard condition so that contents of this file are not included
+// more than once.  
+#ifndef APL_TASK_SWITCH_BUTTON_H
+#define	APL_TASK_SWITCH_BUTTON_H
 
-#include <xc.h>
+#include <xc.h> // include processor files - each processor file is guarded.  
 #include <stdint.h>
 
-#include "PLEU0049.R1_board_pinmap.h"
+/* ***********************************************************************************************
+ * DECLARATIONS
+ * ***********************************************************************************************/
 
-#include "syscfg_cvrt.h"
-#include "syscfg_limits.h"
-#include "syscfg_options.h"
-#include "syscfg_scaling.h"
-#include "syscfg_startup.h"
+typedef struct
+{
+    volatile uint16_t enable;               // Enable/Disable flag 
+    volatile uint16_t status;               // used globally publish the switch button status
+}TASK_SWITCH_BUTTON_CONFIG_t;
 
-#include "init_gpio.h"
-#include "init_irq.h"
-#include "init_dsp.h"
-#include "init_timer.h"
-#include "init_fosc.h"
-#include "init_swdt.h"
-#include "init_hsacmp.h"
-#include "init_hsadc.h"
-#include "init_hspwm.h"
-#include "init_uart.h"
-#include "init_control.h"
+extern volatile TASK_SWITCH_BUTTON_CONFIG_t taskSWITCH_config;
 
-
+#define SWITCH_DELAY_COUNTER_DEFAULT   500
+#define SWITCH_DELAY_COUNTER_FAULT     2500
 
 /* ***********************************************************************************************
  * PROTOTYPES
  * ***********************************************************************************************/
+extern volatile uint16_t init_TaskSwitchButton(void);
+extern volatile uint16_t task_SwitchButton(void);
 
-#endif	/* HARDWARE_ABSTRACTION_LAYER_H */
+
+#endif	/* APL_TASK_SWITCH_BUTTON_H */
 

@@ -86,6 +86,7 @@ extern "C" {
 #include "p33SMPS_pmd.h"
 #include "p33SMPS_swdt.h"
 #include "p33SMPS_timer.h"
+#include "p33SMPS_uart.h"
 
 /* specific drivers */
 #include "p33GS_hsacmp.h"
@@ -98,6 +99,7 @@ extern "C" {
 #include "devcfg_hspwm.h"
 #include "devcfg_hsadc.h"
 #include "devcfg_hsacmp.h"
+#include "devcfg_uart.h"
 
     
 /* ***********************************************************************************************

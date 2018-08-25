@@ -52,13 +52,14 @@
 #include "task_manager.h"
 #include "tasks.h"
 
-int main(void) {
+#include "p33SMPS_UART.h"
 
-    volatile uint16_t fres = 0;
+int main(void) {
 
 #if (USE_TASK_MANAGER_TIMING_DEBUG_ARRAYS == 1)
     volatile uint16_t cnt=0;
 #endif
+    volatile uint16_t fres = 0;
     
     // Right after system reset, first check for root-cause of previous device reset
     fres = CheckCPUResetRootCause();

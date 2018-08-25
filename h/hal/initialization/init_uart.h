@@ -19,45 +19,26 @@
  * MICROCHIP PROVIDES THIS SOFTWARE CONDITIONALLY UPON YOUR ACCEPTANCE OF THESE 
  * TERMS. 
  * ***************************************************************************/
-/* @@hal.h
+/* @@init_uart.h
  * *************************************************************************** 
- * File:   hal.h
+ * File:   init_uart.h
  * Author: M91406
  *
  * Created on July 28, 2017, 11:04 AM
  * ***************************************************************************/
 
-#ifndef HARDWARE_ABSTRACTION_LAYER_H
-#define	HARDWARE_ABSTRACTION_LAYER_H
+#ifndef _HARDWARE_ABSTRACTION_LAYER_INITIALIZE_HIGH_SPEED_ANALOG_COMPARATOR_H_
+#define	_HARDWARE_ABSTRACTION_LAYER_INITIALIZE_HIGH_SPEED_ANALOG_COMPARATOR_H_
 
 #include <xc.h>
 #include <stdint.h>
 
-#include "PLEU0049.R1_board_pinmap.h"
-
-#include "syscfg_cvrt.h"
-#include "syscfg_limits.h"
-#include "syscfg_options.h"
-#include "syscfg_scaling.h"
-#include "syscfg_startup.h"
-
-#include "init_gpio.h"
-#include "init_irq.h"
-#include "init_dsp.h"
-#include "init_timer.h"
-#include "init_fosc.h"
-#include "init_swdt.h"
-#include "init_hsacmp.h"
-#include "init_hsadc.h"
-#include "init_hspwm.h"
-#include "init_uart.h"
-#include "init_control.h"
-
-
+#include "globals.h"
 
 /* ***********************************************************************************************
  * PROTOTYPES
  * ***********************************************************************************************/
+extern volatile uint16_t init_uart(void);
 
-#endif	/* HARDWARE_ABSTRACTION_LAYER_H */
+#endif	/* _HARDWARE_ABSTRACTION_LAYER_INITIALIZE_HIGH_SPEED_ANALOG_COMPARATOR_H_ */
 

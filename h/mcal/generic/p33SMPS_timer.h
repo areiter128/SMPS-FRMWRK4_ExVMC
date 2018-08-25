@@ -153,7 +153,7 @@ typedef enum
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //  TxCON - Register Flags
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#if defined (__P33SMPS_FJ__) || defined (__P33SMPS_FJC__) || defined (_P33SMPS_UAEG_) || \
+#if defined (__P33SMPS_FJ__) || defined (__P33SMPS_FJA__) || defined (_P33SMPS_FJC_) || \
     defined (__P33SMPS_EP2__) || defined (__P33SMPS_EP5__) || defined (__P33SMPS_EP7__)
 
     // Full Register Bit Fields

@@ -54,7 +54,7 @@
 
 uint16_t gspwm_reset_pwm_io(void)
 {
-    uint16_t i=0;
+    volatile uint16_t i=0;
     
     for (i=1; i<=HSPWM_CHANNEL_COUNT; i++)
     {
