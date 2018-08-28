@@ -34,6 +34,7 @@ volatile uint16_t init_gpio(void) {
     LED_GN_INIT;
     SWITCH_INIT;
     CLKOUT_INIT;
+    TSTOUT_INIT;
 
     // initializing specific board function IOs
     PWMH_INIT;

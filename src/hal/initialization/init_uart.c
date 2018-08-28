@@ -32,14 +32,14 @@
 
 #include "init_uart.h"
 
-/*@@init_uart
+/*@@init_smps_uart
  *****************************************************************************
- * Function:	 uint16_t init_uart(void)
+ * Function:	 uint16_t init_smps_uart(void)
  * Arguments:	 (none)
  * Return Value: 1: success, 2: failure)
  *
  * Summary:
- * Initializes the uart module and opens a port
+ * Initializes the UART module and opens a port
  *
  * Description:	
  * This routine initializes the UART peripheral module of the dsPIC33 and opens 
@@ -51,11 +51,19 @@
  * (none)
  * 
  *****************************************************************************/
-volatile uint16_t init_uart(void)
+volatile uint16_t init_smps_uart(void)
 {
 
     volatile uint16_t fres=1;
 
+    /* map UART pins to device pins */
+    pps_UnlockIO();
+    pps_RemapInput(CVRT_UART_RX_PPS_NO, CVRT_UART_RX_PPS);
+    pps_RemapOutput(CVRT_UART_TX_PPS_NO, CVRT_UART_TX_PPS);
+    pps_LockIO();
+    
+    UART_TX_INIT;
+    
     /* Turn on power to comparator module, as, well as comparators for phase #1 and #2 */
     fres &= gsuart_power_on(CVRT_UART_IDX);
 
@@ -68,35 +76,3 @@ volatile uint16_t init_uart(void)
 	return(fres);
 
 }
-
-/*@@launch_HSACMP
- *****************************************************************************
- * Function:	 int launch_HSACMP(void)
- * Arguments:	 (none)
- * Return Value: 1: success, 2: failure)
- *
- * Summary:
- * Activates the high-speed analog comparator module
- *
- * Description:	
- * This routine activates the high-speed analog comparator module of dsPIC33 GS. 
- * Multiple comparators are used to trigger certain events like over-current and 
- * over-voltage conditions. A comparator is also used for peak current control mode 
- * when enabled.
- *
- * See also:
- * init_ADC, init_HSPWM
- * 
- *****************************************************************************/
-/*
-volatile uint16_t exec_launch_hsacmp(void)
-{
-
-    volatile uint16_t fres=1;
-
-    fres &= gscmp_enable(CVRT_OCP_CMP_IDX);
-    fres &= gscmp_enable(CVRT_OVP_CMP_IDX);
-
-    return(fres);
-}
-*/

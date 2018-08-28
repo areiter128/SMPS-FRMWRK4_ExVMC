@@ -56,6 +56,8 @@ volatile uint16_t init_VMC_Controller(void)
     cnpnz_vmc.MaxOutput = DUTY_RATIO_MAX_REG;
     
 //    cnpnz_vmc.status.flag.enable = 1;
+
+    
     
     return(fres);
     

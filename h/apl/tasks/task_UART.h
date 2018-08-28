@@ -19,20 +19,17 @@
  * MICROCHIP PROVIDES THIS SOFTWARE CONDITIONALLY UPON YOUR ACCEPTANCE OF THESE 
  * TERMS. 
  * ***************************************************************************/
-/*@@task_Switch.h
+/*@@task_UART.h
  * ***************************************************************************
- * File:   task_Switch.h
+ * File:   task_UART.h
  * Author: M91406
  * 
  * Summary:
  * Header of switch button task
  * 
  * Description:
- * This header is used to register a global data structure allowing to edit
- * parameters of the task. It is also used to publish global function calls.
- * the main task routine is polling on the switch button of the DSP expander
- * board. When a switch event has been triggered, a global switch event flag 
- * is set in the task_Switch data structure for other tasks to respond to.
+ * This header covers the global data structures, variables and function call 
+ * prototypes of the generic SMPS UART communication stack.
  * 
  * History:
  * 05/03/2018	File created
@@ -40,33 +37,123 @@
 
 // This is a guard condition so that contents of this file are not included
 // more than once.  
-#ifndef APL_TASK_SWITCH_BUTTON_H
-#define	APL_TASK_SWITCH_BUTTON_H
+#ifndef _APL_TASK_SMPS_UART_H_
+#define	_APL_TASK_SMPS_UART_H_
 
 #include <xc.h> // include processor files - each processor file is guarded.  
 #include <stdint.h>
+#include "hal.h"
+#include "mcal.h"
 
 /* ***********************************************************************************************
  * DECLARATIONS
  * ***********************************************************************************************/
 
+/*@@SMPS_UART_STATUS_BIT_FIELD_t
+ *****************************************************************************
+ * 
+ * Summary:
+ * Universal masking data structure to conveniently address specific 
+ * SMPS UART protocol settings and status flag bits
+ *
+ * Description:	
+ * 
+ *
+ * See also:
+ * 
+ *****************************************************************************/
+
+typedef struct{
+
+	volatile unsigned RXFrameReady:1;	// Bit #0:  
+	volatile unsigned TXFrameReady:1;	// Bit #1:  Reserved
+	volatile unsigned RXComplete:1;	// Bit #2:  Reserved
+	volatile unsigned TXComplete:1;	// Bit #3:  Reserved
+	volatile unsigned SOF:1;	// Bit #4:  Reserved
+	volatile unsigned :1;	// Bit #5:  Reserved
+	volatile unsigned :1;	// Bit #6:  Reserved
+	volatile unsigned :1;	// Bit #7:  Reserved
+    
+	volatile unsigned fault:1;	// Bit #8:  communication error was detected
+	volatile unsigned :1;	// Bit #9:  Reserved
+	volatile unsigned :1;	// Bit #10: Reserved
+	volatile unsigned :1;	// Bit #11: Reserved
+	volatile unsigned :1;	// Bit #12: Reserved
+	volatile unsigned :1;	// Bit #13: Reserved
+	volatile unsigned :1;	// Bit #14: Reserved
+	volatile unsigned enable:1;	// Bit #15: flag bit to enable/disable (suspend) the communication 
+} __attribute__((packed))SMPS_UART_STATUS_BIT_FIELD_t;
+
+typedef union 
+{
+	volatile uint16_t flags; // buffer for 16-bit word read/write operations
+	volatile SMPS_UART_STATUS_BIT_FIELD_t flag; // data structure for single bit addressing operations
+}SMPS_UART_STATUS_FLAGS_t;
+
+typedef struct{
+    
+    volatile uint8_t  start;    // start-byte (always 0xAA)
+    volatile uint16_t id;       // Command-ID
+    volatile uint16_t data_len; // data length of the data content
+    volatile uint8_t  data[CVRT_UxRXBUF_SIZE]; // data content
+    volatile uint16_t crc;      // CRC16 result over id, data-length and data content
+    volatile uint8_t  stop;     // start-byte (always 0x0D)
+} __attribute__((packed))SMPS_UART_RX_COMM_FRAME_t;
+
+typedef struct{
+    
+    volatile uint8_t  start;    // start-byte (always 0xAA)
+    volatile uint16_t id;       // Command-ID
+    volatile uint16_t data_len; // data length of the data content
+    volatile uint8_t  data[CVRT_UxTXBUF_SIZE]; // data content
+    volatile uint16_t crc;      // CRC16 result over id, data-length and data content
+    volatile uint8_t  stop;     // start-byte (always 0x0D)
+} __attribute__((packed))SMPS_UART_TX_COMM_FRAME_t;
+
+
 typedef struct
 {
-    volatile uint16_t enable;               // Enable/Disable flag 
-    volatile uint16_t status;               // used globally publish the switch button status
-}TASK_SWITCH_BUTTON_CONFIG_t;
+    volatile SMPS_UART_STATUS_FLAGS_t status;
+    
+    volatile uint32_t baudrate;
+    volatile uint16_t port_index;
+    
+    volatile SMPS_UART_RX_COMM_FRAME_t RXBytes;
+    volatile SMPS_UART_TX_COMM_FRAME_t TXBytes;
 
-extern volatile TASK_SWITCH_BUTTON_CONFIG_t taskSWITCH_config;
+}__attribute__((packed))SMPS_UART_OBJECT_t;
 
-#define SWITCH_DELAY_COUNTER_DEFAULT   500
-#define SWITCH_DELAY_COUNTER_FAULT     2500
+/** UART Driver Hardware Flags
+
+  @Summary
+    Specifies the status of the hardware receive or transmit
+
+  @Description
+    This type specifies the status of the hardware receive or transmit.
+    More than one of these values may be OR'd together to create a complete
+    status value.  To test a value of this type, the bit of interest must be
+    AND'ed with value and checked to see if the result is non-zero.
+*/
+typedef enum
+{
+    UART_RX_DATA_AVAILABLE = (1 << 0), // Indicates that Receive buffer has data, at least one more character can be read 
+    UART_RX_OVERRUN_ERROR = (1 << 1), // Indicates that Receive buffer has overflowed
+    UART_FRAMING_ERROR = (1 << 2), // Indicates that Framing error has been detected for the current character
+    UART_PARITY_ERROR = (1 << 3), // Indicates that Parity error has been detected for the current character
+    UART_RECEIVER_IDLE = (1 << 4), // Indicates that Receiver is Idle
+    UART_TX_COMPLETE = (1 << 8), // Indicates that the last transmission has completed 
+    UART_TX_FULL = (1 << 9) // Indicates that Transmit buffer is full 
+}UART_STATUS_e;
+
+extern volatile SMPS_UART_OBJECT_t smps_uart;
+
 
 /* ***********************************************************************************************
  * PROTOTYPES
  * ***********************************************************************************************/
-extern volatile uint16_t init_TaskSwitchButton(void);
-extern volatile uint16_t task_SwitchButton(void);
+extern volatile uint16_t init_TaskUART(void);
+extern volatile uint16_t exec_TaskUART(void);
 
 
-#endif	/* APL_TASK_SWITCH_BUTTON_H */
+#endif	/* _APL_TASK_SMPS_UART_H_ */
 

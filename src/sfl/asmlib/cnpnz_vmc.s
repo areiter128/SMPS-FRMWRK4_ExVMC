@@ -1,8 +1,8 @@
 ;LICENSE / DISCLAIMER
 ; **********************************************************************************
-;  SDK Version: z-Domain Control Loop Designer v0.9.0.31
+;  SDK Version: z-Domain Control Loop Designer v0.9.0.32
 ;  Author:      M91406
-;  Date/Time:   08/17/18 12:31:49 AM
+;  Date/Time:   08/26/18 09:57:35 PM
 ; **********************************************************************************
 ;  4P4Z Control Library File (Fast Floating Point Coefficient Scaling Mode)
 ; **********************************************************************************

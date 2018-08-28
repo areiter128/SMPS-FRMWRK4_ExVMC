@@ -38,89 +38,40 @@
 
 // High Speed Analog Comparators
 
+#if defined (__P33SMPS_EP__)
 
-// Comparator #1 used for over current protection
+// UART #1 used for common debugging, monitoring & control
 
 #define CVRT_UART_IDX           1                       // Index of UART module for control and monitoring
-#define CVRT_UART_BAUDRATE      UART_BAUDRATE_9600		// Baudrate
+#define CVRT_UART_BAUDRATE      UART_BAUDRATE_57600		// Baudrate
 #define CVRT_UART_DATA_BITS     UART_DATA_BITS_8        // Number of data bits
 #define CVRT_UART_PARITY        UART_PARITY_NONE        // Parity setting of the UART 
 #define CVRT_UART_STOP_BITS     UART_STOP_BITS_1        // Number of stop bits
 #define CVRT_UART_IRS_PRIORITY  UART_ISR_PRIORITY_1     // Priority of the UART interrupts
-/*
-#if defined (__P33SMPS_EP2__)
 
-   #define CVRT_OCP_CMP_CFG    (REG_CMPON_OFF | \
-                                REG_CMPSIDL_OFF | \
-                                REG_HYSSEL_20MV | \
-                                REG_FLTREN_OFF | \
-                                REG_FCLKSEL_PWMCLK | \
-                                REG_DACOE_ON | \
-                                REG_EXTREF_DISABLED | \
-                                HYSPOL_FALLING_EDGE | \
-                                REG_ALTINP_DEFAULT | \
-                                REG_CMPPOL_NON_INVERTED \
-                                )
+#define CVRT_UART_RX_PPS_NO     63u
+#define CVRT_UART_RX_PPS        PPSIN_U1RX
+#define CVRT_UART_TX_PPS_NO     36u
+#define CVRT_UART_TX_PPS        PPSOUT_U1TX
 
-#elif defined (__P33SMPS_EP5__) || defined (__P33SMPS_EP7__) || defined (__P33SMPS_EP8__)
+#define CVRT_UxRXBUF_SIZE       (32)
+#define CVRT_UxTXBUF_SIZE       (32)
 
-   #define CVRT_OCP_CMP_CFG    (REG_CMPON_OFF | \
-                                REG_CMPSIDL_OFF | \
-                                REG_HYSSEL_20MV | \
-                                REG_FLTREN_OFF | \
-                                REG_FCLKSEL_PWMCLK | \
-                                REG_DACOE_ON | \
-                                REG_EXTREF_DISABLED | \
-                                HYSPOL_FALLING_EDGE | \
-                                REG_ALTINP_DEFAULT | \
-                                REG_CMPPOL_NON_INVERTED | \
-                                REG_RANGE_HIGH \
-                                )
+#if (CVRT_UART_IDX == 1)
+    #define _CVRT_UxRXInterrupt _U1RXInterrupt
+    #define _CVRT_UxRXIF        _U1RXIF
+    #define CVRT_UxRXREG        U1RXREG
 
+    #define _CVRT_UxTXInterrupt _U1TXInterrupt
+    #define _CVRT_UxTXIF        _U1TXIF
+    #define CVRT_UxTXREG        U1TXREG
+    #define _CVRT_UxTXBF        U1STAbits.UTXBF
+
+    #define _CVRT_UxEInterrupt  _U1ErrInterrupt
+    #define _CVRT_UxEIF         _U1EIF
 #endif
-
-// Comparator #2 used for output over voltage protection
-
-#define CVRT_OVP_CMP_IDX		2					// Analog inductor current comparator of phase #2
-#define CVRT_OVP_CMP_INPUT      REG_INSEL_CMPxB		// Analog comparator input selection
-#define CVRT_OVP_CMPDAC         CMP2DAC             // D/A converter of the analog comparator of phase #2
-#define CVRT_OVP_CMPDAC_IDX     1                	// D/A converter index of the analog comparator
-#define CVRT_OVP_CMP_MIN        0x0000              // Minimum value of the 12-bit DAC
-#define CVRT_OVP_CMP_MAX        0x0FFF              // Maximum value of the 12-bit DAC
-#define CVRT_OVP_CMP_NOM        VOUT_OVP_TRIP       // Nominal value of the 12-bit DAC
-
-#if defined (__P33SMPS_EP2__)
-
-   #define CVRT_OVP_CMP_CFG    (REG_CMPON_OFF | \
-                                REG_CMPSIDL_OFF | \
-                                REG_HYSSEL_20MV | \
-                                REG_FLTREN_ON | \
-                                REG_FCLKSEL_PWMCLK | \
-                                REG_DACOE_OFF | \
-                                REG_EXTREF_DISABLED | \
-                                HYSPOL_FALLING_EDGE | \
-                                REG_ALTINP_DEFAULT | \
-                                REG_CMPPOL_NON_INVERTED \
-                                )
-
-
-#elif defined (__P33SMPS_EP5__) || defined (__P33SMPS_EP7__) || defined (__P33SMPS_EP8__)
-
-   #define CVRT_OVP_CMP_CFG    (REG_CMPON_OFF | \
-                                REG_CMPSIDL_OFF | \
-                                REG_HYSSEL_20MV | \
-                                REG_FLTREN_ON | \
-                                REG_FCLKSEL_PWMCLK | \
-                                REG_DACOE_OFF | \
-                                REG_EXTREF_DISABLED | \
-                                HYSPOL_FALLING_EDGE | \
-                                REG_ALTINP_DEFAULT | \
-                                REG_CMPPOL_NON_INVERTED | \
-                                REG_RANGE_HIGH \
-                                )
-
+    
 #endif
-*/
 
 #endif	/* _DEVICE_CONFIGURATION_UART_H_ */
 

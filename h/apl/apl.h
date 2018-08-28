@@ -43,6 +43,7 @@
 #include "task_OnPIM_LED.h"
 #include "task_SoftStart.h"
 #include "task_Switch.h"
+#include "task_UART.h"
 
 /* ***********************************************************************************************
  * PROTOTYPES

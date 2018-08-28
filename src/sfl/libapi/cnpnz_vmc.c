@@ -1,11 +1,11 @@
 /* ***************************************************************************************
- * z-Domain Control Loop Designer Version 0.9.0.31.
+ * z-Domain Control Loop Designer Version 0.9.0.32.
  * ***************************************************************************************
  * 4p4z compensation filter coefficients derived for following operating conditions:
  * ***************************************************************************************
  *
  * 	Controller Type:	4P4Z - Advanced High-Q Compensator
- * 	Sampling Frequency:	400000 Hz 
+ * 	Sampling Frequency:	300000 Hz 
  * 	Fixed Point Format:	15
  * 	Scaling Mode:		4 - Fast Floating Point Coefficient Scaling
  * 	Input Gain:			1
@@ -37,9 +37,9 @@
  * 	fP0:	110 Hz 
  * 	fP1:	100000 Hz 
  * 	fZ1:	2000 Hz 
- * 	fP2:	200000 Hz 
+ * 	fP2:	150000 Hz 
  * 	fZ2:	5900 Hz 
- * 	fP3:	200000 Hz 
+ * 	fP3:	150000 Hz 
  * 	fZ3:	40000 Hz 
  *
  * ***************************************************************************************
@@ -48,19 +48,19 @@
 
 	volatile int32_t cnpnz_vmc_ACoefficients [4] = 
 	{
-		0x568C0000,	// Coefficient A1 will be multiplied with controller output u(n-1)
-		0x53F40001,	// Coefficient A2 will be multiplied with controller output u(n-2)
-		0x79190009,	// Coefficient A3 will be multiplied with controller output u(n-3)
-		0x9EEB0007	// Coefficient A4 will be multiplied with controller output u(n-4)
+		0x44360000,	// Coefficient A1 will be multiplied with controller output u(n-1)
+		0x68580001,	// Coefficient A2 will be multiplied with controller output u(n-2)
+		0x779A0004,	// Coefficient A3 will be multiplied with controller output u(n-3)
+		0x4A7D0009	// Coefficient A4 will be multiplied with controller output u(n-4)
 	};
 
 	volatile int32_t cnpnz_vmc_BCoefficients [5] = 
 	{
-		0x6EED0000,	// Coefficient B0 will be multiplied with error input e(n)
-		0xB239FFFF,	// Coefficient B1 will be multiplied with error input e(n-1)
-		0x88B40001,	// Coefficient B2 will be multiplied with error input e(n-2)
-		0x4DDBFFFF,	// Coefficient B3 will be multiplied with error input e(n-3)
-		0x99BE0001	// Coefficient B4 will be multiplied with error input e(n-4)
+		0x4FE80000,	// Coefficient B0 will be multiplied with error input e(n)
+		0x9BF40000,	// Coefficient B1 will be multiplied with error input e(n-1)
+		0x981C0001,	// Coefficient B2 will be multiplied with error input e(n-2)
+		0x64470000,	// Coefficient B3 will be multiplied with error input e(n-3)
+		0x91150002	// Coefficient B4 will be multiplied with error input e(n-4)
 	};
 
 

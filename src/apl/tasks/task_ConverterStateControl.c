@@ -8,6 +8,22 @@
 
 #include "task_ConverterStateControl.h"
 
+//volatile CONVERTER_t cvrt;
+
+volatile uint16_t cvrt_InitConverter(void)
+{
+/*    
+    cvrt.c_vmc = &cnpnz_vmc;    // voltage loop controller 
+
+    cvrt.converter.voltage_reference = cnpnz_vmc.ptrControlReference;
+    cvrt.converter.output_voltage = cnpnz_vmc.ptrSource;
+    cvrt.converter.duty_cycle1 = cnpnz_vmc.ptrTarget;
+    cvrt.converter.switching_period = &CVRT_PPER;
+    cvrt.converter.cpu_load = &task_mgr.cpu_load.load;
+*/    
+    return(1);
+}
+
 volatile uint16_t cvrt_ShutDown(void)
 {
     cnpnz_vmc.status.flag.enable = 0; // turn off controller
@@ -32,3 +48,4 @@ volatile uint16_t cvrt_StartUp(void)
     
     return(1);
 }
+

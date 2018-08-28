@@ -125,6 +125,8 @@ typedef enum {
     TASK_LED_GREEN_TOGGLE, // task forcing the green expander board LED to toggle state
 
     // System function / Special function initialization
+    TASK_INIT_UART, // Task initializing the debugging UART interface
+    TASK_EXEC_UART, // Task executing the debugging UART communication
     TASK_INIT_HSADC, // Task initializing the high speed ADC module
     TASK_LAUNCH_HSADC, // Task launching the pre-configured high speed ADC module
     TASK_INIT_HSACMP, // Task initializing the high speed analog comparator module

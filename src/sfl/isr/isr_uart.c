@@ -39,6 +39,25 @@
 
 #include "globals.h"
 
+typedef enum
+{
+    FRMBUF_STAT_START,
+    FRMBUF_STAT_ID0,
+    FRMBUF_STAT_ID1,
+    FRMBUF_STAT_DLEN,
+    FRMBUF_STAT_DATA,
+    FRMBUF_STAT_CRC,
+    FRMBUF_STAT_STOP
+}FRAME_STAT_STEP_e;
+
+volatile char rx_buffer[CVRT_U1RXBUF_SIZE];
+volatile uint16_t rx_buf_idx = 0;
+volatile FRAME_STAT_STEP_e rx_frame_stat=FRMBUF_STAT_START;
+
+volatile char tx_buffer[CVRT_U1RXBUF_SIZE];
+volatile uint16_t tx_buf_idx = 0;
+volatile FRAME_STAT_STEP_e tx_frame_stat=FRMBUF_STAT_START;
+
 #if defined (U1MODE)
 /***************************************************************************
 ISR: 		Transmit Interrupt for UART #1

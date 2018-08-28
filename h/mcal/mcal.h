@@ -78,7 +78,7 @@ extern "C" {
 #endif
 */
 
-    
+/* generic peripheral drives */    
 #include "p33SMPS_irq.h"
 #include "p33SMPS_dsp.h"
 #include "p33SMPS_gpio.h"
@@ -87,8 +87,9 @@ extern "C" {
 #include "p33SMPS_swdt.h"
 #include "p33SMPS_timer.h"
 #include "p33SMPS_uart.h"
+#include "p33SMPS_pps.h"
 
-/* specific drivers */
+/* specific smps drivers */
 #include "p33GS_hsacmp.h"
 #include "p33GS_hsadc.h"
 #include "p33GS_hspwm.h"

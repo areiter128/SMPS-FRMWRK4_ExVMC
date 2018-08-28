@@ -67,6 +67,16 @@
 #define DBGLED1_RD      PORTCbits.RC14
 #define DBGLED1_INIT    {DBGLED1_WR = LED_OFF; DBGLED1_TRIS = 0;}
 
+#define TPUTX_TRIS      TRISBbits.TRISB4
+#define TPUTX_WR        LATBbits.LATB4
+#define TPUTX_RD        PORTBbits.RB4
+#define TPUTX_INIT      {TPUTX_WR = 1; TPUTX_TRIS = 0;}
+
+#define TPURX_TRIS      TRISCbits.TRISC15
+#define TPURX_WR        LATCbits.LATC15
+#define TPURX_RD        PORTCbits.RC15
+#define TPURX_INIT      {TPURX_WR = 1; TPURX_TRIS = 0;}
+
 // Header Test Points
 
 #define	TP03_TRIS   TRISDbits.TRISD13
@@ -214,7 +224,7 @@
 #define	TP30_RD
    not connected */
 
-#define	TP31_TRIS
+#define	TP31_TRIS   
 #define	TP31_WR
 #define	TP31_RD
 
@@ -230,9 +240,9 @@
 #define	TP34_WR
 #define	TP34_RD
 
-#define	TP35_TRIS
-#define	TP35_WR
-#define	TP35_RD
+#define	TP35_TRIS   TRISDbits.TRISD4
+#define	TP35_WR     LATDbits.LATD4
+#define	TP35_RD     PORTDbits.RD4
 
 #define	TP36_TRIS
 #define	TP36_WR
