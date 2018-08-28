@@ -83,46 +83,30 @@ typedef union {
 } CONVERTER_STATUS_t;
 
 /* converter data structure */
-/*
 typedef struct {
-    
     volatile uint16_t* input_voltage; // Recent Input Voltage
     volatile uint16_t* output_voltage; // Recent Output Voltage measured at phase #1
-    volatile int16_t   average_current; // Total average converter output current (bi-directional)
     volatile uint16_t* phase_current1; // Inductor current phase #1
     volatile uint16_t* switching_period; // Recent switching period (= 1/fsw)
     volatile uint16_t* duty_cycle1; // Recent duty cycle register phase #1
-    
-    volatile uint16_t  phase_hwcl1; // Inductor current limitation phase #1
+    volatile uint16_t* phase_hwcl1; // Inductor current limitation phase #1
+    volatile uint16_t* voltage_reference; // Voltage Loop Reference
+    volatile uint16_t* cpu_load; // pointer to recent CPU load value
+}__attribute__((packed))CONVERTER_SETTINGS_t;
 
-    volatile uint16_t  voltage_reference; // Voltage Loop Reference
-    volatile uint16_t  current_reference; // Phase current reference
-    
-}CONVERTER_SETTINGS_t;
-*/
-/*
 typedef struct {
-
-    // Default 2P2Z/3P3Z/4P4Z/5P5Z compensator data structure
-    volatile cNPNZ16b_t* compensator;    // Add a generic nPnZ compensator structure with clamping
-    
-//} __attribute__((packed)) VOLTAGE_LOOP_SETTINGS_t;
-} CONTROL_LOOP_SETTINGS_t;
-*/
-typedef struct {    
     
     // Generic status information
     volatile CONVERTER_STATUS_t status; // Converter Stage Status Code
 
     // Hardware-specific converter settings and properties
-//    volatile CONVERTER_SETTINGS_t converter; // Generic converter settings
+    volatile CONVERTER_SETTINGS_t converter; // Generic converter settings
     
     // Controller and Converter Objects
-    volatile cNPNZ16b_t c_vmc;        // Declare a NPNZ_t Data Structure for the outer voltage loop
+    volatile cNPNZ16b_t* c_vmc;        // Pointer to a voltage loop
 
 }__attribute__((packed))CONVERTER_t;
 //} CONVERTER_t;
-
 
 #endif
 // EOF _4PH_CONVERTER_DEFINITIONS_H_

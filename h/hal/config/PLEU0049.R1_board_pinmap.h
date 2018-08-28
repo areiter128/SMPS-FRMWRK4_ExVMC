@@ -64,6 +64,17 @@
 #define LED_GN_WR       TP54_WR
 #define LED_GN_RD       TP54_RD
 #define LED_GN_INIT     {LED_GN_WR = LED_OFF; LED_GN_TRIS = 0;}
+
+#define UART_TX_TRIS    TPUTX_TRIS
+#define UART_TX_WR      TPUTX_WR
+#define UART_TX_RD      TPUTX_RD
+#define UART_TX_INIT    {UART_TX_WR = 1; UART_TX_TRIS = 0;}
+
+#define UART_RX_TRIS    TPURX_TRIS
+#define UART_RX_WR      TPURX_WR
+#define UART_RX_RD      TPURX_RD
+#define UART_RX_INIT    {UART_RX_WR = 1; UART_RX_TRIS = 0;}
+
 /*
 #define DBGPIN_TRIS     TP39_TRIS
 #define DBGPIN_WR       TP39_WR
@@ -74,6 +85,11 @@
 #define CLKOUT_WR       TP03_WR
 #define CLKOUT_RD       TP03_RD
 #define CLKOUT_INIT     {CLKOUT_WR = 0; CLKOUT_TRIS = 0;}
+
+#define TSTOUT_TRIS     TP35_TRIS
+#define TSTOUT_WR       TP35_WR
+#define TSTOUT_RD       TP35_RD
+#define TSTOUT_INIT     {TSTOUT_WR = 0; TSTOUT_TRIS = 0;}
 
 #define SWITCH_CLOSED   0
 #define SWITCH_OPEN     1

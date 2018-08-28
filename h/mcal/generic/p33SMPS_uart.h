@@ -81,6 +81,7 @@
     #define UART_UxMOD_REG_OFF_MASK         0x3BFF
 
     #define UART_UxSTA_REG_WRITE_MASK       0xECE1
+    #define UART_UxSTA_REG_RESET_WRITE_MASK 0xECE3
     #define UART_UxSTA_REG_READ_MASK        0xEFFF
 
     #define UART_UxBRG_REG_WRITE_MASK       0xFFFF
@@ -311,8 +312,8 @@ typedef enum
         REG_UTXEN_ON            = 0b0000010000000000,
         REG_UTXEN_OFF           = 0b0000000000000000,
 
-        REG_UTXBF_ON            = 0b0000001000000000,
-        REG_UTXBF_OFF           = 0b0000000000000000,
+        REG_UTXBF_FULL          = 0b0000001000000000,
+        REG_UTXBF_EMPTY         = 0b0000000000000000,
             
         REG_TRMT_ON             = 0b0000000100000000,
         REG_TRMT_OFF            = 0b0000000000000000,
@@ -324,20 +325,21 @@ typedef enum
         REG_ADDEN_ENABLED      = 0b0000000000100000,		
         REG_ADDEN_DISABLED     = 0b0000000000000000,		
 
-        REG_RIDLE_ENABLED      = 0b0000000000010000,		
-        REG_RIDLE_DISABLED     = 0b0000000000000000,		
+        REG_RIDLE_IDLE         = 0b0000000000010000,		
+        REG_RIDLE_ACTIVE       = 0b0000000000000000,		
 
-        REG_PERR_ENABLED       = 0b0000000000001000,		
-        REG_PERR_DISABLED      = 0b0000000000000000,		
+        REG_PERR_DETECTED      = 0b0000000000001000,		
+        REG_PERR_NONE          = 0b0000000000000000,		
 
-        REG_FERR_ENABLED       = 0b0000000000000100,		
-        REG_FERR_DISABLED      = 0b0000000000000000,		
+        REG_FERR_DETECTED      = 0b0000000000000100,		
+        REG_FERR_NONE          = 0b0000000000000000,		
             
-        REG_OERR_ENABLED       = 0b0000000000000010,		
-        REG_OERR_DISABLED      = 0b0000000000000000,		
+        REG_OERR_DETECTED      = 0b0000000000000010,		
+        REG_OERR_NONE          = 0b0000000000000000,		
+        REG_OERR_RESET         = 0b1111111111111101,
             
-        REG_URXDA_ENABLED      = 0b0000000000000001,		
-        REG_URXDA_DISABLED     = 0b0000000000000000		
+        REG_URXDA_DATA_READY   = 0b0000000000000001,		
+        REG_URXDA_NO_DATA      = 0b0000000000000000		
 
     }REG_UxSTA_BIT_FIELD_e;
 
@@ -434,6 +436,10 @@ typedef union
 // Prototypes
 
 extern inline uint16_t gstmr_init_uart(uint16_t index, UxMODE_CONTROL_REGISTER_BIT_FIELD_t regUxMODE, UxSTA_CONTROL_REGISTER_BIT_FIELD_t regUxSTA);
+extern inline uint8_t  gsuart_read(volatile uint16_t index);
+extern inline uint16_t gsuart_write(uint16_t index, uint8_t txData);
+extern inline uint16_t gsuart_get_status(volatile uint16_t index);
+
 extern inline uint16_t gsuart_enable(uint16_t index);
 extern inline uint16_t gsuart_disable(uint16_t index);
 extern inline uint16_t gsuart_dispose(uint16_t index);

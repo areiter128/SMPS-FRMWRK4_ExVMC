@@ -29,6 +29,7 @@
           <itemPath>../h/apl/tasks/task_OnPIM_LED.h</itemPath>
           <itemPath>../h/apl/tasks/task_SoftStart.h</itemPath>
           <itemPath>../h/apl/tasks/task_ConverterStateControl.h</itemPath>
+          <itemPath>../h/apl/tasks/task_UART.h</itemPath>
         </logicalFolder>
         <itemPath>../h/apl/apl.h</itemPath>
       </logicalFolder>
@@ -83,6 +84,7 @@
           <itemPath>../h/mcal/generic/p33SMPS_dsp.h</itemPath>
           <itemPath>../h/mcal/generic/p33SMPS_irq.h</itemPath>
           <itemPath>../h/mcal/generic/p33SMPS_uart.h</itemPath>
+          <itemPath>../h/mcal/generic/p33SMPS_pps.h</itemPath>
         </logicalFolder>
         <itemPath>../h/mcal/cpu_macros.h</itemPath>
         <itemPath>../h/mcal/mcal.h</itemPath>
@@ -131,6 +133,7 @@
           <itemPath>../src/apl/tasks/task_OnPIM_LED.c</itemPath>
           <itemPath>../src/apl/tasks/task_SoftStart.c</itemPath>
           <itemPath>../src/apl/tasks/task_ConverterStateControl.c</itemPath>
+          <itemPath>../src/apl/tasks/task_UART.c</itemPath>
         </logicalFolder>
         <itemPath>../src/apl/apl.c</itemPath>
       </logicalFolder>
@@ -170,6 +173,7 @@
           <itemPath>../src/mcal/generic/p33SMPS_dsp.c</itemPath>
           <itemPath>../src/mcal/generic/p33SMPS_irq.c</itemPath>
           <itemPath>../src/mcal/generic/p33SMPS_uart.c</itemPath>
+          <itemPath>../src/mcal/generic/p33SMPS_pps.c</itemPath>
         </logicalFolder>
         <itemPath>../src/mcal/mcal.c</itemPath>
       </logicalFolder>
@@ -186,7 +190,6 @@
           <itemPath>../src/sfl/isr/isr_gpio.c</itemPath>
           <itemPath>../src/sfl/isr/isr_pwm.c</itemPath>
           <itemPath>../src/sfl/isr/isr_timer.c</itemPath>
-          <itemPath>../src/sfl/isr/isr_uart.c</itemPath>
         </logicalFolder>
         <logicalFolder name="libapi" displayName="libapi" projectFiles="true">
           <itemPath>../src/sfl/libapi/cnpnz_vmc.c</itemPath>
@@ -296,7 +299,7 @@
         <property key="oXC16gcc-sfr-warn" value="false"/>
         <property key="oXC16gcc-smar-io-lvl" value="1"/>
         <property key="oXC16gcc-smart-io-fmt" value=""/>
-        <property key="optimization-level" value="3"/>
+        <property key="optimization-level" value="0"/>
         <property key="post-instruction-scheduling" value="default"/>
         <property key="pre-instruction-scheduling" value="default"/>
         <property key="preprocessor-macros" value=""/>

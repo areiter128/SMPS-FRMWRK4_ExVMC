@@ -46,8 +46,8 @@
 
 #define VIN_DIVIDER_R1          15400       // Resitance of upper voltage divider resistor in Ohm
 #define VIN_DIVIDER_R2          2200        // Resitance of lower voltage divider resistor in Ohm
-#define VIN_DIVIDER_RATIO   (float)((float)VIN_AMP_GAIN * ((float)VIN_DIVIDER_R2) / ((float)(VIN_DIVIDER_R1 + VIN_DIVIDER_R2)))
 #define VIN_AMP_GAIN            1.0         // Gain factor or additional op-amp (set to 1.0 if none is used)
+#define VIN_DIVIDER_RATIO   (float)((float)VIN_AMP_GAIN * ((float)VIN_DIVIDER_R2) / ((float)(VIN_DIVIDER_R1 + VIN_DIVIDER_R2)))
 #define VIN_DIVIDER_RATIO_INV  (float)( 1.0 / VIN_DIVIDER_RATIO)
 
 #define VIN_SENSE_OFFSET       0.000        // Input voltage sense offset
@@ -99,9 +99,9 @@
 
 
 // System Settings
-#define SWITCHING_FREQUENCY		400000      // Nominal switching frequency per converter phase in [Hz]
+#define SWITCHING_FREQUENCY		300000      // Nominal switching frequency per converter phase in [Hz]
 #define PWM_DEAD_TIME_RISING	50e-9       // Nominal dead time at the leading edge in [ns]
-#define PWM_DEAD_TIME_FALLING	70e-9       // Nominal dead time at the falling edge in [ns]
+#define PWM_DEAD_TIME_FALLING	80e-9       // Nominal dead time at the falling edge in [ns]
 #define LEB_PERIOD_LE			150e-9		// Leading Edge Blanking period in nanoseconds
 #define ADC_TRIG_OFFSET         100e-9      // ADC trigger offset compensating for propagat6ion delays
 

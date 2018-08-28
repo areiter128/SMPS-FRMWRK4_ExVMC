@@ -94,6 +94,8 @@ volatile uint16_t (*Task_Table[])(void) = {
     task_LEDGreen_ForceToggle, // task forcing the green expander board LED to toggle state
     
     // System function / Special function initialization
+    init_TaskUART,          // task initializing the debugging UART interface
+    exec_TaskUART,          // task launching the debugging UART interface
     init_hsadc,             // task initializing the high-speed ADC module
     exec_launch_hsadc,      // task launching the pre-configured high-speed ADC module
     init_hsacmp,            // task initializing the high-speed analog comparator module
@@ -139,17 +141,18 @@ volatile uint16_t task_list_device_startup[] = {
     TASK_IDLE, // Step #0
     TASK_INIT_FAULT_OBJECTS, // Step #1
     TASK_LED_GREEN_ON, // Step #2
-    TASK_INIT_CNPNZ_VMC, // Step #3
-    TASK_INIT_HSADC, // Step #4
-    TASK_INIT_HSACMP, // Step #4
-    TASK_INIT_HSPWM, // Step #5
-    TASK_INIT_SOFT_START, // Step #6
-    TASK_LAUNCH_HSADC, // Step #7
-    TASK_IDLE, // Step #8
-    TASK_LAUNCH_HSACMP, // Step #9
+    TASK_INIT_UART, // Step #3
+    TASK_INIT_CNPNZ_VMC, // Step #4
+    TASK_INIT_HSADC, // Step #5
+    TASK_INIT_HSACMP, // Step #6
+    TASK_INIT_HSPWM, // Step #7
+    TASK_INIT_SOFT_START, // Step #8
+    TASK_LAUNCH_HSADC, // Step #9
     TASK_IDLE, // Step #10
-    TASK_LAUNCH_HSPWM, // Step #11
-    TASK_IDLE // Step #12
+    TASK_LAUNCH_HSACMP, // Step #11
+    TASK_IDLE, // Step #12
+    TASK_LAUNCH_HSPWM, // Step #13
+    TASK_IDLE // Step #14
 };
 volatile uint16_t task_list_device_startup_size = (sizeof(task_list_device_startup)/sizeof(task_list_device_startup[0]));
 
@@ -172,6 +175,7 @@ volatile uint16_t task_list_system_shut_down_size = (sizeof(task_list_system_shu
 
 volatile uint16_t task_list_normal[] = {
     TASK_IDLE, // Step #0
+    TASK_EXEC_UART, // Step #5
     TASK_ON_BOARD_LED, // Step #1
     TASK_READ_SWITCH, // Step #2
     TASK_LED_RED, // Step #3
@@ -181,6 +185,7 @@ volatile uint16_t task_list_normal_size = (sizeof(task_list_normal)/sizeof(task_
 
 volatile uint16_t task_list_fault[] = {
     TASK_IDLE, // Step #0
+    TASK_EXEC_UART, // Step #3
     TASK_ON_BOARD_LED, // Step #1
     TASK_READ_SWITCH, // Step #2
     TASK_LED_RED, // Step #3
@@ -190,6 +195,7 @@ volatile uint16_t task_list_fault_size = (sizeof(task_list_fault)/sizeof(task_li
 
 volatile uint16_t task_list_standby[] = {
     TASK_IDLE, // Step #0
+    TASK_EXEC_UART, // Step #5
     TASK_ON_BOARD_LED, // Step #1
     TASK_READ_SWITCH, // Step #2
     TASK_LED_RED, // Step #3

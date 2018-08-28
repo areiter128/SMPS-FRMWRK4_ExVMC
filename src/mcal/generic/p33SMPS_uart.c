@@ -186,6 +186,90 @@ uint16_t gsuart_open_port(uint16_t index,
         reg_buf |= REG_BRGH_HIGH_SPEED; 
     }
 
+    // Set up interrupt
+    switch(index)
+    {
+        case 1:
+            _U1RXIF = 0;
+            _U1RXIP = isr_priority;
+            if(isr_priority > 0) {_U1RXIE = 1; }
+            else {_U1RXIE = 0; }
+
+            _U1TXIF = 0;
+            _U1TXIP = isr_priority;
+            if(isr_priority > 0) {_U1TXIE = 0; }
+            else {_U1TXIE = 0; }
+
+            _U1EIF = 0;
+            _U1EIP = isr_priority;
+            if(isr_priority > 0) {_U1EIE = 0; }
+            else {_U1EIE = 0; }
+
+            break;
+
+        #if defined (U2MODE)
+        case 2:
+            _U2RXIF = 0;
+            _U2RXIP = isr_priority;
+            if(isr_priority > 0) {_U2RXIE = 1; }
+            else {_U2RXIE = 0; }
+
+            _U2TXIF = 0;
+            _U2TXIP = isr_priority;
+            if(isr_priority > 0) {_U2TXIE = 0; }
+            else {_U2TXIE = 0; }
+
+            _U2EIF = 0;
+            _U2EIP = isr_priority;
+            if(isr_priority > 0) {_U2EIE = 0; }
+            else {_U2EIE = 0; }
+            
+            break;
+        #endif
+            
+        #if defined (U3MODE)
+        case 3:
+            _U3RXIF = 0;
+            _U3RXIP = isr_priority;
+            if(isr_priority > 0) {_U3RXIE = 1; }
+            else {_U3RXIE = 0; }
+
+            _U3TXIF = 0;
+            _U3TXIP = isr_priority;
+            if(isr_priority > 0) {_U3TXIE = 0; }
+            else {_U3TXIE = 0; }
+
+            _U3EIF = 0;
+            _U3EIP = isr_priority;
+            if(isr_priority > 0) {_U3EIE = 0; }
+            else {_U3EIE = 0; }
+            
+            break;
+        #endif
+
+        #if defined (U4MODE)
+        case 4:
+            _U4RXIF = 0;
+            _U4RXIP = isr_priority;
+            if(isr_priority > 0) {_U4RXIE = 1; }
+            else {_U4RXIE = 0; }
+
+            _U4TXIF = 0;
+            _U4TXIP = isr_priority;
+            if(isr_priority > 0) {_U4TXIE = 0; }
+            else {_U4TXIE = 0; }
+
+            _U4EIF = 0;
+            _U4EIP = isr_priority;
+            if(isr_priority > 0) {_U4EIE = 0; }
+            else {_U4EIE = 0; }
+            
+            break;
+        #endif
+            
+        default:
+            break;
+    }
     
     // Set the baud rate register
     regptr  = (volatile uint16_t *)&U1BRG + reg_offset;
@@ -193,11 +277,126 @@ uint16_t gsuart_open_port(uint16_t index,
     
     // Set basic configuration
     regptr  = (volatile uint16_t *)&U1MODE + reg_offset;
-    *regptr = ((reg_buf & UART_UxMOD_REG_WRITE_MASK) | REG_UARTEN_ON);	// UART ENABLE is masked out !!!
+    *regptr = ((reg_buf & UART_UxMOD_REG_WRITE_MASK) | REG_UARTEN_ON);	// UART ENABLE is on
 
+    // set status register to enable transmit buffer
+    regptr  = (volatile uint16_t *)&U1STA + reg_offset;
+    *regptr = ((reg_buf & UART_UxSTA_REG_WRITE_MASK) | REG_UTXEN_ON);	// UART TX ENABLE is on
     
 	return(1);
 
+}
+
+
+/*@@gsuart_read
+ * ************************************************************************************************
+ * Summary:
+ * Reads one byte from the input buffer 
+ *
+ * Parameters:
+ *	index		= selects the register address range of the target UART unit
+ *
+ * Description:
+ * This routine is reading one byte from the selected UART receive buffer
+ * ***********************************************************************************************/
+
+uint8_t gsuart_read(volatile uint16_t index)
+{
+
+    volatile uint16_t *regptr;
+    volatile uint16_t reg_offset=0, reg_buf=0;
+    volatile uint16_t timeout=0;
+
+    if (index > UART_UART_COUNT) return(0);     // Check if index is valid
+
+    // Determine SFR offset depending on given index
+	reg_offset = ((index - 1) * (volatile uint16_t)UART_INDEX_REG_OFFSET);
+
+    regptr  = (volatile uint16_t *)&U1STA + reg_offset;
+    reg_buf = (*regptr & UART_UxSTA_REG_READ_MASK);
+    
+    while((!(reg_buf & REG_URXDA_DATA_READY)) && (timeout++ < 5000));
+    if((timeout >= 5000)) return(0);
+    
+    regptr  = (volatile uint16_t *)&U1RXREG + reg_offset;
+    reg_buf = *regptr;
+
+    return (reg_buf);   // return byte received
+}
+
+/*@@gsuart_write
+ * ************************************************************************************************
+ * Summary:
+ * Writes one byte to the output buffer 
+ *
+ * Parameters:
+ *	index		= selects the register address range of the target UART unit
+ *  txData      = data byte to send
+ *
+ * Description:
+ * This routine is writing one byte to the selected UART transmit buffer
+ * ***********************************************************************************************/
+
+uint16_t gsuart_write(uint16_t index, uint8_t txData)
+{
+
+    volatile uint16_t *regptr;
+    volatile uint16_t reg_offset=0, reg_buf=0;
+    volatile uint16_t timeout=0;
+
+    if (index > UART_UART_COUNT) return(0);     // Check if index is valid
+
+    // Determine SFR offset depending on given index
+	reg_offset = ((index - 1) * (volatile uint16_t)UART_INDEX_REG_OFFSET);
+
+    regptr  = (volatile uint16_t *)&U1STA + reg_offset;
+    reg_buf = (*regptr & UART_UxSTA_REG_READ_MASK);
+    
+    // wait until buffer is clear
+    while((reg_buf & REG_UTXBF_FULL) && (timeout++ < 5000));
+    if(timeout >= 5000) { return(0); }
+
+    regptr  = (volatile uint16_t *)&U1TXREG + reg_offset;
+    *regptr = txData;    // Write the data byte to the USART.
+
+    return(1);
+
+}
+
+
+/*@@gsuart_get_status
+ * ************************************************************************************************
+ * Summary:
+ * Reads the status of the given UART unit
+ *
+ * Parameters:
+ *	index		= selects the register address range of the target UART unit
+ *
+ * Description:
+ * This routine is reading the status information form the status register of the selected UART 
+ * ***********************************************************************************************/
+
+uint16_t gsuart_get_status(volatile uint16_t index)
+{
+    
+    volatile uint16_t *regptr;
+    volatile uint16_t reg_offset=0, reg_buf=0;
+
+    if (index > UART_UART_COUNT) return(0);     // Check if index is valid
+
+    // Determine SFR offset depending on given index
+	reg_offset = ((index - 1) * (volatile uint16_t)UART_INDEX_REG_OFFSET);
+
+    regptr  = (volatile uint16_t *)&U1STA + reg_offset;
+    reg_buf = (*regptr & UART_UxSTA_REG_READ_MASK);
+    
+    //    if (reg_buf & REG_OERR_DETECTED)
+    //    {
+    //        reg_buf &= REG_OERR_RESET;
+    //        *regptr = ((volatile uint16_t)reg_buf & UART_UxSTA_REG_RESET_WRITE_MASK);
+    //    }
+
+    return(reg_buf);
 }
 
 /*@@gsuart_enable
@@ -363,6 +562,8 @@ uint16_t gsuart_power_off(uint16_t index)
 	return(1);
 
 }
+
+
 
 
 // EOF

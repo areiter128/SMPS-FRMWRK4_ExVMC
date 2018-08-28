@@ -27,8 +27,8 @@
  * Created on July 28, 2017, 11:04 AM
  * ***************************************************************************/
 
-#ifndef _HARDWARE_ABSTRACTION_LAYER_INITIALIZE_HIGH_SPEED_ANALOG_COMPARATOR_H_
-#define	_HARDWARE_ABSTRACTION_LAYER_INITIALIZE_HIGH_SPEED_ANALOG_COMPARATOR_H_
+#ifndef _HARDWARE_ABSTRACTION_LAYER_INITIALIZE_UART_H_
+#define	_HARDWARE_ABSTRACTION_LAYER_INITIALIZE_UART_H_
 
 #include <xc.h>
 #include <stdint.h>
@@ -38,7 +38,7 @@
 /* ***********************************************************************************************
  * PROTOTYPES
  * ***********************************************************************************************/
-extern volatile uint16_t init_uart(void);
+extern volatile uint16_t init_smps_uart(void);
 
-#endif	/* _HARDWARE_ABSTRACTION_LAYER_INITIALIZE_HIGH_SPEED_ANALOG_COMPARATOR_H_ */
+#endif	/* _HARDWARE_ABSTRACTION_LAYER_INITIALIZE_UART_H_ */
 

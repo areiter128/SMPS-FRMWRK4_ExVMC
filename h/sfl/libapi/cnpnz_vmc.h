@@ -1,11 +1,11 @@
 /* ***************************************************************************************
- * z-Domain Control Loop Designer Version 0.9.0.31.
+ * z-Domain Control Loop Designer Version 0.9.0.32.
  * ***************************************************************************************
  * 4p4z compensation filter coefficients derived for following operating conditions:
  * ***************************************************************************************
  *
  * 	Controller Type:	4P4Z - Advanced High-Q Compensator
- * 	Sampling Frequency:	400000 Hz 
+ * 	Sampling Frequency:	300000 Hz 
  * 	Fixed Point Format:	15
  * 	Scaling Mode:		4 - Fast Floating Point Coefficient Scaling
  * 	Input Gain:			1
