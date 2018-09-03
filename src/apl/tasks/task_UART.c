@@ -47,8 +47,8 @@ volatile SMPS_UART_OBJECT_t smps_uart;
 
 /* private scheduler variables */
 
-#define SMPS_UART_FRMUPDT_INT_CNT 2000
-#define SMPS_UART_SEND_INT_CNT   20
+#define SMPS_UART_FRMUPDT_INT_CNT 100   // number of scheduler cycles until data update
+#define SMPS_UART_SEND_INT_CNT   1      // number of scheduler cycles until sending frame
 volatile uint16_t send_int_cnt = 0;
 volatile uint16_t frm_update_int_cnt = 0;
 
@@ -369,7 +369,7 @@ volatile inline uint16_t task_UARTreceive(void) {
 
 volatile inline uint16_t task_DecodeFrame(void) {
 
-    volatile uint16_t value16 = 0;
+//    volatile uint16_t value16 = 0;
 
     switch (smps_uart.RXBytes.id) 
     {

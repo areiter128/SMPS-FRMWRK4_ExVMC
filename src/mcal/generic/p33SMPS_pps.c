@@ -160,50 +160,19 @@ void pps_UnlockIO(void){
  *  pps_UnmapOutput, pps_UnmapInput
  * 
  * ***********************************************************************************************/
-unsigned char pps_RemapOutput(unsigned char pinno, unsigned char peripheral){
+uint16_t pps_RemapOutput(uint8_t pinno, uint8_t peripheral){
 	
-static volatile unsigned char *regptr;
-unsigned char val;
-  
-	// PPS pins on some devices don't start at 0 and offset-handling is required
-	if ( pinno < RP_PINNO_MIN ) 
-    {
-        return (0); 	// Pin-No mismatch => return with error
-    }
+    volatile uint8_t *regptr;
 
-    #if defined (__P33SMPS_EP__)
-    
-    else if((RP_PINNO_MIN < pinno) && (pinno < RP_PINNO_GAP_MIN))
-    {
-        pinno = pinno - RP_PINNO_MIN;	// subtract register offset
-    }
-    else if((RP_PINNO_GAP_MIN < pinno) && (pinno < RP_PINNO_GAP_MAX))
-    {
-        return (0); 	// Pin-No mismatch => return with error
-    }
-    else if((RP_PINNO_GAP_MAX <= pinno) && (pinno <= RP_PINNO_MAX))
-    {
-        pinno = (pinno - RP_PINNO_GAP_MAX);	// subtract register offset
-        pinno = pinno + PR_PINNO_GAP_OFFSET; // account for the lower registers
-    }
-    #else
-        pinno -= RP_PINNO_MIN;	// subtract register offset
-    #endif
-    
+  
 	// Map selected pin function
-	if ((pinno < RP_PINNO_MAX) || (pinno == PIN_RP_TO_VSS))	// check if pin assign is 
-	{ 														// within a valid range
-		regptr = (volatile unsigned char *)&RPOR0 + pinno;	// get basic address
-	
-		// get byte address offset based on requested pin: regptr += pinno;                  
-		*regptr = peripheral;	// copy requested configuration  
-		val = 1;				// report success
-	}
-	else                      // otherwise report failure 
-	{
-		val = 0;
-	}
-	return val;
+    regptr = (volatile uint8_t *)&RPOR0; // get register block base address
+    regptr += (volatile uint8_t)pinno;            // add offset
+
+    *regptr = (volatile uint8_t)peripheral;	// copy configuration into register location
+    
+	return (1);
+
 }
 
 /*@@pps_RemapInput
@@ -233,21 +202,12 @@ unsigned char val;
  *  pps_UnmapInput, pps_UnmapOutput
  * 
  * ***********************************************************************************************/
-unsigned char pps_RemapInput(unsigned char pinno, unsigned char *regptr)
+uint16_t pps_RemapInput(uint8_t pinno, uint8_t *peripheral)
 {
-unsigned char c_ret;
-  
 	// Map selected pin function
-	if ((pinno < RP_PINNO_MAX) || (pinno == PIN_RP_TO_VSS))		// check if pin assign is 
-	{ 															// within a valid range
-		*regptr = pinno;
-		c_ret = 1;				// report success
-	}
-	else                      // otherwise report failure
-	{
-		c_ret = 0;
-	}
-	return c_ret;
+    *peripheral = pinno;
+
+	return 1;
   
 }
 
@@ -277,23 +237,13 @@ unsigned char c_ret;
  *  pps_RemapOutput, pps_UnmapInput
  * 
  * ***********************************************************************************************/
-unsigned char pps_UnmapOutput(unsigned char pinno)
+uint16_t pps_UnmapOutput(uint8_t pinno)
 {
-unsigned char val;
-
-	// PPS pins on some devices don't start at 0 and offset-handling is required
-	if (RP_PINNO_MIN > pinno)
-	{
-		return (0); 	// Pin-No mismatch => return with error
-	}
-	else
-	{
-		pinno -= RP_PINNO_MIN;
-	}
+    volatile uint16_t fres=0;
 
 	// Unmap selected pin function
-	val = pps_RemapOutput(pinno, PPSOUT_NONE);
-	return val;
+	fres = pps_RemapOutput(pinno, PPSPIN_NULL);
+	return fres;
 
 }
 
@@ -323,13 +273,13 @@ unsigned char val;
  *  pps_RemapOutput, pps_UnmapOutput
  * 
  * ***********************************************************************************************/
-unsigned char pps_UnmapInput(unsigned char *regptr)
+uint16_t pps_UnmapInput(uint8_t *peripheral)
 {
-unsigned char val;
+    volatile uint16_t fres=0;
 
 	// Unmap selected pin function
-	val = pps_RemapInput(PIN_RP_TO_VSS, regptr);
-	return val;
+	fres = pps_RemapInput(PPSPIN_NULL, peripheral);
+	return fres;
 
 }
 

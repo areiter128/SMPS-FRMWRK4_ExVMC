@@ -49,9 +49,9 @@
 #define CVRT_UART_STOP_BITS     UART_STOP_BITS_1        // Number of stop bits
 #define CVRT_UART_IRS_PRIORITY  UART_ISR_PRIORITY_1     // Priority of the UART interrupts
 
-#define CVRT_UART_RX_PPS_NO     63u
+#define CVRT_UART_RX_PPS_NO     PPSI_RC15
 #define CVRT_UART_RX_PPS        PPSIN_U1RX
-#define CVRT_UART_TX_PPS_NO     36u
+#define CVRT_UART_TX_PPS_NO     PPSO_RB4
 #define CVRT_UART_TX_PPS        PPSOUT_U1TX
 
 #define CVRT_UxRXBUF_SIZE       (32)
