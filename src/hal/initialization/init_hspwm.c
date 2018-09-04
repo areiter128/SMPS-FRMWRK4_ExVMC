@@ -57,40 +57,40 @@ volatile uint16_t init_hspwm(void)
     volatile uint16_t i = 0, m = 0, phs = 0, trgcon = 0, fltcon = 0;
     
     // Turn on power to PWM peripheral blocks
-    gspwm_module_power_up();
+    hspwm_module_power_up();
     
-    gspwm_channel_power_up(CVRT_PH1_PWM_IDX);
+    hspwm_channel_power_up(CVRT_PH1_PWM_IDX);
     
     #if ( PWM_MPH_PHASE_COUNT >= 2 )
-    gspwm_channel_power_up(CVRT_PH2_PWM_IDX);
+    hspwm_channel_power_up(CVRT_PH2_PWM_IDX);
     #endif
     #if ( PWM_MPH_PHASE_COUNT >= 3 )
-    gspwm_channel_power_up(CVRT_PH3_PWM_IDX);
+    hspwm_channel_power_up(CVRT_PH3_PWM_IDX);
     #endif
     #if ( PWM_MPH_PHASE_COUNT >= 4 )
-    gspwm_channel_power_up(CVRT_PH4_PWM_IDX);
+    hspwm_channel_power_up(CVRT_PH4_PWM_IDX);
     #endif
     #if ( PWM_MPH_PHASE_COUNT >= 5 )
-    gspwm_channel_power_up(CVRT_PH5_PWM_IDX);
+    hspwm_channel_power_up(CVRT_PH5_PWM_IDX);
     #endif
     #if ( PWM_MPH_PHASE_COUNT >= 6 )
-    gspwm_channel_power_up(CVRT_PH6_PWM_IDX);
+    hspwm_channel_power_up(CVRT_PH6_PWM_IDX);
     #endif
     #if ( PWM_MPH_PHASE_COUNT >= 7 )
-    gspwm_channel_power_up(CVRT_PH7_PWM_IDX);
+    hspwm_channel_power_up(CVRT_PH7_PWM_IDX);
     #endif
     #if ( PWM_MPH_PHASE_COUNT >= 8 )
-    gspwm_channel_power_up(CVRT_PH8_PWM_IDX);
+    hspwm_channel_power_up(CVRT_PH8_PWM_IDX);
     #endif
     #if ( PWM_MPH_PHASE_COUNT > 8 )
     #error === specified number of PWM channels not supported by this code module yet ===
     #endif
 
     // Reset PWM output pin configuration to GPIO-mode
-    gspwm_reset_pwm_io();
+    hspwm_reset_pwm_io();
     
 	// Set up basic PWM properties (valid for all channels)
-	gspwm_init_mtb(SWITCHING_FRQ_TIME_BASE, CVRT_HSPWM_PTCON_CFG, CVRT_HSPWM_PTCON2_CFG, SWITCHING_PERIOD);
+	hspwm_init_mtb(SWITCHING_FRQ_TIME_BASE, CVRT_HSPWM_PTCON_CFG, CVRT_HSPWM_PTCON2_CFG, SWITCHING_PERIOD);
 
     for(i=0; i<PWM_MPH_PHASE_COUNT; i++)
     { // Initialize PWM Channel for Phase #1
@@ -161,15 +161,15 @@ volatile uint16_t init_hspwm(void)
             #endif
         }
         
-        gspwm_init_channel(m, CVRT_HSPWM_PWMCONx_CFG, CVRT_HSPWM_IOCONx_CFG, fltcon, CVRT_HSPWM_LEBCONx_CFG);
-        gspwm_init_channel_timing_complementary(m, 0, 0, PWM_DEAD_TIME_LE, PWM_DEAD_TIME_FE);
-        gspwm_set_phase(m, PWMx_HIGH_LOW, phs);
-        gspwm_set_duty_cycle(m, PWMx_HIGH, 0);
-        gspwm_set_leb_period(m, LEB_PERIOD);    
-        gspwm_set_adc_trigger_config(m, trgcon);
+        hspwm_init_channel(m, CVRT_HSPWM_PWMCONx_CFG, CVRT_HSPWM_IOCONx_CFG, fltcon, CVRT_HSPWM_LEBCONx_CFG);
+        hspwm_init_channel_timing_complementary(m, 0, 0, PWM_DEAD_TIME_LE, PWM_DEAD_TIME_FE);
+        hspwm_set_phase(m, PWMx_HIGH_LOW, phs);
+        hspwm_set_duty_cycle(m, PWMx_HIGH, 0);
+        hspwm_set_leb_period(m, LEB_PERIOD);    
+        hspwm_set_adc_trigger_config(m, trgcon);
 
-        gspwm_ovr_output_hold(m, PWMx_HIGH_LOW);			// Hold both PWM channel output pins in override mode until the system is launched
-        gspwm_channel_output_disable(m, PWMx_HIGH_LOW);   // Disable both PWM channel output pins
+        hspwm_ovr_output_hold(m, PWMx_HIGH_LOW);			// Hold both PWM channel output pins in override mode until the system is launched
+        hspwm_channel_output_disable(m, PWMx_HIGH_LOW);   // Disable both PWM channel output pins
         
     }
 
@@ -204,7 +204,7 @@ volatile uint16_t exec_launch_hspwm(void)
     
 
     // Interrupt Configuration = TESTCODE =
-    fres = gspwm_set_sevtcmp_value(PWM_PRIMARY, CVRT_SEV_DEFAULT_TRIGGER);
+    fres = hspwm_set_sevtcmp_value(PWM_PRIMARY, CVRT_SEV_DEFAULT_TRIGGER);
     CVRT_SEV_IRQ_IF = 0;                                // Reset Interrupt Flag
     CVRT_SEV_IRQ_IP = CVRT_SEV_ISR_PRIORITY;            // Set Interrupt Priority
     CVRT_SEV_IRQ_IE = CVRT_SEV_ISR_ENABLE;              // Enable/Disable Interrupt
@@ -214,12 +214,12 @@ volatile uint16_t exec_launch_hspwm(void)
 //    CVRT_PH1_PWM_IRQ_IE = CVRT_PH1_PWM_ISR_ENABLE;      // Enable/Disable ISR
 
     // Enable PWM peripheral
-    fres &= gspwm_module_enable();
+    fres &= hspwm_module_enable();
 
     // Launch PWM1
-    fres &= gspwm_channel_output_enable(CVRT_PH1_PWM_IDX, PWMx_HIGH_LOW);
-    fres &= gspwm_set_duty_cycle(CVRT_PH1_PWM_IDX, PWMx_HIGH, 0);
-    fres &= gspwm_ovr_output_release(CVRT_PH1_PWM_IDX, PWMx_HIGH_LOW);
+    fres &= hspwm_channel_output_enable(CVRT_PH1_PWM_IDX, PWMx_HIGH_LOW);
+    fres &= hspwm_set_duty_cycle(CVRT_PH1_PWM_IDX, PWMx_HIGH, 0);
+    fres &= hspwm_ovr_output_release(CVRT_PH1_PWM_IDX, PWMx_HIGH_LOW);
     
     // Launch PWM2
     #if ( PWM_MPH_PHASE_COUNT >= 2 )
@@ -228,9 +228,9 @@ volatile uint16_t exec_launch_hspwm(void)
     CVRT_PH2_PWM_IRQ_IP = CVRT_PH2_PWM_ISR_PRIORITY;    // Set INterrupt Priority
     CVRT_PH2_PWM_IRQ_IE = CVRT_PH2_PWM_ISR_ENABLE;      // Enable/Disable ISR
 
-    fres &= gspwm_channel_output_enable(CVRT_PH2_PWM_IDX, PWMx_HIGH_LOW);
-    fres &= gspwm_set_duty_cycle(CVRT_PH2_PWM_IDX, PWMx_HIGH, 0);
-    fres &= gspwm_ovr_output_release(CVRT_PH2_PWM_IDX, PWMx_HIGH_LOW);
+    fres &= hspwm_channel_output_enable(CVRT_PH2_PWM_IDX, PWMx_HIGH_LOW);
+    fres &= hspwm_set_duty_cycle(CVRT_PH2_PWM_IDX, PWMx_HIGH, 0);
+    fres &= hspwm_ovr_output_release(CVRT_PH2_PWM_IDX, PWMx_HIGH_LOW);
 
     #endif
     
@@ -241,9 +241,9 @@ volatile uint16_t exec_launch_hspwm(void)
     CVRT_PH3_PWM_IRQ_IP = CVRT_PH3_PWM_ISR_PRIORITY;    // Set INterrupt Priority
     CVRT_PH3_PWM_IRQ_IE = CVRT_PH3_PWM_ISR_ENABLE;      // Enable/Disable ISR
 
-    fres &= gspwm_channel_output_enable(CVRT_PH3_PWM_IDX, PWMx_HIGH_LOW);
-    fres &= gspwm_set_duty_cycle(CVRT_PH3_PWM_IDX, PWMx_HIGH, 0);
-    fres &= gspwm_ovr_output_release(CVRT_PH3_PWM_IDX, PWMx_HIGH_LOW);
+    fres &= hspwm_channel_output_enable(CVRT_PH3_PWM_IDX, PWMx_HIGH_LOW);
+    fres &= hspwm_set_duty_cycle(CVRT_PH3_PWM_IDX, PWMx_HIGH, 0);
+    fres &= hspwm_ovr_output_release(CVRT_PH3_PWM_IDX, PWMx_HIGH_LOW);
 
     #endif
     
@@ -254,9 +254,9 @@ volatile uint16_t exec_launch_hspwm(void)
     CVRT_PH4_PWM_IRQ_IP = CVRT_PH4_PWM_ISR_PRIORITY;    // Set INterrupt Priority
     CVRT_PH4_PWM_IRQ_IE = CVRT_PH4_PWM_ISR_ENABLE;      // Enable/Disable ISR
 
-    fres &= gspwm_channel_output_enable(CVRT_PH4_PWM_IDX, PWMx_HIGH_LOW);
-    fres &= gspwm_set_duty_cycle(CVRT_PH4_PWM_IDX, PWMx_HIGH, 0);
-    fres &= gspwm_ovr_output_release(CVRT_PH4_PWM_IDX, PWMx_HIGH_LOW);
+    fres &= hspwm_channel_output_enable(CVRT_PH4_PWM_IDX, PWMx_HIGH_LOW);
+    fres &= hspwm_set_duty_cycle(CVRT_PH4_PWM_IDX, PWMx_HIGH, 0);
+    fres &= hspwm_ovr_output_release(CVRT_PH4_PWM_IDX, PWMx_HIGH_LOW);
 
     #endif
     

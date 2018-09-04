@@ -166,7 +166,7 @@ volatile uint16_t exec_soft_start(void)
                 ctrl_v_reference = (vout + soft_start.ref_increment);
                 
                 // enable PWM outputs and controller
-                gspwm_ovr_output_release(CVRT_PH1_PWM_IDX, PWMx_HIGH_LOW);
+                hspwm_ovr_output_release(CVRT_PH1_PWM_IDX, PWMx_HIGH_LOW);
                 cnpnz_vmc.status.flag.enable = 1;   // enable controller (close the loop)
                 
                 // wait until control loop activity has been detected at least once
@@ -422,7 +422,7 @@ volatile uint16_t exec_soft_shut_down(void)
             soft_shutdwn.phase = SOFT_SHUT_DOWN_STEP_INIT;
             
             // disable PWM outputs and controller
-            gspwm_ovr_output_hold(CVRT_PH1_PWM_IDX, PWMx_HIGH_LOW);
+            hspwm_ovr_output_hold(CVRT_PH1_PWM_IDX, PWMx_HIGH_LOW);
             cnpnz_vmc.status.flag.enable = 0;   // disable controller (close the loop)
             
             break;

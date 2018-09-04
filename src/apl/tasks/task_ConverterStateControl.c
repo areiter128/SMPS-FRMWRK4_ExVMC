@@ -27,8 +27,8 @@ volatile uint16_t cvrt_InitConverter(void)
 volatile uint16_t cvrt_ShutDown(void)
 {
     cnpnz_vmc.status.flag.enable = 0; // turn off controller
-    gspwm_set_duty_cycle(CVRT_PH1_PWM_IDX, PWM_PRIMARY, 0); // turn off duty cycle
-    gspwm_ovr_output_hold(CVRT_PH1_PWM_IDX, PWMx_HIGH_LOW); // override PWM outputs
+    hspwm_set_duty_cycle(CVRT_PH1_PWM_IDX, PWM_PRIMARY, 0); // turn off duty cycle
+    hspwm_ovr_output_hold(CVRT_PH1_PWM_IDX, PWMx_HIGH_LOW); // override PWM outputs
     
     cnpnz_vmc_Reset(&cnpnz_vmc);    // Reset control histories
     
@@ -37,8 +37,8 @@ volatile uint16_t cvrt_ShutDown(void)
 
 volatile uint16_t cvrt_StartUp(void)
 {
-//    gspwm_set_duty_cycle(CVRT_PH1_PWM_IDX, PWM_PRIMARY, 0); // turn off duty cycle
-//    gspwm_ovr_output_release(CVRT_PH1_PWM_IDX, PWMx_HIGH_LOW); // override PWM outputs
+//    hspwm_set_duty_cycle(CVRT_PH1_PWM_IDX, PWM_PRIMARY, 0); // turn off duty cycle
+//    hspwm_ovr_output_release(CVRT_PH1_PWM_IDX, PWMx_HIGH_LOW); // override PWM outputs
 //    
 //    init_soft_start();
 //    cnpnz_vmc_Reset(&cnpnz_vmc);    // Reset control histories

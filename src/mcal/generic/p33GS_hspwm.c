@@ -39,7 +39,7 @@
  * ***********************************************************************************************/
 
 
-/*@@gspwm_reset_pwm_io
+/*@@hspwm_reset_pwm_io
  * ************************************************************************************************
  * Summary:
  * Resets the IO control configuration of all PWM output pins
@@ -52,19 +52,19 @@
  * sets them into GPIO mode, effectively disabling the PWM outputs.
  * ***********************************************************************************************/
 
-uint16_t gspwm_reset_pwm_io(void)
+uint16_t hspwm_reset_pwm_io(void)
 {
     volatile uint16_t i=0;
     
     for (i=1; i<=HSPWM_CHANNEL_COUNT; i++)
     {
-        gspwm_channel_output_disable(i, PWMx_HIGH_LOW);
+        hspwm_channel_output_disable(i, PWMx_HIGH_LOW);
     }
 
     return(1); 
 }
 
-/*@@gspwm_init_mtb
+/*@@hspwm_init_mtb
  * ************************************************************************************************
  * Summary:
  * Initializes the master time base configuration
@@ -74,7 +74,7 @@ uint16_t gspwm_reset_pwm_io(void)
  *	regXTCON	= holds the register value for the PTCON/STCON register
  *				  => bit 15 of the PTCON register, which enables/disables the PWM module,
  *					 will automatically be masked out. Please enable the PWM module by 
- *					 calling gspwm_enable()
+ *					 calling hspwm_enable()
  *	regXTCON2	= PWM resolution divider
  *	period		= period value, depending on PWM resolution, sets the starting frequency
  *
@@ -83,7 +83,7 @@ uint16_t gspwm_reset_pwm_io(void)
  * PWM resolution divider and starting period are set here.
  * ***********************************************************************************************/
 
-uint16_t gspwm_init_mtb(uint16_t index, uint16_t regXTCON, uint16_t regXTCON2, uint16_t period)
+uint16_t hspwm_init_mtb(uint16_t index, uint16_t regXTCON, uint16_t regXTCON2, uint16_t period)
 {
 
 volatile uint16_t *regptr;
@@ -130,7 +130,7 @@ volatile uint16_t *regptr;
 
 }
 
-/*@@gspwm_set_mtb_period
+/*@@hspwm_set_mtb_period
  * ************************************************************************************************
  * Summary:
  * Sets the master timebase period on the fly
@@ -144,7 +144,7 @@ volatile uint16_t *regptr;
  * "on-the-fly"
  * ***********************************************************************************************/
 
-uint16_t gspwm_set_mtb_period(uint16_t index, uint16_t period)
+uint16_t hspwm_set_mtb_period(uint16_t index, uint16_t period)
 {
 
 volatile uint16_t *regptr;
@@ -180,7 +180,7 @@ volatile uint16_t *regptr;
 
 }
 
-/*@@gspwm_get_mtb_period
+/*@@hspwm_get_mtb_period
  * ************************************************************************************************
  * Summary:
  * Reads the master timebase period on the fly
@@ -195,7 +195,7 @@ volatile uint16_t *regptr;
  * Reads the base period of the primary or secondary time base 
  * ***********************************************************************************************/
 
-uint16_t gspwm_get_mtb_period(uint16_t index)
+uint16_t hspwm_get_mtb_period(uint16_t index)
 {
 
 volatile uint16_t *regptr;
@@ -230,7 +230,7 @@ volatile uint16_t reg_buf=0;
 
 }
 
-/*@@gspwm_init_channel
+/*@@hspwm_init_channel
  * ************************************************************************************************
  * Summary:
  * Initializes a specific PWM generator
@@ -241,14 +241,14 @@ volatile uint16_t reg_buf=0;
  *	regIOCON	= configures the IO control of the associated PWMxH/PWMxL pins
  *	regFCLCON	= configures the FAULT and CURRENT LIMIT sources and features
  *	regLEBCON	= Configures the LEADING EDGE BLANKING (LEB) features 
- *				  => period is set by function gspwm_set_leb_period(...)
+ *				  => period is set by function hspwm_set_leb_period(...)
  *
  * Description:
  * Configures the basic settings and features of a specific PWM generator, its associated pins,
  * FAULT sources and behavior and leading edge blanking features
  * ***********************************************************************************************/
 
-uint16_t gspwm_init_channel(uint16_t index, uint16_t regPWMCON, uint16_t regIOCON, 
+uint16_t hspwm_init_channel(uint16_t index, uint16_t regPWMCON, uint16_t regIOCON, 
 		uint16_t regFCLCON, uint16_t regLEBCON)
 {
 
@@ -275,7 +275,7 @@ volatile uint16_t reg_offset=0;
 
 }
 
-/*@@gspwm_set_duty_cycle
+/*@@hspwm_set_duty_cycle
  * ************************************************************************************************
  * Summary:
  * Sets the duty cycle of a specific channel
@@ -290,7 +290,7 @@ volatile uint16_t reg_offset=0;
  * registers and bit locations on different devices
  * ***********************************************************************************************/
 
-uint16_t gspwm_set_duty_cycle(uint16_t index, uint16_t sub_index, uint16_t duty_cycle)
+uint16_t hspwm_set_duty_cycle(uint16_t index, uint16_t sub_index, uint16_t duty_cycle)
 {
 
 volatile uint16_t *regptr;
@@ -321,7 +321,7 @@ volatile uint16_t reg_offset = 0;
 
 }
 
-/*@@gspwm_get_duty_cycle
+/*@@hspwm_get_duty_cycle
  * ************************************************************************************************
  * Summary:
  * Reads the duty cycle of a specific channel
@@ -337,7 +337,7 @@ volatile uint16_t reg_offset = 0;
  * registers and bit locations on different devices
  * ***********************************************************************************************/
 
-uint16_t gspwm_get_duty_cycle(uint16_t index, uint16_t sub_index)
+uint16_t hspwm_get_duty_cycle(uint16_t index, uint16_t sub_index)
 {
 
 volatile uint16_t *regptr;
@@ -369,7 +369,7 @@ volatile uint16_t reg_buf = 0;
 
 }
 
-/*@@gspwm_set_phase
+/*@@hspwm_set_phase
  * ************************************************************************************************
  * Summary:
  * Sets the phase/period of a specific channel
@@ -384,7 +384,7 @@ volatile uint16_t reg_buf = 0;
  * registers and bit locations on different devices
  * ***********************************************************************************************/
 
-uint16_t gspwm_set_phase(uint16_t index, uint16_t sub_index, uint16_t period)
+uint16_t hspwm_set_phase(uint16_t index, uint16_t sub_index, uint16_t period)
 {
 
 volatile uint16_t *regptr;
@@ -423,7 +423,7 @@ volatile uint16_t reg_offset = 0;
 
 }
 
-/*@@gspwm_get_duty_cycle
+/*@@hspwm_get_duty_cycle
  * ************************************************************************************************
  * Summary:
  * Reads the phase/period of a specific channel
@@ -440,7 +440,7 @@ volatile uint16_t reg_offset = 0;
  * registers and bit locations on different devices
  * ***********************************************************************************************/
 
-uint16_t gspwm_get_phase(uint16_t index, uint16_t sub_index)
+uint16_t hspwm_get_phase(uint16_t index, uint16_t sub_index)
 {
 
 volatile uint16_t *regptr;
@@ -470,7 +470,7 @@ volatile uint16_t reg_buf = 0;
 
 }
 
-/*@@gspwm_set_sevtcmp_value
+/*@@hspwm_set_sevtcmp_value
  * *****************************************************************************************************
  * Summary:
  * Sets the leading edge blanking period of a specific channel
@@ -484,7 +484,7 @@ volatile uint16_t reg_buf = 0;
  * registers and bit locations on different devices
  * *****************************************************************************************************/
 
-uint16_t gspwm_set_sevtcmp_value(uint16_t index, uint16_t period)
+uint16_t hspwm_set_sevtcmp_value(uint16_t index, uint16_t period)
 {
 
 volatile uint16_t *regptr;
@@ -516,7 +516,7 @@ volatile uint16_t *regptr;
 
 }
 
-/*@@gspwm_get_sevtcmp_value
+/*@@hspwm_get_sevtcmp_value
  * *****************************************************************************************************
  * Summary:
  * Reads the leading edge blanking period of a specific channel
@@ -532,7 +532,7 @@ volatile uint16_t *regptr;
  * registers and bit locations on different devices
  * *****************************************************************************************************/
 
-uint16_t gspwm_get_sevtcmp_value(uint16_t index)
+uint16_t hspwm_get_sevtcmp_value(uint16_t index)
 {
 
 volatile uint16_t *regptr;
@@ -565,7 +565,7 @@ volatile uint16_t reg_buf=0;
 
 }
 
-/*@@gspwm_set_leb_period
+/*@@hspwm_set_leb_period
  * *****************************************************************************************************
  * Summary:
  * Sets the leading edge blanking period of a specific channel
@@ -579,7 +579,7 @@ volatile uint16_t reg_buf=0;
  * resolutions, registers and bit locations on different devices
  * *****************************************************************************************************/
 
-uint16_t gspwm_set_leb_period(uint16_t index, uint16_t period)
+uint16_t hspwm_set_leb_period(uint16_t index, uint16_t period)
 {
 
 volatile uint16_t *regptr;
@@ -609,7 +609,7 @@ volatile uint16_t reg_offset=0;
 
 }
 
-/*@@gspwm_get_leb_period
+/*@@hspwm_get_leb_period
  * *****************************************************************************************************
  * Summary:
  * Reads the leading edge blanking period of a specific channel
@@ -625,7 +625,7 @@ volatile uint16_t reg_offset=0;
  * resolutions, registers and bit locations on different devices
  * *****************************************************************************************************/
 
-uint16_t gspwm_get_leb_period(uint16_t index)
+uint16_t hspwm_get_leb_period(uint16_t index)
 {
 
 volatile uint16_t *regptr;
@@ -656,7 +656,7 @@ volatile uint16_t reg_buf=0;
 
 }
 
-/*@@gspwm_init_dead_time
+/*@@hspwm_init_dead_time
  * *****************************************************************************************************
  * Summary:
  * Sets the dead time mode and periods at the leading and falling edge of a specific PWM channel
@@ -670,7 +670,7 @@ volatile uint16_t reg_buf=0;
  * low-side switch. This function configures the dead time generator offering all options.
  * *****************************************************************************************************/
 
-uint16_t gspwm_init_dead_time(uint16_t index, uint16_t dead_time_mode, uint16_t rising_edge_period, uint16_t falling_edge_period)
+uint16_t hspwm_init_dead_time(uint16_t index, uint16_t dead_time_mode, uint16_t rising_edge_period, uint16_t falling_edge_period)
 {
 
 volatile uint16_t *regptr;
@@ -714,7 +714,7 @@ volatile uint16_t reg_buf = 0;
 
 }
 
-/*@@gspwm_get_dead_time
+/*@@hspwm_get_dead_time
  * *****************************************************************************************************
  * Summary:
  * Reads the dead time period of a specific channel
@@ -734,11 +734,11 @@ volatile uint16_t reg_buf = 0;
  * be used to derive both dead times simultaneously:
  * 
  * uint16_t a=0, b=0;
- * gspwm_get_dead_times(1, &a, &b); // REading both dead times of PWM channel #1
+ * hspwm_get_dead_times(1, &a, &b); // REading both dead times of PWM channel #1
  *
  * *****************************************************************************************************/
 
-uint16_t gspwm_get_dead_times(uint16_t index, uint16_t *rising_edge_period, uint16_t *falling_edge_period)
+uint16_t hspwm_get_dead_times(uint16_t index, uint16_t *rising_edge_period, uint16_t *falling_edge_period)
 {
 
 volatile uint16_t *regptr;
@@ -758,7 +758,7 @@ volatile uint16_t reg_offset=0;
 
 }
 
-/*@@gspwm_init_channel_timing_complementary
+/*@@hspwm_init_channel_timing_complementary
  * *****************************************************************************************************
  * Summary:
  * Initializes a specific PWM generator
@@ -775,7 +775,7 @@ volatile uint16_t reg_offset=0;
  * mode or push-pull mode
  * *****************************************************************************************************/
 
-uint16_t gspwm_init_channel_timing_complementary(uint16_t index, uint16_t phase, 
+uint16_t hspwm_init_channel_timing_complementary(uint16_t index, uint16_t phase, 
 	uint16_t duty_cycle, uint16_t dead_time, uint16_t alternate_dead_time)
 {
 
@@ -802,7 +802,7 @@ volatile uint16_t reg_offset=0;
 
 }
 
-/*@@gspwm_init_channel_timing_redundant
+/*@@hspwm_init_channel_timing_redundant
  * *****************************************************************************************************
  * Summary:
  * Initializes a specific PWM generator in redundant mode
@@ -818,7 +818,7 @@ volatile uint16_t reg_offset=0;
  * mode or push-pull mode
  * *****************************************************************************************************/
 
-uint16_t gspwm_init_channel_timing_redundant(uint16_t index, uint16_t phase, 
+uint16_t hspwm_init_channel_timing_redundant(uint16_t index, uint16_t phase, 
 		uint16_t duty_cycle)
 {
 
@@ -839,7 +839,7 @@ volatile uint16_t reg_offset=0;
 
 }
 
-/*@@gspwm_init_channel_timing_push_pull
+/*@@hspwm_init_channel_timing_push_pull
  * *****************************************************************************************************
  * Summary:
  * Initializes a specific PWM generator in push-pull mode
@@ -856,7 +856,7 @@ volatile uint16_t reg_offset=0;
  * mode or push-pull mode
  * *****************************************************************************************************/
 
-uint16_t gspwm_init_channel_timing_push_pull(uint16_t index, uint16_t phase, 
+uint16_t hspwm_init_channel_timing_push_pull(uint16_t index, uint16_t phase, 
 		uint16_t duty_cycle, uint16_t dead_time, uint16_t alternate_dead_time)
 {
 
@@ -883,7 +883,7 @@ volatile uint16_t reg_offset;
 
 }
 
-/*@@gspwm_init_channel_timing_true_independent
+/*@@hspwm_init_channel_timing_true_independent
  * *****************************************************************************************************
  * Summary:
  * Initializes a specific PWM generator
@@ -899,7 +899,7 @@ volatile uint16_t reg_offset;
  * mode or push-pull mode
  * *****************************************************************************************************/
 
-uint16_t gspwm_init_channel_timing_true_independent(uint16_t index, uint16_t sub_index, 
+uint16_t hspwm_init_channel_timing_true_independent(uint16_t index, uint16_t sub_index, 
 		uint16_t phase, uint16_t duty_cycle)
 {
 
@@ -939,7 +939,7 @@ volatile uint16_t reg_offset=0;
 
 }
 
-/*@@gspwm_init_channel_adc_trigger
+/*@@hspwm_init_channel_adc_trigger
  * *****************************************************************************************************
  * Summary:
  * Initializes the trigger configuration of a specific PWM generator
@@ -956,7 +956,7 @@ volatile uint16_t reg_offset=0;
  * value, however, can be set individually by using the sub_index and ADC parameters.
  * *****************************************************************************************************/
 
-uint16_t gspwm_init_channel_adc_trigger(uint16_t index, uint16_t regTRGCON, 
+uint16_t hspwm_init_channel_adc_trigger(uint16_t index, uint16_t regTRGCON, 
 			uint16_t primary_adc_trigger, uint16_t secondary_adc_trigger)
 {
 
@@ -980,7 +980,7 @@ volatile uint16_t reg_offset;
 
 }
 
-/*@@gspwm_set_adc_trigger_config
+/*@@hspwm_set_adc_trigger_config
  * *****************************************************************************************************
  * Summary:
  * Sets the trigger configuration of a specific PWM generator
@@ -995,7 +995,7 @@ volatile uint16_t reg_offset;
  * the sub_index.
  * *****************************************************************************************************/
 
-uint16_t gspwm_set_adc_trigger_config(uint16_t index, uint16_t adc_tigger_config)
+uint16_t hspwm_set_adc_trigger_config(uint16_t index, uint16_t adc_tigger_config)
 {
 
 volatile uint16_t *regptr;
@@ -1012,7 +1012,7 @@ volatile uint16_t reg_offset;
 
 }
 
-/*@@gspwm_set_adc_trigger
+/*@@hspwm_set_adc_trigger
  * *****************************************************************************************************
  * Summary:
  * Sets the trigger location of a specific PWM generator
@@ -1027,7 +1027,7 @@ volatile uint16_t reg_offset;
  * the sub_index.
  * *****************************************************************************************************/
 
-uint16_t gspwm_set_adc_trigger(uint16_t index, uint16_t sub_index, uint16_t adc_trigger)
+uint16_t hspwm_set_adc_trigger(uint16_t index, uint16_t sub_index, uint16_t adc_trigger)
 {
 
 volatile uint16_t *regptr;
@@ -1057,7 +1057,7 @@ volatile uint16_t reg_offset;
 
 }
 
-/*@@gspwm_get_adc_trigger
+/*@@hspwm_get_adc_trigger
  * *****************************************************************************************************
  * Summary:
  * Reads the trigger location of a specific PWM generator
@@ -1074,7 +1074,7 @@ volatile uint16_t reg_offset;
  * the sub_index.
  * *****************************************************************************************************/
 
-uint16_t gspwm_get_adc_trigger(uint16_t index, uint16_t sub_index)
+uint16_t hspwm_get_adc_trigger(uint16_t index, uint16_t sub_index)
 {
 
 volatile uint16_t *regptr;
@@ -1105,7 +1105,7 @@ volatile uint16_t reg_buf=0;
 
 }
 
-/*@@gspwm_channel_power_up()
+/*@@hspwm_channel_power_up()
  * *****************************************************************************************************
  * Summary:
  * Turns on the base power of the PWM module 
@@ -1117,7 +1117,7 @@ volatile uint16_t reg_buf=0;
  * 
  * *****************************************************************************************************/
 
-uint16_t gspwm_channel_power_up(uint16_t index)
+uint16_t hspwm_channel_power_up(uint16_t index)
 {
 	 
 	if (index > HSPWM_CHANNEL_COUNT) return(0);
@@ -1156,7 +1156,7 @@ uint16_t gspwm_channel_power_up(uint16_t index)
 	 
 }
 
-/*@@gspwm_channel_power_down()
+/*@@hspwm_channel_power_down()
  * *****************************************************************************************************
  * Summary:
  * Turns off the base power of the PWM module 
@@ -1168,7 +1168,7 @@ uint16_t gspwm_channel_power_up(uint16_t index)
  * 
  * *****************************************************************************************************/
 
-uint16_t gspwm_channel_power_down(uint16_t index)
+uint16_t hspwm_channel_power_down(uint16_t index)
 {
 	 
 	if (index > HSPWM_CHANNEL_COUNT) return(0);
@@ -1210,7 +1210,7 @@ uint16_t gspwm_channel_power_down(uint16_t index)
 	 
 }
 
-/*@@gspwm_module_power_up()
+/*@@hspwm_module_power_up()
  * *****************************************************************************************************
  * Summary:
  * Turns on the base power of the PWM module 
@@ -1221,7 +1221,7 @@ uint16_t gspwm_channel_power_down(uint16_t index)
  * 
  * *****************************************************************************************************/
 
-uint16_t gspwm_module_power_up(void)
+uint16_t hspwm_module_power_up(void)
 {
 	 
 	_PWMMD = 0;		// Turn on power to PWM module
@@ -1230,7 +1230,7 @@ uint16_t gspwm_module_power_up(void)
 	 
 }
 
-/*@@gspwm_module_power_down()
+/*@@hspwm_module_power_down()
  * *****************************************************************************************************
  * Summary:
  * Turns on the base power of the PWM module 
@@ -1241,7 +1241,7 @@ uint16_t gspwm_module_power_up(void)
  * 
  * *****************************************************************************************************/
 
-uint16_t gspwm_module_power_down(void)
+uint16_t hspwm_module_power_down(void)
 {
 	 
 	_PWMMD = 1;		// Turn off power to PWM module
@@ -1250,7 +1250,7 @@ uint16_t gspwm_module_power_down(void)
 	 
 }
 
-/*@@gspwm_module_enable()
+/*@@hspwm_module_enable()
  * *****************************************************************************************************
  * Summary:
  * Enables the PWM generator
@@ -1262,7 +1262,7 @@ uint16_t gspwm_module_power_down(void)
  * on certain dsPIC GS devices encountering glitches when PWM is turned on.
  * *****************************************************************************************************/
 
-uint16_t gspwm_module_enable(void)
+uint16_t hspwm_module_enable(void)
 {
 	 
 	_PTEN = 1;		// Enable PWM module
@@ -1271,7 +1271,7 @@ uint16_t gspwm_module_enable(void)
 	 
 }
 
-/*@@gspwm_module_disable()
+/*@@hspwm_module_disable()
  * *****************************************************************************************************
  * Summary:
  * Disables the PWM generator
@@ -1283,7 +1283,7 @@ uint16_t gspwm_module_enable(void)
  * at certain pins will be lost as every pin will be re-configured as GPIO.
  * *****************************************************************************************************/
 
-uint16_t gspwm_module_disable(void)
+uint16_t hspwm_module_disable(void)
 {
 
 	_PTEN = 0;		// Disable PWM module
@@ -1292,7 +1292,7 @@ uint16_t gspwm_module_disable(void)
 
 }
 
-/*@@gspwm_ovr_output_hold()
+/*@@hspwm_ovr_output_hold()
  * *****************************************************************************************************
  * Summary:
  * Overrides specific PWM generator outputs
@@ -1310,7 +1310,7 @@ uint16_t gspwm_module_disable(void)
  * (selected PWM output will be disabled)
  * *****************************************************************************************************/
 
-uint16_t gspwm_ovr_output_hold(uint16_t index, uint16_t sub_index)
+uint16_t hspwm_ovr_output_hold(uint16_t index, uint16_t sub_index)
 {
 
 volatile uint16_t *regptr;
@@ -1342,7 +1342,7 @@ volatile uint16_t reg_buf=0;
 	return(1);
 }
 
-/*@@gspwm_ovr_output_release()
+/*@@hspwm_ovr_output_release()
  * *****************************************************************************************************
  * Summary:
  * Releases specific PWM generator outputs
@@ -1360,7 +1360,7 @@ volatile uint16_t reg_buf=0;
  * (selected PWM output will be enabled)
  * *****************************************************************************************************/
 
-uint16_t gspwm_ovr_output_release(uint16_t index, uint16_t sub_index)
+uint16_t hspwm_ovr_output_release(uint16_t index, uint16_t sub_index)
 {
 
 volatile uint16_t *regptr;
@@ -1392,7 +1392,7 @@ volatile uint16_t reg_buf=0;
 	return(1);
 }
 
-/*@@gspwm_channel_output_disable()
+/*@@hspwm_channel_output_disable()
  * *****************************************************************************************************
  * Summary:
  * Disables specific PWM generator outputs
@@ -1410,7 +1410,7 @@ volatile uint16_t reg_buf=0;
  * (selected PWM output will be disabled)
  * *****************************************************************************************************/
 
-uint16_t gspwm_channel_output_disable(uint16_t index, uint16_t sub_index)
+uint16_t hspwm_channel_output_disable(uint16_t index, uint16_t sub_index)
 {
 
 volatile uint16_t *regptr;
@@ -1442,7 +1442,7 @@ volatile uint16_t reg_buf=0;
 	return(1);
 }
 
-/*@@gspwm_channel_output_enable()
+/*@@hspwm_channel_output_enable()
  * *****************************************************************************************************
  * Summary:
  * Releases specific PWM generator outputs
@@ -1460,7 +1460,7 @@ volatile uint16_t reg_buf=0;
  * (selected PWM output will be enabled)
  * *****************************************************************************************************/
 
-uint16_t gspwm_channel_output_enable(uint16_t index, uint16_t sub_index)
+uint16_t hspwm_channel_output_enable(uint16_t index, uint16_t sub_index)
 {
 
 volatile uint16_t *regptr;
@@ -1492,7 +1492,7 @@ volatile uint16_t reg_buf=0;
 	return(1);
 }
 
-/*@@gspwm_write_wp_fclcon()
+/*@@hspwm_write_wp_fclcon()
  * *****************************************************************************************************
  * Summary:
  * The dsPIC33EP GS FCLCON write protection unlock sequence to write to FCLCON
@@ -1509,7 +1509,7 @@ volatile uint16_t reg_buf=0;
  * *****************************************************************************************************/
 #if defined (__P33SMPS_EP2__) || defined (__P33SMPS_EP5__) || defined (__P33SMPS_EP7__)
 
-uint16_t gspwm_write_wp_fclcon(uint16_t index, uint16_t regFCLCON)
+uint16_t hspwm_write_wp_fclcon(uint16_t index, uint16_t regFCLCON)
 {
 
 // volatile uint16_t *regptr;
@@ -1520,7 +1520,7 @@ uint16_t gspwm_write_wp_fclcon(uint16_t index, uint16_t regFCLCON)
     // TODO: complete UNLOAD and LOCK sequence for PWMLOCK registers
 
 /*
-	reg_offset = ((index-1) * GSPWM_CHANNEL_REG_OFFSET);
+	reg_offset = ((index-1) * HSPWM_CHANNEL_REG_OFFSET);
 	regptr  = (volatile uint16_t *)&FCLCON1 + reg_offset;
     reg_buf = regFCLCON;
     

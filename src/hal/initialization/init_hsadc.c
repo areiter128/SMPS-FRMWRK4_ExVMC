@@ -134,7 +134,7 @@ volatile uint16_t exec_launch_hsadc(void)
     volatile uint16_t fres=1;
     volatile uint16_t dummy_buffer=0;
 
-    fres &= gspwm_set_adc_trigger(CVRT_PH1_PWM_IDX, PWMx_HIGH, 500);
+    fres &= hspwm_set_adc_trigger(CVRT_PH1_PWM_IDX, PWMx_HIGH, 500);
 
     ADC_VOUT_ADC_IF = 0;                            // Reset Interrupt Flag Bit
     dummy_buffer = VOUT_FB_ADCBUF;                 // Dummy Read

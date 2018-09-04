@@ -40,48 +40,48 @@
  * ***********************************************************************************************/
 
 // Prototypes
-extern inline uint16_t gspwm_reset_pwm_io(void);
+extern inline uint16_t hspwm_reset_pwm_io(void);
 
-extern inline uint16_t gspwm_init_mtb(uint16_t index, uint16_t regXTCON, uint16_t regXTCON2, uint16_t period);
-extern inline uint16_t gspwm_init_channel(uint16_t index, uint16_t regPWMCON, uint16_t regIOCON, uint16_t regFCLCON, uint16_t regLEBCON);
-extern inline uint16_t gspwm_init_channel_timing_complementary(uint16_t index, uint16_t phase, uint16_t duty_cycle, uint16_t dead_time, uint16_t alternate_dead_time);
-extern inline uint16_t gspwm_init_channel_timing_redundant(uint16_t index, uint16_t phase, uint16_t duty_cycle);
-extern inline uint16_t gspwm_init_channel_timing_push_pull(uint16_t index, uint16_t phase, uint16_t duty_cycle, uint16_t dead_time, uint16_t alternate_dead_time);
-extern inline uint16_t gspwm_init_channel_timing_true_independent(uint16_t index, uint16_t sub_index, uint16_t phase, uint16_t duty_cycle);
-extern inline uint16_t gspwm_init_channel_adc_trigger(uint16_t index, uint16_t regTRGCON, uint16_t primary_adc_trigger, uint16_t secondary_adc_trigger);
-extern inline uint16_t gspwm_set_adc_trigger_config(uint16_t index, uint16_t adc_tigger_config);
-extern inline uint16_t gspwm_init_dead_time(uint16_t index, uint16_t dead_time_mode, uint16_t rising_edge_period, uint16_t falling_edge_period);
+extern inline uint16_t hspwm_init_mtb(uint16_t index, uint16_t regXTCON, uint16_t regXTCON2, uint16_t period);
+extern inline uint16_t hspwm_init_channel(uint16_t index, uint16_t regPWMCON, uint16_t regIOCON, uint16_t regFCLCON, uint16_t regLEBCON);
+extern inline uint16_t hspwm_init_channel_timing_complementary(uint16_t index, uint16_t phase, uint16_t duty_cycle, uint16_t dead_time, uint16_t alternate_dead_time);
+extern inline uint16_t hspwm_init_channel_timing_redundant(uint16_t index, uint16_t phase, uint16_t duty_cycle);
+extern inline uint16_t hspwm_init_channel_timing_push_pull(uint16_t index, uint16_t phase, uint16_t duty_cycle, uint16_t dead_time, uint16_t alternate_dead_time);
+extern inline uint16_t hspwm_init_channel_timing_true_independent(uint16_t index, uint16_t sub_index, uint16_t phase, uint16_t duty_cycle);
+extern inline uint16_t hspwm_init_channel_adc_trigger(uint16_t index, uint16_t regTRGCON, uint16_t primary_adc_trigger, uint16_t secondary_adc_trigger);
+extern inline uint16_t hspwm_set_adc_trigger_config(uint16_t index, uint16_t adc_tigger_config);
+extern inline uint16_t hspwm_init_dead_time(uint16_t index, uint16_t dead_time_mode, uint16_t rising_edge_period, uint16_t falling_edge_period);
 
-extern inline uint16_t gspwm_get_dead_times(uint16_t index, uint16_t *rising_edge_period, uint16_t *falling_edge_period);
-extern inline uint16_t gspwm_set_mtb_period(uint16_t index, uint16_t period);
-extern inline uint16_t gspwm_get_mtb_period(uint16_t index);
-extern inline uint16_t gspwm_set_phase(uint16_t index, uint16_t sub_index, uint16_t period);
-extern inline uint16_t gspwm_get_phase(uint16_t index, uint16_t sub_index);
-extern inline uint16_t gspwm_set_duty_cycle(uint16_t index, uint16_t sub_index, uint16_t duty_cycle);
-extern inline uint16_t gspwm_get_duty_cycle(uint16_t index, uint16_t sub_index);
-extern inline uint16_t gspwm_set_leb_period(uint16_t index, uint16_t period);
-extern inline uint16_t gspwm_get_leb_period(uint16_t index);
-extern inline uint16_t gspwm_set_sevtcmp_value(uint16_t index, uint16_t period);
-extern inline uint16_t gspwm_get_sevtcmp_value(uint16_t index);
-extern inline uint16_t gspwm_set_adc_trigger(uint16_t index, uint16_t sub_index, uint16_t adc_trigger);
-extern inline uint16_t gspwm_get_adc_trigger(uint16_t index, uint16_t sub_index);
+extern inline uint16_t hspwm_get_dead_times(uint16_t index, uint16_t *rising_edge_period, uint16_t *falling_edge_period);
+extern inline uint16_t hspwm_set_mtb_period(uint16_t index, uint16_t period);
+extern inline uint16_t hspwm_get_mtb_period(uint16_t index);
+extern inline uint16_t hspwm_set_phase(uint16_t index, uint16_t sub_index, uint16_t period);
+extern inline uint16_t hspwm_get_phase(uint16_t index, uint16_t sub_index);
+extern inline uint16_t hspwm_set_duty_cycle(uint16_t index, uint16_t sub_index, uint16_t duty_cycle);
+extern inline uint16_t hspwm_get_duty_cycle(uint16_t index, uint16_t sub_index);
+extern inline uint16_t hspwm_set_leb_period(uint16_t index, uint16_t period);
+extern inline uint16_t hspwm_get_leb_period(uint16_t index);
+extern inline uint16_t hspwm_set_sevtcmp_value(uint16_t index, uint16_t period);
+extern inline uint16_t hspwm_get_sevtcmp_value(uint16_t index);
+extern inline uint16_t hspwm_set_adc_trigger(uint16_t index, uint16_t sub_index, uint16_t adc_trigger);
+extern inline uint16_t hspwm_get_adc_trigger(uint16_t index, uint16_t sub_index);
 
-extern inline uint16_t gspwm_channel_power_up(uint16_t index);
-extern inline uint16_t gspwm_channel_power_down(uint16_t index);
+extern inline uint16_t hspwm_channel_power_up(uint16_t index);
+extern inline uint16_t hspwm_channel_power_down(uint16_t index);
 
-extern inline uint16_t gspwm_module_power_up(void);
-extern inline uint16_t gspwm_module_power_down(void);
-extern inline uint16_t gspwm_module_enable(void);
-extern inline uint16_t gspwm_module_disable(void);
+extern inline uint16_t hspwm_module_power_up(void);
+extern inline uint16_t hspwm_module_power_down(void);
+extern inline uint16_t hspwm_module_enable(void);
+extern inline uint16_t hspwm_module_disable(void);
 
-extern inline uint16_t gspwm_ovr_output_hold(uint16_t index, uint16_t sub_index);
-extern inline uint16_t gspwm_ovr_output_release(uint16_t index, uint16_t sub_index);
-extern inline uint16_t gspwm_channel_output_disable(uint16_t index, uint16_t sub_index);
-extern inline uint16_t gspwm_channel_output_enable(uint16_t index, uint16_t sub_index);
+extern inline uint16_t hspwm_ovr_output_hold(uint16_t index, uint16_t sub_index);
+extern inline uint16_t hspwm_ovr_output_release(uint16_t index, uint16_t sub_index);
+extern inline uint16_t hspwm_channel_output_disable(uint16_t index, uint16_t sub_index);
+extern inline uint16_t hspwm_channel_output_enable(uint16_t index, uint16_t sub_index);
 
-#if defined (__P33SMPS_EP2__) || defined (__P33SMPS_EP5__) || defined (__P33SMPS_EP7__)
+#if defined (__P33SMPS_EP__)
 
-  extern inline uint16_t gspwm_write_wp_fclcon(uint16_t index, uint16_t regFCLCON);
+  extern inline uint16_t hspwm_write_wp_fclcon(uint16_t index, uint16_t regFCLCON);
 
 #endif
 
