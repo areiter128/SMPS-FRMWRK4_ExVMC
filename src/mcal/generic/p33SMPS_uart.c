@@ -340,7 +340,7 @@ uint8_t gsuart_read(volatile uint16_t index)
  * This routine is writing one byte to the selected UART transmit buffer
  * ***********************************************************************************************/
 
-uint16_t gsuart_write(uint16_t index, uint8_t txData)
+uint16_t gsuart_write_byte(uint16_t index, uint8_t txData)
 {
 
     volatile uint16_t *regptr;

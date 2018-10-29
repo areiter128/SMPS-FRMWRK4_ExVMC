@@ -437,7 +437,7 @@ typedef union
 
 extern inline uint16_t gstmr_init_uart(uint16_t index, UxMODE_CONTROL_REGISTER_BIT_FIELD_t regUxMODE, UxSTA_CONTROL_REGISTER_BIT_FIELD_t regUxSTA);
 extern inline uint8_t  gsuart_read(volatile uint16_t index);
-extern inline uint16_t gsuart_write(uint16_t index, uint8_t txData);
+extern inline uint16_t gsuart_write_byte(uint16_t index, uint8_t txData);
 extern inline uint16_t gsuart_get_status(volatile uint16_t index);
 
 extern inline uint16_t gsuart_enable(uint16_t index);

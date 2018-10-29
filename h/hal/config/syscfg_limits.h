@@ -45,7 +45,7 @@
 #define VIN_NOMINAL         12.000       // Nominal input voltage in [V]
 #define VIN_FB_REF_ADC      (uint16_t)((float)VIN_DIVIDER_RATIO * (float)VIN_NOMINAL * ADC_SCALER)   // Input voltage feedback in ADC ticks
 
-#define VIN_MAXIMUM         16.000      // input voltage maximum (Under-Voltage-Lockout-Level)
+#define VIN_MAXIMUM         20.000      // input voltage maximum (Under-Voltage-Lockout-Level)
 #define VIN_MAXIMUM_HYST    0.500       // input voltage maximum (Under-Voltage-Lockout Hysteresis Level)
 #define VIN_OVLO_TRIP       (uint16_t)((float)VIN_MAXIMUM * (float)VIN_DIVIDER_RATIO * (float)ADC_SCALER) // Input voltage sense ADC ticks
 #define VIN_OVLO_RELEASE    (uint16_t)(((float)VIN_MAXIMUM - (float)VIN_MAXIMUM_HYST) * (float)VIN_DIVIDER_RATIO * (float)ADC_SCALER) // Input voltage sense ADC ticks

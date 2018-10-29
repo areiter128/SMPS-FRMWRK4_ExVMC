@@ -47,10 +47,11 @@ volatile SMPS_UART_OBJECT_t smps_uart;
 
 /* private scheduler variables */
 
-#define SMPS_UART_FRMUPDT_INT_CNT 100   // number of scheduler cycles until data update
-#define SMPS_UART_SEND_INT_CNT   1      // number of scheduler cycles until sending frame
+#define SMPS_UART_FRMUPDT_INT_CNT 416   // number of scheduler cycles until data update
+#define SMPS_UART_SEND_INT_CNT   1    // number of scheduler cycles until sending frame (e.g. 416=2500ms)
 volatile uint16_t send_int_cnt = 0;
 volatile uint16_t frm_update_int_cnt = 0;
+volatile uint16_t msg_cnt = 0;
 
 /* UART data frame definitions and private variables */
 
@@ -132,7 +133,7 @@ volatile uint16_t exec_TaskUART(void) {
     Nop();
     Nop();
 
-    // Check if a receive buffer is ready to be processed
+    // Check if a receive buffer is ready to be processed in every scheduler call cycle
     if(UART_RxTx.status.flag.RXFrameReady)
     {
         fres = task_UARTreceive();
@@ -148,7 +149,7 @@ volatile uint16_t exec_TaskUART(void) {
         else
         { return(1); }
     }
-    // send status frame 
+    // send status frame when the send-tick-timer interval SMPS_UART_FRMUPDT_INT_CNT has expired
     if((frm_update_int_cnt++ == SMPS_UART_FRMUPDT_INT_CNT) && 
         (UART_RxTx.UartTXSendDone = 1))
     {
@@ -158,9 +159,11 @@ volatile uint16_t exec_TaskUART(void) {
 
         // build data frame
         smps_uart.TXBytes.id = 0x434C;
-        smps_uart.TXBytes.data_len = 2;
+        smps_uart.TXBytes.data_len = 4;
         smps_uart.TXBytes.data[0] = (task_mgr.cpu_load.load >> 8);
         smps_uart.TXBytes.data[1] = (task_mgr.cpu_load.load & 0x00FF);
+        smps_uart.TXBytes.data[2] = (msg_cnt >> 8);
+        smps_uart.TXBytes.data[3] = (msg_cnt & 0x00FF);
 
         smps_uart.TXBytes.crc = smpsuart_get_crc((uint8_t *)&smps_uart.TXBytes.data[0], smps_uart.TXBytes.data_len);
         
@@ -186,19 +189,18 @@ volatile uint16_t exec_TaskUART(void) {
         UART_RxTx.UartTXSendDone = 0;
         
         UART_RxTx.status.flag.TXFrameReady = 1;
+        msg_cnt++;
 //        
 //UART_RxTx.UartSendCounter = 1;
 //CVRT_UxRXREG = 0xAA;
 
     }
-    else if ((UART_RxTx.status.flag.TXFrameReady) && (!UART_RxTx.UartTXSendDone))
+    
+    if ((UART_RxTx.status.flag.TXFrameReady) && (!UART_RxTx.UartTXSendDone))
     {
         if(send_int_cnt++ == SMPS_UART_SEND_INT_CNT)
         {
             send_int_cnt = 0;
-            Nop();
-            Nop();
-            Nop();
             task_UARTsend();
         }
 
@@ -294,7 +296,7 @@ volatile inline int16_t task_UARTsend(void)
         // CVRT_UxTXREG = 0x041 + UART_RxTx.UartSendCounter++; // UART_RxTx.TXBytes[UART_RxTx.UartSendCounter++];
         
         // call library function to send byte via UART
-        fres &= gsuart_write(smps_uart.port_index, UART_RxTx.TXBytes[UART_RxTx.UartSendCounter++]);
+        fres &= gsuart_write_byte(smps_uart.port_index, UART_RxTx.TXBytes[UART_RxTx.UartSendCounter++]);
     
         // when all bytes of a data frame has been sent, reset flags and counter
         if(UART_RxTx.UartSendCounter > (_UART_TX_DLEN + FRAME_TOTAL_OVERHEAD))
