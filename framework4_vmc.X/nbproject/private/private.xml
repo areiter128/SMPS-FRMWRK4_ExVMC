@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/D:/Documents/_sandbox/01_VMC-MPLABX_5/h/hal/config/PLEU0049.R1_board_pinmap.h</file>
+            <file>file:/D:/Documents/_sandbox/01_VMC-MPLABX_5/h/mcal/config/00124_R10_EP806_pinmap.h</file>
+            <file>file:/D:/Documents/_sandbox/01_VMC-MPLABX_5/h/hal/config/syscfg_scaling.h</file>
+            <file>file:/D:/Documents/_sandbox/01_VMC-MPLABX_5/h/hal/config/syscfg_limits.h</file>
+            <file>file:/D:/Documents/_sandbox/01_VMC-MPLABX_5/src/apl/tasks/task_UART.c</file>
+            <file>file:/D:/Documents/_sandbox/01_VMC-MPLABX_5/src/apl/config/tasks.c</file>
+            <file>file:/D:/Documents/_sandbox/01_VMC-MPLABX_5/h/apl/tasks/task_UART.h</file>
+            <file>file:/D:/Documents/_sandbox/01_VMC-MPLABX_5/h/apl/config/tasks.h</file>
+            <file>file:/D:/Documents/_sandbox/01_VMC-MPLABX_5/src/main.c</file>
+            <file>file:/D:/Documents/_sandbox/01_VMC-MPLABX_5/h/mcal/config/devcfg_hspwm.h</file>
+            <file>file:/D:/Documents/_sandbox/01_VMC-MPLABX_5/h/hal/config/syscfg_cvrt.h</file>
+            <file>file:/D:/Documents/_sandbox/01_VMC-MPLABX_5/src/mcal/generic/p33SMPS_uart.c</file>
+            <file>file:/D:/Documents/_sandbox/01_VMC-MPLABX_5/src/_root/generic/task_manager.c</file>
+            <file>file:/D:/Documents/_sandbox/01_VMC-MPLABX_5/src/sfl/asmlib/cnpnz_vmc.s</file>
+        </group>
+    </open-files>
+</project-private>
