@@ -1,0 +1,13 @@
+#
+# Generated - do not edit!
+#
+# NOCDDL
+#
+CND_BASEDIR=`pwd`
+# 00124_R10_EP806 configuration
+CND_ARTIFACT_DIR_00124_R10_EP806=dist/00124_R10_EP806/production
+CND_ARTIFACT_NAME_00124_R10_EP806=framework4_vmc.X.production.hex
+CND_ARTIFACT_PATH_00124_R10_EP806=dist/00124_R10_EP806/production/framework4_vmc.X.production.hex
+CND_PACKAGE_DIR_00124_R10_EP806=${CND_DISTDIR}/00124_R10_EP806/package
+CND_PACKAGE_NAME_00124_R10_EP806=framework4vmc.x.tar
+CND_PACKAGE_PATH_00124_R10_EP806=${CND_DISTDIR}/00124_R10_EP806/package/framework4vmc.x.tar
