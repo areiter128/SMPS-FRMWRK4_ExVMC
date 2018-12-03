@@ -241,7 +241,7 @@
         <platform>3</platform>
       </toolsSet>
       <packs>
-        <pack name="dsPIC33E-GS_DFP" vendor="Microchip" version="1.0.19"/>
+        <pack name="dsPIC33E-GS_DFP" vendor="Microchip" version="1.0.22"/>
       </packs>
       <compileType>
         <linkerTool>

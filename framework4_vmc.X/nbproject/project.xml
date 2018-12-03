@@ -12,6 +12,36 @@
             <asminc-extensions/>
             <sourceEncoding>ISO-8859-1</sourceEncoding>
             <make-dep-projects/>
+            <sourceRootList>
+                <sourceRootElem>../h</sourceRootElem>
+                <sourceRootElem>../h/_root</sourceRootElem>
+                <sourceRootElem>../h/_root/config</sourceRootElem>
+                <sourceRootElem>../h/_root/generic</sourceRootElem>
+                <sourceRootElem>../h/apl</sourceRootElem>
+                <sourceRootElem>../h/apl/config</sourceRootElem>
+                <sourceRootElem>../h/apl/tasks</sourceRootElem>
+                <sourceRootElem>../h/hal</sourceRootElem>
+                <sourceRootElem>../h/hal/config</sourceRootElem>
+                <sourceRootElem>../h/hal/initialization</sourceRootElem>
+                <sourceRootElem>../h/mcal</sourceRootElem>
+                <sourceRootElem>../h/mcal/config</sourceRootElem>
+                <sourceRootElem>../h/mcal/generic</sourceRootElem>
+                <sourceRootElem>../h/sfl</sourceRootElem>
+                <sourceRootElem>../h/sfl/asmlib</sourceRootElem>
+                <sourceRootElem>../h/sfl/generic</sourceRootElem>
+                <sourceRootElem>../h/sfl/libapi</sourceRootElem>
+                <sourceRootElem>../h/sfl/isr</sourceRootElem>
+                <sourceRootElem>../src</sourceRootElem>
+            </sourceRootList>
+            <confList>
+                <confElem>
+                    <name>00124_R10_EP806</name>
+                    <type>2</type>
+                </confElem>
+            </confList>
+            <formatting>
+                <project-formatting-style>false</project-formatting-style>
+            </formatting>
         </data>
     </configuration>
 </project>
