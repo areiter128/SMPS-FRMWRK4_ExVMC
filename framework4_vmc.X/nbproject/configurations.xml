@@ -235,13 +235,13 @@
         <targetDevice>dsPIC33EP128GS806</targetDevice>
         <targetHeader></targetHeader>
         <targetPluginBoard></targetPluginBoard>
-        <platformTool>RealICEPlatformTool</platformTool>
+        <platformTool>ICD4Tool</platformTool>
         <languageToolchain>XC16</languageToolchain>
-        <languageToolchainVersion>1.35</languageToolchainVersion>
+        <languageToolchainVersion>1.40</languageToolchainVersion>
         <platform>3</platform>
       </toolsSet>
       <packs>
-        <pack name="dsPIC33E-GS_DFP" vendor="Microchip" version="1.0.22"/>
+        <pack name="dsPIC33E-GS_DFP" vendor="Microchip" version="1.0.26"/>
       </packs>
       <compileType>
         <linkerTool>
