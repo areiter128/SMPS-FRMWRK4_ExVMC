@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project>
+  <executable name="dist/00124_R10_EP806/production/framework4_vmc.X.production.elf">
+    <memory name="data">
+      <units>bytes</units>
+      <length>8192</length>
+      <used>942</used>
+      <free>7250</free>
+    </memory>
+    <memory name="program">
+      <units>bytes</units>
+      <length>131136</length>
+      <used>27252</used>
+      <free>103884</free>
+    </memory>
+  </executable>
+</project>
